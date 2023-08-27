@@ -13,6 +13,9 @@ public class HotelService extends BaseCRUDService<HotelModel, Long> {
     @Autowired
     private HotelRepository hotelRepository;
 
+    @Autowired
+    private EnderecoService enderecoService;
+
     @Override
     public AbstractCRUDRepository<HotelModel, Long> getRepository() {
         super.getRepository();
@@ -22,8 +25,12 @@ public class HotelService extends BaseCRUDService<HotelModel, Long> {
     @Override
     protected void beforeSave(HotelModel entity) {
         super.beforeSave(entity);
-        entity.setEndereco(null);
-        System.out.println(entity.getNome());
-        System.out.println(entity.getCnpj());
+        entity.getEndereco().forEach(
+                e -> {
+                    if (e.getId() == null) {
+                        e = enderecoService.save(e);
+                    }
+                }
+        );
     }
 }
