@@ -5,50 +5,35 @@ import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
-public class BaseCRUDService<T, D> implements AbstractCRUDService<T, D>{
+public class BaseCRUDService<T, D> implements AbstractCRUDService<T, D> {
 
     public T save(T entity) {
-
         T var2;
-        try {
-            this.validate(entity);
-            this.beforeSave(entity);
-            entity = (T) this.getRepository().save(entity);
-            this.afterSave(entity);
-            var2 = entity;
-        } finally {
-        }
-
+        this.validate(entity);
+        this.beforeSave(entity);
+        entity = (T) this.getRepository().save(entity);
+        this.afterSave(entity);
+        var2 = entity;
         return var2;
     }
 
     public T update(T entity) {
-
         T var2;
-        try {
-            this.validate(entity);
-            this.beforeUpdate(entity);
-            entity = (T) this.getRepository().save(entity);
-            this.afterUpdate(entity);
-            var2 = entity;
-        } finally {
-        }
-
+        this.validate(entity);
+        this.beforeUpdate(entity);
+        entity = (T) this.getRepository().save(entity);
+        this.afterUpdate(entity);
+        var2 = entity;
         return var2;
     }
+
     public void delete(T entity) {
-
         T var2;
-        try {
-            this.validateDelete(entity);
-            this.beforeDelete(entity);
-            this.getRepository().delete(entity);
-            this.afterDelete(entity);
-            var2 = entity;
-        } finally {
-
-        }
-
+        this.validateDelete(entity);
+        this.beforeDelete(entity);
+        this.getRepository().delete(entity);
+        this.afterDelete(entity);
+        var2 = entity;
     }
 
     public List<T> findAll() {
@@ -56,7 +41,7 @@ public class BaseCRUDService<T, D> implements AbstractCRUDService<T, D>{
     }
 
     public T getById(D id) {
-        return (T) this.getRepository().findById(id).orElseThrow(EntityNotFoundException::new);
+        return this.getRepository().findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
 
