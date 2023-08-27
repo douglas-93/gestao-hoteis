@@ -25,14 +25,17 @@ public class ReservaModel implements Serializable {
     private LocalDateTime dataAlteracaoReserva;
     private LocalDateTime dataCancelamento;
     private LocalDate dataEntrada;
+    private LocalDate dataPrevistaSaida;
     private LocalDate dataSaida;
     private Boolean checkedIn;
     private Boolean checkedOut;
     private Boolean cancelada;
     private String motivoCancelamento;
+    private Integer diasHospedado;
+    private BigDecimal valorDiaria;
+    private BigDecimal valorTotalEstadia;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospedeModel> hospedes;
     @OneToMany
     private List<QuartoModel> quarto;
-    private BigDecimal valorEstadia;
 }
