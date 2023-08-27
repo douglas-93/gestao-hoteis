@@ -6,26 +6,18 @@ import lombok.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "enderecos")
+@Table(name = "categoriaQuarto")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class EnderecoModel implements Serializable {
+public class CategoriaQuartoModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cep;
-    private String pais = "Brasil";
-    private String estado;
-    private String cidade;
-    private String bairro;
-    private String rua;
-    private String numero;
-    private String complemento;
+    private String nome;
     @Version
     private Long versao;
-
 }
