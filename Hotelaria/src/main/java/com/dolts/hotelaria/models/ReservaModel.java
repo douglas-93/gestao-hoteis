@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,7 +36,7 @@ public class ReservaModel implements Serializable {
     private BigDecimal valorDiaria;
     private BigDecimal valorTotalEstadia;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HospedeModel> hospedes;
+    private List<HospedeModel> hospedes = new ArrayList<>();
     @OneToMany
-    private List<QuartoModel> quarto;
+    private List<QuartoModel> quarto = new ArrayList<>();
 }
