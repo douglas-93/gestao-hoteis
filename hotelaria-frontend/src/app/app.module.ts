@@ -7,6 +7,8 @@ import { FooterModule, ResetPasswordFormModule, CreateAccountFormModule, ChangeP
 import { AuthService, ScreenService, AppInfoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
+import { BaseCrudComponent } from './shared/components/base-crud/base-crud.component';
+import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { AppRoutingModule } from './app-routing.module';
     ScreenService,
     AppInfoService
   ],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

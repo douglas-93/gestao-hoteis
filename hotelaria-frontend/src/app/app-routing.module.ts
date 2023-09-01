@@ -1,13 +1,26 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { LoginFormComponent, ResetPasswordFormComponent, CreateAccountFormComponent, ChangePasswordFormComponent } from './shared/components';
-import { AuthGuardService } from './shared/services';
-import { HomeComponent } from './pages/home/home.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { TasksComponent } from './pages/tasks/tasks.component';
-import { DxDataGridModule, DxFormModule } from 'devextreme-angular';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {
+  ChangePasswordFormComponent,
+  CreateAccountFormComponent,
+  LoginFormComponent,
+  ResetPasswordFormComponent
+} from './shared/components';
+import {AuthGuardService} from './shared/services';
+import {HomeComponent} from './pages/home/home.component';
+import {ProfileComponent} from './pages/profile/profile.component';
+import {TasksComponent} from './pages/tasks/tasks.component';
+import {DxDataGridModule, DxFormModule} from 'devextreme-angular';
+import {CadastrosComponent} from './pages/cadastros/cadastros.component';
+import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
+import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
 
 const routes: Routes = [
+  {
+    path: 'pages/cadastros',
+    component: CadastrosComponent,
+    canActivate: [ AuthGuardService ]
+  },
   {
     path: 'tasks',
     component: TasksComponent,
@@ -50,13 +63,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true }), DxDataGridModule, DxFormModule],
+  imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [
     HomeComponent,
     ProfileComponent,
-    TasksComponent
+    TasksComponent,
+    CadastrosComponent,
+    BaseCrudComponent,
+    ToolbarComponent
   ]
 })
 export class AppRoutingModule { }

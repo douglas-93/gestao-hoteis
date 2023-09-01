@@ -17,5 +17,10 @@ export const navigation = [
         path: '/tasks'
       }
     ]
+  },
+  {
+    text: 'Cadastros',
+    path: '/pages/cadastros',
+    icon: 'folder'
   }
 ];
