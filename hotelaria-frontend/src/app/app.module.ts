@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BaseCrudComponent } from './shared/components/base-crud/base-crud.component';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 import {RouterModule} from "@angular/router";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {RouterModule} from "@angular/router";
     LoginFormModule,
     UnauthenticatedContentModule,
     AppRoutingModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule
   ],
   providers: [
     AuthService,

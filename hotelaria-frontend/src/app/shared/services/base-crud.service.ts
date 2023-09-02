@@ -1,13 +1,13 @@
 import {environment} from "../../../enviroment";
 import {HttpClient} from "@angular/common/http";
 
-export abstract class BaseCRUDService<T> {
+export class BaseCRUDService<T> {
 
   url: string = environment.BASE_URL;
 
   constructor(servicePath: string,
               private http: HttpClient) {
-    this.url = this.url.concat(`/${servicePath}`)
+    this.url = this.url.concat(`${servicePath}`)
   }
 
   findAll() {

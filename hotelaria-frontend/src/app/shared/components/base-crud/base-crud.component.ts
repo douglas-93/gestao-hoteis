@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ModeEnum} from "../../enums/mode.enum";
 import {Router} from "@angular/router";
 
@@ -13,10 +13,10 @@ export class BaseCrudComponent {
   @Input() editTitle: string;
   @Input() mode: ModeEnum = ModeEnum.LIST;
 
-  @Input() filterFunction: Function;
-  @Input() novoCadastroFunction: Function;
-  @Input() saveFunction: Function;
-  @Input() deleteFunction: Function;
+  @Output() filterFunction: EventEmitter<any> = new EventEmitter<any>();
+  @Output() novoCadastroFunction: EventEmitter<any> = new EventEmitter<any>();
+  @Output() saveFunction: EventEmitter<any> = new EventEmitter<any>();
+  @Output() deleteFunction: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private router: Router) {
   }
@@ -25,4 +25,17 @@ export class BaseCrudComponent {
   }
 
   protected readonly ModeEnum = ModeEnum;
+
+  filterFunctionEnv() {
+    this.filterFunction.emit();
+  }
+  novoCadastroFunctionEnv() {
+    this.novoCadastroFunction.emit();
+  }
+  saveFunctionEnv() {
+    this.saveFunction.emit();
+  }
+  deleteFunctionEnv() {
+    this.deleteFunction.emit();
+  }
 }

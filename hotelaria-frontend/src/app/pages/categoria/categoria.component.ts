@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ModeEnum} from "../../shared/enums/mode.enum";
+import {BaseCRUDService} from "../../shared/services/base-crud.service";
+import {CategoriaQuartoModel} from "../../shared/models/categoriaQuarto.model";
 import notify from "devextreme/ui/notify";
+import {CategoriaService} from "../../shared/services/categoria.service";
+
 
 @Component({
   selector: 'app-categoria',
@@ -11,10 +15,13 @@ import notify from "devextreme/ui/notify";
 export class CategoriaComponent implements OnInit {
 
   mode: ModeEnum = ModeEnum.LIST
+  categorias: CategoriaQuartoModel[];
+  categoria: CategoriaQuartoModel;
   protected readonly ModeEnum = ModeEnum;
-  categorias: any[];
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private categoriaService: CategoriaService) {
+    this.categoria = new CategoriaQuartoModel();
   }
 
   ngOnInit(): void {
@@ -23,10 +30,25 @@ export class CategoriaComponent implements OnInit {
   }
 
   buscar() {
-    notify('Buscou', 'success', 2000)
+    this.categoriaService.findAll().subscribe(res => {
+      if (res.ok) {
+        this.categorias = res.body!
+      }
+    })
   }
 
   novo() {
     this.router.navigate(['categoria', 'cad']);
+  }
+
+  salvar() {
+    if (this.categoria.nome != undefined && this.categoria.ativa != undefined) {
+      this.categoriaService.save(this.categoria).subscribe(res => {
+        if (res.ok) {
+          this.categoria = res.body!
+          notify('Salvo com sucesso', 'success', 3000);
+        }
+      })
+    }
   }
 }
