@@ -9,6 +9,7 @@ import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { BaseCrudComponent } from './shared/components/base-crud/base-crud.component';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ToolbarComponent } from './shared/components/toolbar/toolbar.component'
     ChangePasswordFormModule,
     LoginFormModule,
     UnauthenticatedContentModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RouterModule
   ],
   providers: [
     AuthService,

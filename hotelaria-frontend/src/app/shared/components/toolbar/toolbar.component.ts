@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Router} from "@angular/router";
+import {ModeEnum} from "../../enums/mode.enum";
 
 @Component({
   selector: 'app-toolbar',
@@ -14,13 +15,13 @@ export class ToolbarComponent {
   @Output() deletar = new EventEmitter();
 
   @Input() cadastro: boolean;
-
+  @Input() mode: ModeEnum;
   @Input() desativarBotaoFechar: boolean;
 
   edit: boolean;
 
   constructor(private router: Router) {
-    this.edit = this.router.url.includes('edit/')
+    this.edit = this.router.url.includes('edit')
   }
 
   filtrarEnv(e: any) {
@@ -28,6 +29,7 @@ export class ToolbarComponent {
   }
 
   novoCadEnv(e: any) {
+    this.mode = ModeEnum.EDIT
     this.novoCadastro.emit(e)
   }
 

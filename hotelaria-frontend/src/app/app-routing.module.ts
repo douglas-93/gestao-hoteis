@@ -10,7 +10,7 @@ import {AuthGuardService} from './shared/services';
 import {HomeComponent} from './pages/home/home.component';
 import {ProfileComponent} from './pages/profile/profile.component';
 import {TasksComponent} from './pages/tasks/tasks.component';
-import {DxButtonModule, DxDataGridModule, DxFormModule} from 'devextreme-angular';
+import {DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxFormModule, DxTextBoxModule} from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
 import {NgIf} from "@angular/common";
@@ -24,73 +24,113 @@ import { ReservaComponent } from './pages/reserva/reserva.component';
 
 const routes: Routes = [
   {
-    path: 'pages/reserva',
+    path: 'reserva',
     component: ReservaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'pages/empresa',
+    path: 'reserva/cad',
+    component: ReservaComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'reserva/edit',
+    component: ReservaComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'empresa',
     component: EmpresaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'pages/hospede',
+    path: 'empresa/cad',
+    component: EmpresaComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'empresa/edit',
+    component: EmpresaComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'hospede',
     component: HospedeComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'pages/quarto',
+    path: 'hospede/cad',
+    component: HospedeComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'hospede/edit',
+    component: HospedeComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'quarto',
     component: QuartoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'pages/tipo',
+    path: 'quarto/cad',
+    component: QuartoComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'quarto/edit',
+    component: QuartoComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'tipo',
     component: TipoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'pages/categoria',
+    path: 'tipo/cad',
+    component: TipoComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'tipo/edit',
+    component: TipoComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'categoria',
     component: CategoriaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'pages/hotel',
+    path: 'categoria/cad',
+    component: CategoriaComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'categoria/edit',
+    component: CategoriaComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'hotel',
     component: HotelComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'tasks',
-    component: TasksComponent,
+    path: 'hotel/cad',
+    component: HotelComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'profile',
-    component: ProfileComponent,
+    path: 'hotel/edit',
+    component: HotelComponent,
     canActivate: [ AuthGuardService ]
   },
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'login-form',
-    component: LoginFormComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'reset-password',
-    component: ResetPasswordFormComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'create-account',
-    component: CreateAccountFormComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'change-password/:recoveryCode',
-    component: ChangePasswordFormComponent,
     canActivate: [ AuthGuardService ]
   },
   {
@@ -100,7 +140,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf],
+  imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [

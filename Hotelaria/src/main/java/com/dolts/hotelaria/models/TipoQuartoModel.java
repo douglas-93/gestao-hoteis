@@ -18,6 +18,7 @@ public class TipoQuartoModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    private Boolean ativa;
     @Version
     private Long versao;
 }

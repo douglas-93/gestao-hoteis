@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.mt {
+  margin-top: 10px;
+}
+
+.mb {
+  margin-bottom: 10px;
+}
+
+.mr {
+  margin-right: 10px;
+}
+
+.ml {
+  margin-left: 10px;
+}

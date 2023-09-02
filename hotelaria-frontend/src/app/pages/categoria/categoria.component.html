@@ -1,4 +1,37 @@
-<h2 class="content-block">Categoria</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
-</div>
+<base-crud [editTitle]="'Cadastro de Categorias'"
+           [filterFunction]="buscar"
+           [listTitle]="'Listagem de Categorias'"
+           [mode]="mode"
+           [novoCadastroFunction]="novo">
+  <div class="mt mb" list-filter-fields>
+    <div class="row">
+      <span class="mr">Categoria</span>
+      <dx-text-box [showClearButton]="true"
+                   labelMode="hidden"
+                   width="500">
+      </dx-text-box>
+    </div>
+  </div>
+
+  <div class="mt" list-result>
+    <dx-data-grid [dataSource]="categorias">
+    </dx-data-grid>
+  </div>
+
+  <div edit-template>
+    <div class="row">
+      <div class="row mr">
+        <span class="mr">Categoria</span>
+        <dx-text-box [showClearButton]="true"
+                     labelMode="hidden"
+                     width="500">
+        </dx-text-box>
+      </div>
+
+      <div class="row ml">
+        <span class="mr">Ativo</span>
+        <dx-check-box></dx-check-box>
+      </div>
+    </div>
+  </div>
+</base-crud>

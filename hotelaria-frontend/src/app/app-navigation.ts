@@ -20,7 +20,7 @@ export const navigation = [
   // },
   {
     text: 'Hotel',
-    path: '/pages/hotel',
+    path: '/hotel',
     icon: 'fa-solid fa-building'
   },
   {
@@ -29,34 +29,34 @@ export const navigation = [
     items: [
       {
         text: 'Categoria',
-        path: '/pages/categoria',
+        path: '/categoria',
         icon: 'fa-solid fa-gem'
       },
       {
         text: 'Tipo',
-        path: '/pages/tipo',
+        path: '/tipo',
         icon: 'fa-solid fa-people-group'
       },
       {
         text: 'Quarto',
-        path: '/pages/quarto',
+        path: '/quarto',
         icon: 'fa-solid fa-door-open'
       }
     ]
   },
   {
     text: 'Hospede',
-    path: '/pages/hospede',
+    path: '/hospede',
     icon: 'fa-solid fa-user'
   },
   {
     text: 'Empresa',
-    path: '/pages/empresa',
+    path: '/empresa',
     icon: 'fa-solid fa-city'
   },
   {
     text: 'Reserva',
-    path: '/pages/reserva',
+    path: '/reserva',
     icon: 'fa-solid fa-calendar'
   }
 ];
