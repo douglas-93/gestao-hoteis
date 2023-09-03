@@ -21,6 +21,7 @@ import { QuartoComponent } from './pages/quarto/quarto.component';
 import { HospedeComponent } from './pages/hospede/hospede.component';
 import { EmpresaComponent } from './pages/empresa/empresa.component';
 import { ReservaComponent } from './pages/reserva/reserva.component';
+import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
   {
@@ -140,7 +141,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule],
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [

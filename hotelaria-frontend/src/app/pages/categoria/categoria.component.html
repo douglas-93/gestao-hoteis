@@ -1,9 +1,9 @@
-<base-crud [editTitle]="'Cadastro de Categorias'"
-           (filterFunction)="buscar()"
-           [listTitle]="'Listagem de Categorias'"
-           [mode]="mode"
+<base-crud (filterFunction)="buscar()"
            (novoCadastroFunction)="novo()"
-           (saveFunction)="salvar()">
+           (saveFunction)="salvar()"
+           [editTitle]="'Cadastro de Categorias'"
+           [listTitle]="'Listagem de Categorias'"
+           [mode]="mode">
   <div class="mt mb" list-filter-fields>
     <div class="row">
       <span class="mr">Categoria</span>
@@ -23,7 +23,8 @@
     <div class="row">
       <div class="row mr">
         <span class="mr">Categoria</span>
-        <dx-text-box [(value)]="categoria.nome"
+        <dx-text-box #categoriaTextBox
+                     [(value)]="categoria.nome"
                      [showClearButton]="true"
                      labelMode="hidden"
                      width="500">
@@ -32,7 +33,7 @@
 
       <div class="row ml">
         <span class="mr">Ativo</span>
-        <dx-check-box [value]="categoria.ativa" (onValueChanged)="categoria.ativa = $event.value">
+        <dx-check-box (onValueChanged)="categoria.ativa = $event.value" [value]="categoria.ativa">
         </dx-check-box>
       </div>
     </div>
