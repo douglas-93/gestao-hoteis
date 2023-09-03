@@ -1,4 +1,5 @@
-<base-crud (filterFunction)="buscar()"
+<base-crud #crud
+           (filterFunction)="buscar()"
            (novoCadastroFunction)="novo()"
            (saveFunction)="salvar()"
            [editTitle]="'Cadastro de Categorias'"
@@ -15,7 +16,10 @@
   </div>
 
   <div class="mt" list-result>
-    <dx-data-grid [dataSource]="categorias">
+    <dx-data-grid (onRowDblClick)="edit()"
+                  (onSelectionChanged)="selecionaCategoria($event)"
+                  [dataSource]="categorias">
+      <dxo-selection mode="single"></dxo-selection>
     </dx-data-grid>
   </div>
 
@@ -24,6 +28,7 @@
       <div class="row mr">
         <span class="mr">Categoria</span>
         <dx-text-box #categoriaTextBox
+                     (onEnterKey)="salvar()"
                      [(value)]="categoria.nome"
                      [showClearButton]="true"
                      labelMode="hidden"

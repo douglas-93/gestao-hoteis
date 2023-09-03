@@ -1,4 +1,5 @@
-<base-crud (filterFunction)="buscar()"
+<base-crud #crud
+           (filterFunction)="buscar()"
            (novoCadastroFunction)="novo()"
            (saveFunction)="salvar()"
            [editTitle]="'Cadastro de Tipo'"
@@ -15,7 +16,10 @@
   </div>
 
   <div class="mt" list-result>
-    <dx-data-grid [dataSource]="tipos">
+    <dx-data-grid (onRowDblClick)="edit()"
+                  (onSelectionChanged)="selecionTipo($event)"
+                  [dataSource]="tipos">
+      <dxo-selection mode="single"></dxo-selection>
     </dx-data-grid>
   </div>
 
@@ -24,6 +28,7 @@
       <div class="row mr">
         <span class="mr">Tipo</span>
         <dx-text-box #tipoTextBox
+                     (onEnterKey)="salvar()"
                      [(value)]="tipo.nome"
                      [showClearButton]="true"
                      labelMode="hidden"

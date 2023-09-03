@@ -25,92 +25,92 @@ import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
   {
-    path: 'reserva',
+    path: 'reservas',
     component: ReservaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'reserva/cad',
+    path: 'reservas/cad',
     component: ReservaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'reserva/edit',
+    path: 'reservas/edit/:id',
     component: ReservaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'empresa',
+    path: 'empresas',
     component: EmpresaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'empresa/cad',
+    path: 'empresas/cad',
     component: EmpresaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'empresa/edit',
+    path: 'empresas/edit/:id',
     component: EmpresaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'hospede',
+    path: 'hospedes',
     component: HospedeComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'hospede/cad',
+    path: 'hospedes/cad',
     component: HospedeComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'hospede/edit',
+    path: 'hospedes/edit/:id',
     component: HospedeComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'quarto',
+    path: 'quartos',
     component: QuartoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'quarto/cad',
+    path: 'quartos/cad',
     component: QuartoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'quarto/edit',
+    path: 'quartos/edit/:id',
     component: QuartoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'tipo',
+    path: 'tipos',
     component: TipoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'tipo/cad',
+    path: 'tipos/cad',
     component: TipoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'tipo/edit',
+    path: 'tipos/edit/:id',
     component: TipoComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'categoria',
+    path: 'categorias',
     component: CategoriaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'categoria/cad',
+    path: 'categorias/cad',
     component: CategoriaComponent,
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'categoria/edit',
+    path: 'categorias/edit/:id',
     component: CategoriaComponent,
     canActivate: [ AuthGuardService ]
   },
@@ -125,7 +125,7 @@ const routes: Routes = [
     canActivate: [ AuthGuardService ]
   },
   {
-    path: 'hotel/edit',
+    path: 'hotel/edit/:id',
     component: HotelComponent,
     canActivate: [ AuthGuardService ]
   },

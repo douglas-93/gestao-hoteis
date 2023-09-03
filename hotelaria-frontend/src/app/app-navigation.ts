@@ -29,34 +29,34 @@ export const navigation = [
     items: [
       {
         text: 'Categoria',
-        path: '/categoria',
+        path: '/categorias',
         icon: 'fa-solid fa-gem'
       },
       {
         text: 'Tipo',
-        path: '/tipo',
+        path: '/tipos',
         icon: 'fa-solid fa-people-group'
       },
       {
         text: 'Quarto',
-        path: '/quarto',
+        path: '/quartos',
         icon: 'fa-solid fa-door-open'
       }
     ]
   },
   {
     text: 'Hospede',
-    path: '/hospede',
+    path: '/hospedes',
     icon: 'fa-solid fa-user'
   },
   {
     text: 'Empresa',
-    path: '/empresa',
+    path: '/empresas',
     icon: 'fa-solid fa-city'
   },
   {
     text: 'Reserva',
-    path: '/reserva',
+    path: '/reservas',
     icon: 'fa-solid fa-calendar'
   }
 ];

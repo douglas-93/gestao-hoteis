@@ -3,7 +3,8 @@
     <div class="content-block">
       <div class="dx-card responsive-paddings">
         <h2 class="content-block">{{listTitle}}</h2>
-        <app-toolbar (filtrar)="filterFunctionEnv()"
+        <app-toolbar #toolbarList
+                     (filtrar)="filterFunctionEnv()"
                      (novoCadastro)="novoCadastroFunctionEnv()"
                      [cadastro]="false"
                      [mode]="mode">
@@ -21,7 +22,8 @@
     <div class="content-block">
       <div class="dx-card responsive-paddings">
         <h2 class="content-block">{{editTitle}}</h2>
-        <app-toolbar (deletar)="deleteFunctionEnv()"
+        <app-toolbar #toolbarEdit
+                     (deletar)="deleteFunctionEnv()"
                      (salvar)="saveFunctionEnv()"
                      [cadastro]="true"
                      [mode]="mode">

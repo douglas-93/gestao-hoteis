@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../enums/mode.enum";
 import {Router} from "@angular/router";
+import {ToolbarComponent} from "../toolbar/toolbar.component";
 
 @Component({
   selector: 'base-crud',
@@ -8,6 +9,9 @@ import {Router} from "@angular/router";
   styleUrls: ['./base-crud.component.scss']
 })
 export class BaseCrudComponent {
+
+  @ViewChild('toolbarList') toolbarList: ToolbarComponent;
+  @ViewChild('toolbarEdit') toolbarEdit: ToolbarComponent;
 
   @Input() listTitle: string;
   @Input() editTitle: string;
