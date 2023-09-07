@@ -10,7 +10,14 @@ import {AuthGuardService} from './shared/services';
 import {HomeComponent} from './pages/home/home.component';
 import {ProfileComponent} from './pages/profile/profile.component';
 import {TasksComponent} from './pages/tasks/tasks.component';
-import {DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxFormModule, DxTextBoxModule} from 'devextreme-angular';
+import {
+  DxButtonModule,
+  DxCheckBoxModule,
+  DxDataGridModule, DxFileUploaderModule,
+  DxFormModule, DxListModule, DxNumberBoxModule, DxSelectBoxModule,
+  DxSwitchModule, DxTabPanelModule,
+  DxTextBoxModule
+} from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
 import {NgIf} from "@angular/common";
@@ -141,7 +148,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule],
+  imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [

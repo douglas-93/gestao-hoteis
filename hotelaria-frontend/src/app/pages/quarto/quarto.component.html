@@ -1,4 +1,141 @@
-<h2 class="content-block">Quarto</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
-</div>
+<base-crud #crud
+           (filterFunction)="buscar()"
+           (novoCadastroFunction)="novo()"
+           (saveFunction)="salvar()"
+           [editTitle]="'Cadastro de Quartos'"
+           [listTitle]="'Listagem de Quartos'"
+           [mode]="mode">
+
+  <div list-filter-fields>
+
+  </div>
+
+  <div list-result></div>
+
+  <div edit-template>
+
+    <dx-tab-panel>
+      <dxi-item title='Dados'>
+        <dx-form>
+
+          <dxi-item [colCount]="2"
+                    itemType="group">
+            <dxi-item dataField="nome"
+                      template="nomeTemplate">
+            </dxi-item>
+            <dxi-item dataField="ativo"
+                      template="ativoTemplate">
+            </dxi-item>
+          </dxi-item>
+          <dxi-item [colCount]="2"
+                    itemType="group">
+            <dxi-item dataField="capacidadePessoas"
+                      template="capacidadePessoasTemplate">
+            </dxi-item>
+            <dxi-item dataField="valorDiara"
+                      template="valorDiaraTemplate">
+            </dxi-item>
+          </dxi-item>
+          <dxi-item [colCount]="2"
+                    itemType="group">
+            <dxi-item dataField="tipoQuarto"
+                      template="tipoQuartoTemplate">
+            </dxi-item>
+            <dxi-item dataField="categoriaQuarto"
+                      template="categoriaQuartoTemplate">
+            </dxi-item>
+          </dxi-item>
+
+          <!--   TEMPLATES   -->
+
+          <div *dxTemplate="let data of 'nomeTemplate'">
+            <dx-text-box></dx-text-box>
+          </div>
+          <div *dxTemplate="let data of 'ativoTemplate'">
+            <dx-switch></dx-switch>
+          </div>
+          <div *dxTemplate="let data of 'capacidadePessoasTemplate'">
+            <dx-number-box></dx-number-box>
+          </div>
+          <div *dxTemplate="let data of 'valorDiaraTemplate'">
+            <dx-text-box></dx-text-box>
+          </div>
+          <div *dxTemplate="let data of 'tipoQuartoTemplate'">
+            <dx-select-box></dx-select-box>
+          </div>
+          <div *dxTemplate="let data of 'categoriaQuartoTemplate'">
+            <dx-select-box></dx-select-box>
+          </div>
+
+        </dx-form>
+      </dxi-item>
+
+      <dxi-item title='Itens'>
+
+        <dx-form>
+          <dxi-item [colCount]="4"
+                    itemType="group">
+
+            <dxi-item [colSpan]="3"
+                      caption="Item"
+                      dataField="item"
+                      template="itemTemplate">
+            </dxi-item>
+            <dxi-item template="buttonsTemplate">
+            </dxi-item>
+
+          </dxi-item>
+
+          <dxi-item itemType="group">
+            <dxi-item template="listTemplate"></dxi-item>
+          </dxi-item>
+
+          <!--    TEMPLATES      -->
+          <div *dxTemplate="let data of 'itemTemplate'">
+            <dx-text-box></dx-text-box>
+          </div>
+
+          <div *dxTemplate="let data of 'buttonsTemplate'">
+            <div class="row" style="align-items: flex-end; height: 82.63px">
+              <dx-button icon="fa fa-circle-plus">
+              </dx-button>
+              <dx-button icon="fa fa-circle-minus">
+              </dx-button>
+            </div>
+          </div>
+
+          <div *dxTemplate="let data of 'listTemplate'">
+            <dx-list #listaItens
+                     [allowItemDeleting]="true">
+            </dx-list>
+          </div>
+
+        </dx-form>
+
+      </dxi-item>
+
+      <dxi-item title='Imagens'>
+
+        <dx-form>
+
+          <dxi-item dataField="Imagens"
+                    template="fileUploadTemplate">
+          </dxi-item>
+
+          <!--    TEMPLATES      -->
+          <div *dxTemplate="let data of 'fileUploadTemplate'">
+            <dx-file-uploader #fileUploader
+                              [multiple]="true"
+                              accept="image/*"
+                              selectButtonText="Selecionar Imagem">
+            </dx-file-uploader>
+          </div>
+
+        </dx-form>
+
+      </dxi-item>
+
+    </dx-tab-panel>
+  </div>
+
+</base-crud>
