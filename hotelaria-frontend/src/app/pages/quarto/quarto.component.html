@@ -124,14 +124,25 @@
 
           <!--    TEMPLATES      -->
           <div *dxTemplate="let data of 'fileUploadTemplate'">
-            <dx-file-uploader #fileUploader
+            <dx-file-uploader (onValueChanged)="carregarArquivo($event)"
+                              [accept]="'image/*'"
                               [multiple]="true"
-                              accept="image/*"
-                              selectButtonText="Selecionar Imagem">
+                              [selectButtonText]="'Selecione a imagem'"
+                              [uploadMode]="'useForm'">
             </dx-file-uploader>
           </div>
 
         </dx-form>
+
+        <dx-gallery #gallery
+                    [dataSource]="imgDataSource"
+                    [height]="300"
+                    [loop]="true"
+                    [showIndicator]="true"
+                    [showNavButtons]="true"
+                    [slideshowDelay]="2000"
+                    id="gallery"
+        ></dx-gallery>
 
       </dxi-item>
 

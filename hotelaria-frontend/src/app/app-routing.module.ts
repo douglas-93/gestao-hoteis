@@ -11,12 +11,12 @@ import {HomeComponent} from './pages/home/home.component';
 import {ProfileComponent} from './pages/profile/profile.component';
 import {TasksComponent} from './pages/tasks/tasks.component';
 import {
-  DxButtonModule,
-  DxCheckBoxModule,
-  DxDataGridModule, DxFileUploaderModule,
-  DxFormModule, DxListModule, DxNumberBoxModule, DxSelectBoxModule,
-  DxSwitchModule, DxTabPanelModule,
-  DxTextBoxModule
+    DxButtonModule,
+    DxCheckBoxModule,
+    DxDataGridModule, DxFileUploaderModule,
+    DxFormModule, DxGalleryModule, DxListModule, DxNumberBoxModule, DxSelectBoxModule,
+    DxSwitchModule, DxTabPanelModule,
+    DxTextBoxModule
 } from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
@@ -148,7 +148,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule],
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [

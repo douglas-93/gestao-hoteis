@@ -9,6 +9,8 @@ import {Router} from "@angular/router";
 })
 export class QuartoComponent implements OnInit {
   mode: ModeEnum = ModeEnum.LIST;
+  img: string | ArrayBuffer | null;
+  imgDataSource: string[] = [];
 
   constructor(private router: Router) {
   }
@@ -38,4 +40,26 @@ export class QuartoComponent implements OnInit {
   findQuarto(id: string) {
 
   }
+
+  carregarArquivo(e: any) {
+    this.imgDataSource = []
+    const arquivos: File[] = e.value
+    arquivos.forEach(a => {
+      this.lerArquivo(a)
+    })
+  }
+
+  lerArquivo(arquivo?: File) {
+    if (arquivo) {
+      let url: string | ArrayBuffer;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target!.result;
+        /* pegando a url para o atributo */
+        this.imgDataSource.push(<string>result!);
+      };
+      reader.readAsDataURL(arquivo);
+    }
+  }
+
 }
