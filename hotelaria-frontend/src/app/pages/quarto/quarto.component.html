@@ -92,14 +92,16 @@
 
           <!--    TEMPLATES      -->
           <div *dxTemplate="let data of 'itemTemplate'">
-            <dx-text-box></dx-text-box>
+            <dx-text-box #itemTxBox
+                         (onEnterKey)="adicionaItemLista()">
+            </dx-text-box>
           </div>
 
           <div *dxTemplate="let data of 'buttonsTemplate'">
             <div class="row" style="align-items: flex-end; height: 82.63px">
-              <dx-button icon="fa fa-circle-plus">
-              </dx-button>
-              <dx-button icon="fa fa-circle-minus">
+              <dx-button (onClick)="adicionaItemLista()"
+                         icon="fa fa-arrow-down"
+                         text="Adicionar">
               </dx-button>
             </div>
           </div>
@@ -125,6 +127,7 @@
           <!--    TEMPLATES      -->
           <div *dxTemplate="let data of 'fileUploadTemplate'">
             <dx-file-uploader (onValueChanged)="carregarArquivo($event)"
+                              [(value)]="imgData"
                               [accept]="'image/*'"
                               [multiple]="true"
                               [selectButtonText]="'Selecione a imagem'"
@@ -134,15 +137,14 @@
 
         </dx-form>
 
-        <dx-gallery #gallery
-                    [dataSource]="imgDataSource"
-                    [height]="300"
-                    [loop]="true"
-                    [showIndicator]="true"
-                    [showNavButtons]="true"
-                    [slideshowDelay]="2000"
-                    id="gallery"
-        ></dx-gallery>
+        <div *ngFor="let imagem of imgDataSource; let i = index" style="margin: 5px auto">
+          <div style="display: flex; align-items: center; justify-content: start; max-width: 50vw;">
+            <dx-button (onClick)="removerImagem(i)" class="mr"
+                       icon="fa fa-trash">
+            </dx-button>
+            <img [src]="imagem" alt="Imagem {{ i }}" style="max-width: 100%; height: auto">
+          </div>
+        </div>
 
       </dxi-item>
 

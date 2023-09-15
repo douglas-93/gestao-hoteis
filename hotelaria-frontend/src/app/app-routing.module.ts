@@ -20,7 +20,7 @@ import {
 } from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import { HotelComponent } from './pages/hotel/hotel.component';
 import { CategoriaComponent } from './pages/categoria/categoria.component';
 import { TipoComponent } from './pages/tipo/tipo.component';
@@ -148,7 +148,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule],
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [

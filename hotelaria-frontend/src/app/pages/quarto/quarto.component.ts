@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
+import {DxListComponent, DxTextBoxComponent} from "devextreme-angular";
 
 @Component({
   selector: 'app-quarto',
@@ -8,11 +9,17 @@ import {Router} from "@angular/router";
   styleUrls: ['./quarto.component.scss']
 })
 export class QuartoComponent implements OnInit {
+
+  @ViewChild('itemTxBox') itemTxBox: DxTextBoxComponent;
+  @ViewChild('listaItens') listaItens: DxListComponent;
+
   mode: ModeEnum = ModeEnum.LIST;
   img: string | ArrayBuffer | null;
   imgDataSource: string[] = [];
+  imgData: any[] = [];
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -62,4 +69,15 @@ export class QuartoComponent implements OnInit {
     }
   }
 
+  removerImagem(index: number) {
+    // this.imgDataSource.splice(index, 1)[0];
+    this.imgData.splice(index, 1)[0];
+    this.cdr.detectChanges();
+  }
+
+  adicionaItemLista(){
+    this.listaItens.items.push(this.itemTxBox.value);
+    this.itemTxBox.value = '';
+    this.listaItens.instance.repaint();
+  }
 }
