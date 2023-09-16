@@ -1,25 +1,25 @@
 <div class="user-panel">
-  <div class="user-info">
-    <div class="image-container">
-      <div class="user-image"></div>
+    <div class="user-info">
+        <div class="image-container">
+            <div class="user-image"></div>
+        </div>
+        <div class="user-name">{{user?.email}}</div>
     </div>
-    <div class="user-name">{{user?.email}}</div>
-  </div>
-  <dx-context-menu
-    *ngIf="menuMode === 'context'"
-    [items]="menuItems"
-    target=".user-button"
-    showEvent="dxclick"
-    width="210px"
-    [position]="{
+    <dx-context-menu
+        *ngIf="menuMode === 'context'"
+        [items]="menuItems"
+        [position]="{
       my: 'top',
       at: 'bottom'
     }"
-    cssClass="user-menu">
-  </dx-context-menu>
-  <dx-list
-    *ngIf="menuMode === 'list'"
-    class="dx-toolbar-menu-action"
-    [items]="menuItems">
-  </dx-list>
+        cssClass="user-menu"
+        showEvent="dxclick"
+        target=".user-button"
+        width="210px">
+    </dx-context-menu>
+    <dx-list
+        *ngIf="menuMode === 'list'"
+        [items]="menuItems"
+        class="dx-toolbar-menu-action">
+    </dx-list>
 </div>

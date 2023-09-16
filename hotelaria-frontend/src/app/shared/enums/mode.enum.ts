@@ -1,4 +1,4 @@
 export enum ModeEnum {
-  LIST,
-  EDIT
+    LIST,
+    EDIT
 }

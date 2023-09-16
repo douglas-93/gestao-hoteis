@@ -5,42 +5,42 @@
            [editTitle]="'Cadastro de Tipo'"
            [listTitle]="'Listagem de Tipo'"
            [mode]="mode">
-  <div class="mt mb" list-filter-fields>
-    <div class="row">
-      <span class="mr">Tipo</span>
-      <dx-text-box [showClearButton]="true"
-                   labelMode="hidden"
-                   width="500">
-      </dx-text-box>
+    <div class="mt mb" list-filter-fields>
+        <div class="row">
+            <span class="mr">Tipo</span>
+            <dx-text-box [showClearButton]="true"
+                         labelMode="hidden"
+                         width="500">
+            </dx-text-box>
+        </div>
     </div>
-  </div>
 
-  <div class="mt" list-result>
-    <dx-data-grid (onRowDblClick)="edit()"
-                  (onSelectionChanged)="selecionTipo($event)"
-                  [dataSource]="tipos">
-      <dxo-selection mode="single"></dxo-selection>
-    </dx-data-grid>
-  </div>
-
-  <div edit-template>
-    <div class="row">
-      <div class="row mr">
-        <span class="mr">Tipo</span>
-        <dx-text-box #tipoTextBox
-                     (onEnterKey)="salvar()"
-                     [(value)]="tipo.nome"
-                     [showClearButton]="true"
-                     labelMode="hidden"
-                     width="500">
-        </dx-text-box>
-      </div>
-
-      <div class="row ml">
-        <span class="mr">Ativo</span>
-        <dx-check-box (onValueChanged)="tipo.ativa = $event.value" [value]="tipo.ativa">
-        </dx-check-box>
-      </div>
+    <div class="mt" list-result>
+        <dx-data-grid (onRowDblClick)="edit()"
+                      (onSelectionChanged)="selecionTipo($event)"
+                      [dataSource]="tipos">
+            <dxo-selection mode="single"></dxo-selection>
+        </dx-data-grid>
     </div>
-  </div>
+
+    <div edit-template>
+        <div class="row">
+            <div class="row mr">
+                <span class="mr">Tipo</span>
+                <dx-text-box #tipoTextBox
+                             (onEnterKey)="salvar()"
+                             [(value)]="tipo.nome"
+                             [showClearButton]="true"
+                             labelMode="hidden"
+                             width="500">
+                </dx-text-box>
+            </div>
+
+            <div class="row ml">
+                <span class="mr">Ativo</span>
+                <dx-check-box (onValueChanged)="tipo.ativa = $event.value" [value]="tipo.ativa">
+                </dx-check-box>
+            </div>
+        </div>
+    </div>
 </base-crud>

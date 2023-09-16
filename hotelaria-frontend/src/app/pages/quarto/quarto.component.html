@@ -6,149 +6,149 @@
            [listTitle]="'Listagem de Quartos'"
            [mode]="mode">
 
-  <div list-filter-fields>
+    <div list-filter-fields>
 
-  </div>
+    </div>
 
-  <div list-result></div>
+    <div list-result></div>
 
-  <div edit-template>
+    <div edit-template>
 
-    <dx-tab-panel>
-      <dxi-item title='Dados'>
-        <dx-form>
+        <dx-tab-panel>
+            <dxi-item title='Dados'>
+                <dx-form>
 
-          <dxi-item [colCount]="2"
-                    itemType="group">
-            <dxi-item dataField="nome"
-                      template="nomeTemplate">
-            </dxi-item>
-            <dxi-item dataField="ativo"
-                      template="ativoTemplate">
-            </dxi-item>
-          </dxi-item>
-          <dxi-item [colCount]="2"
-                    itemType="group">
-            <dxi-item dataField="capacidadePessoas"
-                      template="capacidadePessoasTemplate">
-            </dxi-item>
-            <dxi-item dataField="valorDiara"
-                      template="valorDiaraTemplate">
-            </dxi-item>
-          </dxi-item>
-          <dxi-item [colCount]="2"
-                    itemType="group">
-            <dxi-item dataField="tipoQuarto"
-                      template="tipoQuartoTemplate">
-            </dxi-item>
-            <dxi-item dataField="categoriaQuarto"
-                      template="categoriaQuartoTemplate">
-            </dxi-item>
-          </dxi-item>
+                    <dxi-item [colCount]="2"
+                              itemType="group">
+                        <dxi-item dataField="nome"
+                                  template="nomeTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="ativo"
+                                  template="ativoTemplate">
+                        </dxi-item>
+                    </dxi-item>
+                    <dxi-item [colCount]="2"
+                              itemType="group">
+                        <dxi-item dataField="capacidadePessoas"
+                                  template="capacidadePessoasTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="valorDiara"
+                                  template="valorDiaraTemplate">
+                        </dxi-item>
+                    </dxi-item>
+                    <dxi-item [colCount]="2"
+                              itemType="group">
+                        <dxi-item dataField="tipoQuarto"
+                                  template="tipoQuartoTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="categoriaQuarto"
+                                  template="categoriaQuartoTemplate">
+                        </dxi-item>
+                    </dxi-item>
 
-          <!--   TEMPLATES   -->
+                    <!--   TEMPLATES   -->
 
-          <div *dxTemplate="let data of 'nomeTemplate'">
-            <dx-text-box></dx-text-box>
-          </div>
-          <div *dxTemplate="let data of 'ativoTemplate'">
-            <dx-switch></dx-switch>
-          </div>
-          <div *dxTemplate="let data of 'capacidadePessoasTemplate'">
-            <dx-number-box></dx-number-box>
-          </div>
-          <div *dxTemplate="let data of 'valorDiaraTemplate'">
-            <dx-text-box></dx-text-box>
-          </div>
-          <div *dxTemplate="let data of 'tipoQuartoTemplate'">
-            <dx-select-box></dx-select-box>
-          </div>
-          <div *dxTemplate="let data of 'categoriaQuartoTemplate'">
-            <dx-select-box></dx-select-box>
-          </div>
+                    <div *dxTemplate="let data of 'nomeTemplate'">
+                        <dx-text-box></dx-text-box>
+                    </div>
+                    <div *dxTemplate="let data of 'ativoTemplate'">
+                        <dx-switch></dx-switch>
+                    </div>
+                    <div *dxTemplate="let data of 'capacidadePessoasTemplate'">
+                        <dx-number-box></dx-number-box>
+                    </div>
+                    <div *dxTemplate="let data of 'valorDiaraTemplate'">
+                        <dx-text-box></dx-text-box>
+                    </div>
+                    <div *dxTemplate="let data of 'tipoQuartoTemplate'">
+                        <dx-select-box></dx-select-box>
+                    </div>
+                    <div *dxTemplate="let data of 'categoriaQuartoTemplate'">
+                        <dx-select-box></dx-select-box>
+                    </div>
 
-        </dx-form>
-      </dxi-item>
-
-      <dxi-item title='Itens'>
-
-        <dx-form>
-          <dxi-item [colCount]="4"
-                    itemType="group">
-
-            <dxi-item [colSpan]="3"
-                      caption="Item"
-                      dataField="item"
-                      template="itemTemplate">
-            </dxi-item>
-            <dxi-item template="buttonsTemplate">
+                </dx-form>
             </dxi-item>
 
-          </dxi-item>
+            <dxi-item title='Itens'>
 
-          <dxi-item itemType="group">
-            <dxi-item template="listTemplate"></dxi-item>
-          </dxi-item>
+                <dx-form>
+                    <dxi-item [colCount]="4"
+                              itemType="group">
 
-          <!--    TEMPLATES      -->
-          <div *dxTemplate="let data of 'itemTemplate'">
-            <dx-text-box #itemTxBox
-                         (onEnterKey)="adicionaItemLista()">
-            </dx-text-box>
-          </div>
+                        <dxi-item [colSpan]="3"
+                                  caption="Item"
+                                  dataField="item"
+                                  template="itemTemplate">
+                        </dxi-item>
+                        <dxi-item template="buttonsTemplate">
+                        </dxi-item>
 
-          <div *dxTemplate="let data of 'buttonsTemplate'">
-            <div class="row" style="align-items: flex-end; height: 82.63px">
-              <dx-button (onClick)="adicionaItemLista()"
-                         icon="fa fa-arrow-down"
-                         text="Adicionar">
-              </dx-button>
-            </div>
-          </div>
+                    </dxi-item>
 
-          <div *dxTemplate="let data of 'listTemplate'">
-            <dx-list #listaItens
-                     [allowItemDeleting]="true">
-            </dx-list>
-          </div>
+                    <dxi-item itemType="group">
+                        <dxi-item template="listTemplate"></dxi-item>
+                    </dxi-item>
 
-        </dx-form>
+                    <!--    TEMPLATES      -->
+                    <div *dxTemplate="let data of 'itemTemplate'">
+                        <dx-text-box #itemTxBox
+                                     (onEnterKey)="adicionaItemLista()">
+                        </dx-text-box>
+                    </div>
 
-      </dxi-item>
+                    <div *dxTemplate="let data of 'buttonsTemplate'">
+                        <div class="row" style="align-items: flex-end; height: 82.63px">
+                            <dx-button (onClick)="adicionaItemLista()"
+                                       icon="fa fa-arrow-down"
+                                       text="Adicionar">
+                            </dx-button>
+                        </div>
+                    </div>
 
-      <dxi-item title='Imagens'>
+                    <div *dxTemplate="let data of 'listTemplate'">
+                        <dx-list #listaItens
+                                 [allowItemDeleting]="true">
+                        </dx-list>
+                    </div>
 
-        <dx-form>
+                </dx-form>
 
-          <dxi-item dataField="Imagens"
-                    template="fileUploadTemplate">
-          </dxi-item>
+            </dxi-item>
 
-          <!--    TEMPLATES      -->
-          <div *dxTemplate="let data of 'fileUploadTemplate'">
-            <dx-file-uploader (onValueChanged)="carregarArquivo($event)"
-                              [(value)]="imgData"
-                              [accept]="'image/*'"
-                              [multiple]="true"
-                              [selectButtonText]="'Selecione a imagem'"
-                              [uploadMode]="'useForm'">
-            </dx-file-uploader>
-          </div>
+            <dxi-item title='Imagens'>
 
-        </dx-form>
+                <dx-form>
 
-        <div *ngFor="let imagem of imgDataSource; let i = index" style="margin: 5px auto">
-          <div style="display: flex; align-items: center; justify-content: start; max-width: 50vw;">
-            <dx-button (onClick)="removerImagem(i)" class="mr"
-                       icon="fa fa-trash">
-            </dx-button>
-            <img [src]="imagem" alt="Imagem {{ i }}" style="max-width: 100%; height: auto">
-          </div>
-        </div>
+                    <dxi-item dataField="Imagens"
+                              template="fileUploadTemplate">
+                    </dxi-item>
 
-      </dxi-item>
+                    <!--    TEMPLATES      -->
+                    <div *dxTemplate="let data of 'fileUploadTemplate'">
+                        <dx-file-uploader (onValueChanged)="carregarArquivo($event)"
+                                          [(value)]="imgData"
+                                          [accept]="'image/*'"
+                                          [multiple]="true"
+                                          [selectButtonText]="'Selecione a imagem'"
+                                          [uploadMode]="'useForm'">
+                        </dx-file-uploader>
+                    </div>
 
-    </dx-tab-panel>
-  </div>
+                </dx-form>
+
+                <div *ngFor="let imagem of imgDataSource; let i = index" style="margin: 5px auto">
+                    <div style="display: flex; align-items: center; justify-content: start; max-width: 50vw;">
+                        <dx-button (onClick)="removerImagem(i)" class="mr"
+                                   icon="fa fa-trash">
+                        </dx-button>
+                        <img [src]="imagem" alt="Imagem {{ i }}" style="max-width: 100%; height: auto">
+                    </div>
+                </div>
+
+            </dxi-item>
+
+        </dx-tab-panel>
+    </div>
 
 </base-crud>

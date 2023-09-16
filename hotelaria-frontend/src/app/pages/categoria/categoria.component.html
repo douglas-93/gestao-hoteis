@@ -5,43 +5,43 @@
            [editTitle]="'Cadastro de Categorias'"
            [listTitle]="'Listagem de Categorias'"
            [mode]="mode">
-  <div class="mt mb" list-filter-fields>
-    <div class="row">
-      <span class="mr">Categoria</span>
-      <dx-text-box [showClearButton]="true"
-                   labelMode="hidden"
-                   width="500">
-      </dx-text-box>
+    <div class="mt mb" list-filter-fields>
+        <div class="row">
+            <span class="mr">Categoria</span>
+            <dx-text-box [showClearButton]="true"
+                         labelMode="hidden"
+                         width="500">
+            </dx-text-box>
+        </div>
     </div>
-  </div>
 
-  <div class="mt" list-result>
-    <dx-data-grid (onRowDblClick)="edit()"
-                  (onSelectionChanged)="selecionaCategoria($event)"
-                  [dataSource]="categorias">
-      <dxo-selection mode="single"></dxo-selection>
-    </dx-data-grid>
-  </div>
-
-  <div edit-template>
-    <div class="row">
-      <div class="row mr">
-        <span class="mr">Categoria</span>
-        <dx-text-box #categoriaTextBox
-                     (onEnterKey)="salvar()"
-                     [(value)]="categoria.nome"
-                     [showClearButton]="true"
-                     labelMode="hidden"
-                     width="500">
-        </dx-text-box>
-      </div>
-
-      <div class="row ml">
-        <span class="mr">Ativo</span>
-        <dx-check-box (onValueChanged)="categoria.ativa = $event.value"
-                      [value]="categoria.ativa">
-        </dx-check-box>
-      </div>
+    <div class="mt" list-result>
+        <dx-data-grid (onRowDblClick)="edit()"
+                      (onSelectionChanged)="selecionaCategoria($event)"
+                      [dataSource]="categorias">
+            <dxo-selection mode="single"></dxo-selection>
+        </dx-data-grid>
     </div>
-  </div>
+
+    <div edit-template>
+        <div class="row">
+            <div class="row mr">
+                <span class="mr">Categoria</span>
+                <dx-text-box #categoriaTextBox
+                             (onEnterKey)="salvar()"
+                             [(value)]="categoria.nome"
+                             [showClearButton]="true"
+                             labelMode="hidden"
+                             width="500">
+                </dx-text-box>
+            </div>
+
+            <div class="row ml">
+                <span class="mr">Ativo</span>
+                <dx-check-box (onValueChanged)="categoria.ativa = $event.value"
+                              [value]="categoria.ativa">
+                </dx-check-box>
+            </div>
+        </div>
+    </div>
 </base-crud>

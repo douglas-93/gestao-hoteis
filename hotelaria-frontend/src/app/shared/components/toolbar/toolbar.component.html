@@ -1,42 +1,42 @@
 <!--  FILTRO  -->
 
 <div *ngIf="!cadastro" class="container">
-  <dx-button
-    (onClick)="filtrarEnv($event)"
-    icon="fa-solid fa-filter"
-    text="Buscar">
-  </dx-button>
-  <dx-button
-    (onClick)="novoCadEnv($event)"
-    icon="fa-solid fa-plus"
-    text="Novo">
-  </dx-button>
-  <dx-button
-    *ngIf="!desativarBotaoFechar"
-    (onClick)="voltar()"
-    icon="fa-solid fa-xmark"
-    text="Fechar">
-  </dx-button>
+    <dx-button
+        (onClick)="filtrarEnv($event)"
+        icon="fa-solid fa-filter"
+        text="Buscar">
+    </dx-button>
+    <dx-button
+        (onClick)="novoCadEnv($event)"
+        icon="fa-solid fa-plus"
+        text="Novo">
+    </dx-button>
+    <dx-button
+        (onClick)="voltar()"
+        *ngIf="!desativarBotaoFechar"
+        icon="fa-solid fa-xmark"
+        text="Fechar">
+    </dx-button>
 </div>
 
 <!--  CADASTRO  -->
 
 <div *ngIf="cadastro" class="container">
-  <dx-button
-    (onClick)="salvaEnv($event)"
-    icon="fa-solid fa-floppy-disk"
-    text="Salvar">
-  </dx-button>
-  <dx-button
-    (onClick)="deleteEnv($event)"
-    *ngIf="edit"
-    icon="fa-solid fa-trash"
-    text="Excluir">
-  </dx-button>
-  <dx-button
-    *ngIf="!desativarBotaoFechar"
-    (onClick)="voltar()"
-    icon="fa-solid fa-xmark"
-    text="Fechar">
-  </dx-button>
+    <dx-button
+        (onClick)="salvaEnv($event)"
+        icon="fa-solid fa-floppy-disk"
+        text="Salvar">
+    </dx-button>
+    <dx-button
+        (onClick)="deleteEnv($event)"
+        *ngIf="edit"
+        icon="fa-solid fa-trash"
+        text="Excluir">
+    </dx-button>
+    <dx-button
+        (onClick)="voltar()"
+        *ngIf="!desativarBotaoFechar"
+        icon="fa-solid fa-xmark"
+        text="Fechar">
+    </dx-button>
 </div>

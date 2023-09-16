@@ -1,37 +1,37 @@
 <div>
-  <div *ngIf="mode === ModeEnum.LIST">
-    <div class="content-block">
-      <div class="dx-card responsive-paddings">
-        <h2 class="content-block">{{listTitle}}</h2>
-        <app-toolbar #toolbarList
-                     (filtrar)="filterFunctionEnv()"
-                     (novoCadastro)="novoCadastroFunctionEnv()"
-                     [cadastro]="false"
-                     [mode]="mode">
-        </app-toolbar>
+    <div *ngIf="mode === ModeEnum.LIST">
+        <div class="content-block">
+            <div class="dx-card responsive-paddings">
+                <h2 class="content-block">{{listTitle}}</h2>
+                <app-toolbar #toolbarList
+                             (filtrar)="filterFunctionEnv()"
+                             (novoCadastro)="novoCadastroFunctionEnv()"
+                             [cadastro]="false"
+                             [mode]="mode">
+                </app-toolbar>
 
-        <ng-content select="[list-filter-fields]"></ng-content>
+                <ng-content select="[list-filter-fields]"></ng-content>
 
-        <ng-content select="[list-result]"></ng-content>
+                <ng-content select="[list-result]"></ng-content>
 
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div *ngIf="mode === ModeEnum.EDIT">
-    <div class="content-block">
-      <div class="dx-card responsive-paddings">
-        <h2 class="content-block">{{editTitle}}</h2>
-        <app-toolbar #toolbarEdit
-                     (deletar)="deleteFunctionEnv()"
-                     (salvar)="saveFunctionEnv()"
-                     [cadastro]="true"
-                     [mode]="mode">
-        </app-toolbar>
+    <div *ngIf="mode === ModeEnum.EDIT">
+        <div class="content-block">
+            <div class="dx-card responsive-paddings">
+                <h2 class="content-block">{{editTitle}}</h2>
+                <app-toolbar #toolbarEdit
+                             (deletar)="deleteFunctionEnv()"
+                             (salvar)="saveFunctionEnv()"
+                             [cadastro]="true"
+                             [mode]="mode">
+                </app-toolbar>
 
-        <ng-content select="[edit-template]"></ng-content>
+                <ng-content select="[edit-template]"></ng-content>
 
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
