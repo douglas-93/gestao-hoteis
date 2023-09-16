@@ -1,1 +1,71 @@
-<p>hotel works!</p>
+<base-crud #crud
+           (filterFunction)="buscar()"
+           (novoCadastroFunction)="novo()"
+           (saveFunction)="salvar()"
+           [editTitle]="'Cadastro do Hotel'"
+           [listTitle]="'Listagem do Cadastro'"
+           [mode]="mode">
+
+    <div list-filter-fields>
+
+    </div>
+
+    <div list-result>
+
+    </div>
+
+    <div edit-template>
+
+        <dx-tab-panel>
+            <dxi-item title='Dados'>
+                <dx-form>
+                    <dxi-item colCount="2" itemType="group">
+                        <dxi-item [label]="{text: 'Nome do Hotel'}"
+                                  dataField="nome"
+                                  template="nomeTemplate">
+                        </dxi-item>
+                        <dxi-item [label]="{text: 'CNPJ'}"
+                                  dataField="cnpj"
+                                  template="cnpjTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <dxi-item colCount="2" itemType="group">
+                        <dxi-item [label]="{text: 'Responsável'}"
+                                  dataField="responsavel"
+                                  template="responsavelTemplate">
+                        </dxi-item>
+                        <dxi-item [label]="{text: 'CPF do Responsável'}"
+                                  dataField="cpfResponsavel"
+                                  template="cpfTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <!--          TEMPLATE      -->
+
+                    <div *dxTemplate="let data of 'nomeTemplate'">
+                        <dx-text-box>
+                        </dx-text-box>
+                    </div>
+                    <div *dxTemplate="let data of 'cnpjTemplate'">
+                        <dx-text-box>
+                        </dx-text-box>
+                    </div>
+                    <div *dxTemplate="let data of 'responsavelTemplate'">
+                        <dx-text-box>
+                        </dx-text-box>
+                    </div>
+                    <div *dxTemplate="let data of 'cpfTemplate'">
+                        <dx-text-box>
+                        </dx-text-box>
+                    </div>
+                </dx-form>
+            </dxi-item>
+            <dxi-item title='Endereço'>
+                <app-endereco-form></app-endereco-form>
+            </dxi-item>
+        </dx-tab-panel>
+
+    </div>
+
+</base-crud>
