@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {EnderecoModel} from "../../models/endereco.model";
 import notify from "devextreme/ui/notify";
-import {DxDataGridComponent, DxFormComponent} from "devextreme-angular";
+import {DxDataGridComponent, DxFormComponent, DxTextBoxComponent} from "devextreme-angular";
 import {CepService} from "../../services/cep.service";
 
 
@@ -11,8 +11,10 @@ import {CepService} from "../../services/cep.service";
     styleUrls: ['./endereco-form.component.scss']
 })
 export class EnderecoFormComponent {
+
     @ViewChild('enderecoForm', {static: false}) enderecoForm: DxFormComponent;
     @ViewChild('grid', {static: false}) grid: DxDataGridComponent;
+    @ViewChild('numero') numeroTxtBox: DxTextBoxComponent;
 
     endereco: EnderecoModel;
     enderecoSelecinado: EnderecoModel;
@@ -37,6 +39,9 @@ export class EnderecoFormComponent {
                         this.endereco.bairro = res.body?.bairro!;
                         this.endereco.cidade = res.body?.localidade!;
                         this.endereco.estado = res.body?.uf!;
+
+                        this.numeroTxtBox.instance.focus();
+
                         return;
                     }
                     if (res.body?.erro === true) {

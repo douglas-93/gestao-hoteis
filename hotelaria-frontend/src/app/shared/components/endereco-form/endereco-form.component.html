@@ -64,7 +64,8 @@
         </dx-text-box>
     </div>
     <div *dxTemplate="let data of 'numeroTemplate'">
-        <dx-text-box [(value)]='endereco.numero'>
+        <dx-text-box #numero
+                     [(value)]='endereco.numero'>
         </dx-text-box>
     </div>
 </dx-form>
