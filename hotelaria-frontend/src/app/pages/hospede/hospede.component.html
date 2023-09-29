@@ -1,4 +1,82 @@
-<h2 class="content-block">Hospede</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
-</div>
+<base-crud #crud
+           (filterFunction)="buscar()"
+           (novoCadastroFunction)="novo()"
+           (saveFunction)="salvar()"
+           [editTitle]="'Cadastro de Hospede'"
+           [listTitle]="'Listagem de Hospedes'"
+           [mode]="mode">
+    <div list-filter-fields>
+
+    </div>
+
+    <div list-result>
+
+    </div>
+
+    <div edit-template>
+        <dx-form>
+            <dxi-item itemType="group" colCount="5">
+                <dxi-item dataField="nome"
+                          [colSpan]="2"
+                          template="nomeTemplate">
+                </dxi-item>
+                <dxi-item dataField="dataNascimento"
+                          template="dataNascimentoTemplate">
+                </dxi-item>
+                <dxi-item dataField="ativo"
+                          [colSpan]="2"
+                          template="ativoTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <dxi-item itemType="group" colCount="4">
+                <dxi-item dataField="cpf"
+                          template="cpfTemplate">
+                </dxi-item>
+                <dxi-item dataField="rg"
+                          template="rgTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <dxi-item itemType="group" colCount="2">
+                <dxi-item dataField="observacao"
+                          [colSpan]="2"
+                          template="observacaoTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <!--            TEMPLATE            -->
+
+            <div *dxTemplate="let data of 'nomeTemplate'">
+                <dx-text-box></dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'dataNascimentoTemplate'">
+                <dx-date-box [useMaskBehavior]="true"
+                             [max]="hoje"
+                             displayFormat="dd/MM/yyyy">
+                </dx-date-box>
+            </div>
+
+            <div *dxTemplate="let data of 'ativoTemplate'">
+                <dx-switch></dx-switch>
+            </div>
+
+            <div *dxTemplate="let data of 'cpfTemplate'">
+                <dx-text-box mask="000.000.000-00">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'rgTemplate'">
+                <dx-text-box mask="AA-00.000.000">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'observacaoTemplate'">
+                <dx-text-area [minHeight]="200">
+                </dx-text-area>
+            </div>
+
+        </dx-form>
+    </div>
+</base-crud>
