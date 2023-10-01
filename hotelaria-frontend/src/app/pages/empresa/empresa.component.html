@@ -1,4 +1,86 @@
-<h2 class="content-block">Empresa</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
-</div>
+<base-crud #crud
+           (filterFunction)="buscar()"
+           (novoCadastroFunction)="novo()"
+           (saveFunction)="salvar()"
+           [editTitle]="'Cadastro de Empresa'"
+           [listTitle]="'Listagem de Empresas'"
+           [mode]="mode">
+    <div list-filter-fields>
+
+    </div>
+
+    <div list-result>
+
+    </div>
+
+    <div edit-template>
+        <dx-form>
+            <dxi-item itemType="group" colCount="5">
+                <dxi-item dataField="razaoSocial"
+                          [colSpan]="2"
+                          template="razaoSocialTemplate">
+                </dxi-item>
+                <dxi-item dataField="nomeFantasia"
+                          template="nomeFantasiaTemplate">
+                </dxi-item>
+                <dxi-item dataField="ativo"
+                          [colSpan]="2"
+                          template="ativoTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <dxi-item itemType="group" colCount="4">
+                <dxi-item dataField="cnpj"
+                          template="cnpjTemplate">
+                </dxi-item>
+                <dxi-item dataField="inscricaoEstadual"
+                          template="inscricaoEstadualTemplate">
+                </dxi-item>
+                <dxi-item [colSpan]="2"
+                          dataField="ramoAtividade"
+                          template="ramoAtividadeTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <dxi-item itemType="group" colCount="2">
+                <dxi-item dataField="observacao"
+                          [colSpan]="2"
+                          template="observacaoTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <!--            TEMPLATE            -->
+
+            <div *dxTemplate="let data of 'razaoSocialTemplate'">
+                <dx-text-box></dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'nomeFantasiaTemplate'">
+                <dx-text-box></dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'ativoTemplate'">
+                <dx-switch></dx-switch>
+            </div>
+
+            <div *dxTemplate="let data of 'cnpjTemplate'">
+                <dx-text-box mask="00.000.000/0000-00">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'inscricaoEstadualTemplate'">
+                <dx-text-box></dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'ramoAtividadeTemplate'">
+                <dx-text-box></dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'observacaoTemplate'">
+                <dx-text-area [minHeight]="200">
+                </dx-text-area>
+            </div>
+
+        </dx-form>
+    </div>
+</base-crud>
