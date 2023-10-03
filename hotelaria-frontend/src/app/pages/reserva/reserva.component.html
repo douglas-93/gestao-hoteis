@@ -1,4 +1,30 @@
-<h2 class="content-block">Reserva</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
-</div>
+<base-crud #crud
+           (filterFunction)="buscar()"
+           (novoCadastroFunction)="novo()"
+           (saveFunction)="salvar()"
+           [editTitle]="'Cadastro de Reserva'"
+           [listTitle]="'Listagem de Reservas'"
+           [mode]="mode">
+
+    <div list-filter-fields></div>
+    <div list-result></div>
+    <div edit-template>
+        <dx-form>
+            <dxi-item itemType="group" colCount="3">
+                <dxi-item itemType="group">
+                    <dxi-item dataField="hospedes"></dxi-item>
+                </dxi-item>
+
+                <dxi-item itemType="group">
+                    <dxi-item dataField="quartos"></dxi-item>
+                </dxi-item>
+
+                <dxi-item itemType="group">
+                    <dxi-item dataField="data"></dxi-item>
+                </dxi-item>
+
+
+            </dxi-item>
+        </dx-form>
+    </div>
+</base-crud>
