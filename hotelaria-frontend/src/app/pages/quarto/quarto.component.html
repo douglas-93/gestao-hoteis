@@ -49,22 +49,32 @@
                     <!--   TEMPLATES   -->
 
                     <div *dxTemplate="let data of 'nomeTemplate'">
-                        <dx-text-box></dx-text-box>
+                        <dx-text-box [(value)]="quarto.nome">
+                        </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'ativoTemplate'">
-                        <dx-switch></dx-switch>
+                        <dx-switch [(value)]="quarto.ativo">
+                        </dx-switch>
                     </div>
                     <div *dxTemplate="let data of 'capacidadePessoasTemplate'">
-                        <dx-number-box></dx-number-box>
+                        <dx-number-box [(value)]="quarto.capacidadePessoas">
+                        </dx-number-box>
                     </div>
                     <div *dxTemplate="let data of 'valorDiaraTemplate'">
-                        <dx-text-box></dx-text-box>
+                        <dx-text-box #valorDiaria>
+                        </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'tipoQuartoTemplate'">
-                        <dx-select-box></dx-select-box>
+                        <dx-select-box [(value)]="quarto.tipoQuarto"
+                                       [dataSource]="tipos"
+                                       displayExpr="nome">
+                        </dx-select-box>
                     </div>
                     <div *dxTemplate="let data of 'categoriaQuartoTemplate'">
-                        <dx-select-box></dx-select-box>
+                        <dx-select-box [(value)]="quarto.categoriaQuarto"
+                                       [dataSource]="categorias"
+                                       displayExpr="nome">
+                        </dx-select-box>
                     </div>
 
                 </dx-form>
@@ -108,7 +118,8 @@
 
                     <div *dxTemplate="let data of 'listTemplate'">
                         <dx-list #listaItens
-                                 [allowItemDeleting]="true">
+                                 [allowItemDeleting]="true"
+                                 [dataSource]="quarto.itens">
                         </dx-list>
                     </div>
 
