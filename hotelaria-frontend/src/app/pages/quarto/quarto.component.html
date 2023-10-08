@@ -10,18 +10,52 @@
 
     </div>
 
-    <div list-result></div>
+    <div list-result>
+        <dx-data-grid [dataSource]="quartosCadastrados">
+            <dxi-column dataField="nome"
+                        caption="Nome">
+            </dxi-column>
+            <dxi-column dataField="capacidadePessoas"
+                        caption="Capacidade de Pessoas">
+            </dxi-column>
+            <dxi-column dataField="valorDiaria"
+                        caption="Valor da Diaria">
+            </dxi-column>
+            <dxi-column dataField="tipo"
+                        caption="Tipo"
+                        cellTemplate="tipoTemplate">
+            </dxi-column>
+            <dxi-column dataField="categoria"
+                        caption="Categoria"
+                        cellTemplate="categoriaTemplate">
+            </dxi-column>
+            <dxi-column dataField="ativo"
+                        caption="Ativo?">
+            </dxi-column>
+
+            <!--            TEMPLATE        -->
+            <div *dxTemplate="let data of 'tipoTemplate'">
+                {{data.data.tipoQuarto.nome}}
+            </div>
+
+            <div *dxTemplate="let data of 'categoriaTemplate'">
+                {{data.data.categoriaQuarto.nome}}
+            </div>
+        </dx-data-grid>
+    </div>
 
     <div edit-template>
 
         <dx-tab-panel>
             <dxi-item title='Dados'>
-                <dx-form>
+                <dx-form #cadForm
+                         [formData]="quarto">
 
                     <dxi-item [colCount]="2"
                               itemType="group">
                         <dxi-item dataField="nome"
-                                  template="nomeTemplate">
+                                  template="nomeTemplate"
+                                  [isRequired]='true'>
                         </dxi-item>
                         <dxi-item dataField="ativo"
                                   template="ativoTemplate">
@@ -30,19 +64,23 @@
                     <dxi-item [colCount]="2"
                               itemType="group">
                         <dxi-item dataField="capacidadePessoas"
-                                  template="capacidadePessoasTemplate">
+                                  template="capacidadePessoasTemplate"
+                                  [isRequired]='true'>
                         </dxi-item>
                         <dxi-item dataField="valorDiara"
-                                  template="valorDiaraTemplate">
+                                  template="valorDiaraTemplate"
+                                  [isRequired]='true'>
                         </dxi-item>
                     </dxi-item>
                     <dxi-item [colCount]="2"
                               itemType="group">
                         <dxi-item dataField="tipoQuarto"
-                                  template="tipoQuartoTemplate">
+                                  template="tipoQuartoTemplate"
+                                  [isRequired]='true'>
                         </dxi-item>
                         <dxi-item dataField="categoriaQuarto"
-                                  template="categoriaQuartoTemplate">
+                                  template="categoriaQuartoTemplate"
+                                  [isRequired]='true'>
                         </dxi-item>
                     </dxi-item>
 

@@ -7,7 +7,7 @@ export class QuartoModel {
     ativo: boolean;
     capacidadePessoas: number;
     valorDiaria: number;
-    imagem: ArrayBuffer;
+    imagem: ArrayBuffer[];
     tipoQuarto: TipoQuartoModel;
     categoriaQuarto: CategoriaQuartoModel;
     itens: string[];

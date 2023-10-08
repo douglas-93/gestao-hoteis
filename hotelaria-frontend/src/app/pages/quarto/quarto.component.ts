@@ -1,13 +1,15 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
-import {DxListComponent, DxTextBoxComponent} from "devextreme-angular";
+import {DxFormComponent, DxListComponent, DxTextBoxComponent} from "devextreme-angular";
 import {TipoService} from "../../shared/services/tipo.service";
 import {CategoriaService} from "../../shared/services/categoria.service";
 import {forkJoin} from "rxjs";
 import {TipoQuartoModel} from "../../shared/models/tipoQuarto.model";
 import {CategoriaQuartoModel} from "../../shared/models/categoriaQuarto.model";
 import {QuartoModel} from "../../shared/models/quarto.model";
+import notify from "devextreme/ui/notify";
+import {QuartoService} from "../../shared/services/quarto.service";
 
 @Component({
     selector: 'app-quarto',
@@ -18,6 +20,7 @@ export class QuartoComponent implements OnInit {
 
     @ViewChild('itemTxBox') itemTxBox: DxTextBoxComponent;
     @ViewChild('listaItens') listaItens: DxListComponent;
+    @ViewChild('cadForm', {static: false}) cadForm: DxFormComponent;
 
     mode: ModeEnum = ModeEnum.LIST;
     quarto: QuartoModel;
@@ -26,12 +29,14 @@ export class QuartoComponent implements OnInit {
     imgData: any[] = [];
     tipos: TipoQuartoModel[] = [];
     categorias: CategoriaQuartoModel[] = [];
+    quartosCadastrados: QuartoModel[] = [];
 
 
     constructor(private router: Router,
                 private cdr: ChangeDetectorRef,
                 private tipoService: TipoService,
-                private categoriaService: CategoriaService) {
+                private categoriaService: CategoriaService,
+                private quartoService: QuartoService) {
     }
 
     ngOnInit(): void {
@@ -41,6 +46,7 @@ export class QuartoComponent implements OnInit {
 
         this.quarto = new QuartoModel();
         this.quarto.ativo = true;
+        this.quarto.imagem = [];
         this.getTipoECategoria();
 
         if (edit) {
@@ -49,7 +55,11 @@ export class QuartoComponent implements OnInit {
     }
 
     buscar() {
-
+        this.quartoService.findAll().subscribe(resp => {
+            if (resp.ok) {
+                this.quartosCadastrados = resp.body!
+            }
+        })
     }
 
     novo() {
@@ -57,8 +67,24 @@ export class QuartoComponent implements OnInit {
     }
 
     salvar() {
-        this.quarto.itens = this.listaItens.items
-        console.log(this.quarto)
+        if (this.cadForm.instance.validate().isValid) {
+
+            this.quarto.itens = this.listaItens.items
+            if (this.imgDataSource.length > 0) {
+                this.imgDataSource.forEach(i => {
+                    this.quarto.imagem.push(this.converteBase64EmArrayBuffer(i));
+                })
+            }
+            this.quartoService.save(this.quarto).subscribe(resp => {
+                if (resp.ok) {
+                    notify('Salvo com sucesso', 'success', 3000);
+                    window.history.back();
+                }
+            });
+            return;
+        }
+
+        notify('Preencha os campos obrigatórios', 'warning', 3000);
     }
 
     findQuarto(id: string) {
@@ -84,6 +110,19 @@ export class QuartoComponent implements OnInit {
             };
             reader.readAsDataURL(arquivo);
         }
+    }
+
+    converteBase64EmArrayBuffer(base64: string): ArrayBuffer {
+        const binaryString = window.atob(base64.split(',')[1]);
+        const length = binaryString.length;
+        const buffer = new ArrayBuffer(length);
+        const view = new Uint8Array(buffer);
+
+        for (let i = 0; i < length; i++) {
+            view[i] = binaryString.charCodeAt(i);
+        }
+
+        return buffer;
     }
 
     removerImagem(index: number) {
