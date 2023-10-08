@@ -25,9 +25,8 @@ public class QuartoModel implements Serializable {
     private Boolean ativo = true;
     private Integer capacidadePessoas;
     private BigDecimal valorDiaria;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] imagem;
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ImagemQuartoModel> imagem;
     @ManyToOne
     private TipoQuartoModel tipoQuarto;
     @ManyToOne
