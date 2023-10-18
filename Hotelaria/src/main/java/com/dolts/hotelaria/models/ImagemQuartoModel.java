@@ -19,7 +19,9 @@ public class ImagemQuartoModel implements Serializable {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    private byte[] imagem;
+    private String imagem;
 
+    @Version
+    private Long version;
 }
 

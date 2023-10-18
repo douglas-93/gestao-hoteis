@@ -10,6 +10,7 @@ import {CategoriaQuartoModel} from "../../shared/models/categoriaQuarto.model";
 import {QuartoModel} from "../../shared/models/quarto.model";
 import notify from "devextreme/ui/notify";
 import {QuartoService} from "../../shared/services/quarto.service";
+import {ImagemQuartoModel} from "../../shared/models/imagemQuarto.model";
 
 @Component({
     selector: 'app-quarto',
@@ -24,12 +25,12 @@ export class QuartoComponent implements OnInit {
 
     mode: ModeEnum = ModeEnum.LIST;
     quarto: QuartoModel;
-    img: string | ArrayBuffer | null;
     imgDataSource: string[] = [];
     imgData: any[] = [];
     tipos: TipoQuartoModel[] = [];
     categorias: CategoriaQuartoModel[] = [];
     quartosCadastrados: QuartoModel[] = [];
+    arquivos: File[] = []
 
 
     constructor(private router: Router,
@@ -69,12 +70,13 @@ export class QuartoComponent implements OnInit {
     salvar() {
         if (this.cadForm.instance.validate().isValid) {
 
-            this.quarto.itens = this.listaItens.items
-            if (this.imgDataSource.length > 0) {
-                this.imgDataSource.forEach(i => {
-                    this.quarto.imagem.push(this.converteBase64EmArrayBuffer(i));
-                })
-            }
+            this.quarto.itens = this.listaItens.items;
+            this.imgDataSource.forEach( i => {
+                let tempModel: ImagemQuartoModel = new ImagemQuartoModel();
+                tempModel.imagem = i;
+                this.quarto.imagem.push(tempModel);
+            })
+
             this.quartoService.save(this.quarto).subscribe(resp => {
                 if (resp.ok) {
                     notify('Salvo com sucesso', 'success', 3000);
@@ -93,26 +95,25 @@ export class QuartoComponent implements OnInit {
 
     carregarArquivo(e: any) {
         this.imgDataSource = []
-        const arquivos: File[] = e.value
-        arquivos.forEach(a => {
+        this.arquivos = e.value
+        this.arquivos.forEach(a => {
             this.lerArquivo(a)
         })
     }
 
     lerArquivo(arquivo?: File) {
         if (arquivo) {
-            let url: string | ArrayBuffer;
             const reader = new FileReader();
             reader.onload = (e) => {
                 const result = e.target!.result;
-                /* pegando a url para o atributo */
+                /* pegando a imagem como base64 e usando no atributo */
                 this.imgDataSource.push(<string>result!);
             };
             reader.readAsDataURL(arquivo);
         }
     }
 
-    converteBase64EmArrayBuffer(base64: string): ArrayBuffer {
+    /*converteBase64EmArrayBuffer(base64: string): ArrayBuffer {
         const binaryString = window.atob(base64.split(',')[1]);
         const length = binaryString.length;
         const buffer = new ArrayBuffer(length);
@@ -123,7 +124,7 @@ export class QuartoComponent implements OnInit {
         }
 
         return buffer;
-    }
+    }*/
 
     removerImagem(index: number) {
         // this.imgDataSource.splice(index, 1)[0];
