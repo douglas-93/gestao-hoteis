@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
-import {DxFormComponent, DxListComponent, DxTextBoxComponent} from "devextreme-angular";
+import {DxFileUploaderComponent, DxFormComponent, DxListComponent, DxTextBoxComponent} from "devextreme-angular";
 import {TipoService} from "../../shared/services/tipo.service";
 import {CategoriaService} from "../../shared/services/categoria.service";
 import {forkJoin} from "rxjs";
@@ -22,6 +22,7 @@ export class QuartoComponent implements OnInit {
     @ViewChild('itemTxBox') itemTxBox: DxTextBoxComponent;
     @ViewChild('listaItens') listaItens: DxListComponent;
     @ViewChild('cadForm', {static: false}) cadForm: DxFormComponent;
+    @ViewChild('fileUploader', {static: false}) fileUploader: DxFileUploaderComponent;
 
     mode: ModeEnum = ModeEnum.LIST;
     quarto: QuartoModel;
@@ -31,7 +32,8 @@ export class QuartoComponent implements OnInit {
     categorias: CategoriaQuartoModel[] = [];
     quartosCadastrados: QuartoModel[] = [];
     arquivos: File[] = []
-
+    popUpVisible: boolean = false;
+    imagemDoPopUp: string = '';
 
     constructor(private router: Router,
                 private cdr: ChangeDetectorRef,
@@ -71,7 +73,7 @@ export class QuartoComponent implements OnInit {
         if (this.cadForm.instance.validate().isValid) {
 
             this.quarto.itens = this.listaItens.items;
-            this.imgDataSource.forEach( i => {
+            this.imgDataSource.forEach(i => {
                 let tempModel: ImagemQuartoModel = new ImagemQuartoModel();
                 tempModel.imagem = i;
                 this.quarto.imagem.push(tempModel);
@@ -99,6 +101,7 @@ export class QuartoComponent implements OnInit {
         this.arquivos.forEach(a => {
             this.lerArquivo(a)
         })
+        this.fileUploader.instance.reset();
     }
 
     lerArquivo(arquivo?: File) {
@@ -113,22 +116,8 @@ export class QuartoComponent implements OnInit {
         }
     }
 
-    /*converteBase64EmArrayBuffer(base64: string): ArrayBuffer {
-        const binaryString = window.atob(base64.split(',')[1]);
-        const length = binaryString.length;
-        const buffer = new ArrayBuffer(length);
-        const view = new Uint8Array(buffer);
-
-        for (let i = 0; i < length; i++) {
-            view[i] = binaryString.charCodeAt(i);
-        }
-
-        return buffer;
-    }*/
-
     removerImagem(index: number) {
-        // this.imgDataSource.splice(index, 1)[0];
-        this.imgData.splice(index, 1)[0];
+        this.imgDataSource.splice(index, 1)[0];
         this.cdr.detectChanges();
     }
 
@@ -147,5 +136,10 @@ export class QuartoComponent implements OnInit {
                 this.categorias = respCat.body!;
             }
         })
+    }
+
+    abrirImagemPopUp(i: number) {
+        this.imagemDoPopUp = this.imgDataSource[i];
+        this.popUpVisible = true;
     }
 }

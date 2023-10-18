@@ -175,7 +175,8 @@
 
                     <!--    TEMPLATES      -->
                     <div *dxTemplate="let data of 'fileUploadTemplate'">
-                        <dx-file-uploader (onValueChanged)="carregarArquivo($event)"
+                        <dx-file-uploader #fileUploader
+                                          (onValueChanged)="carregarArquivo($event)"
                                           [(value)]="imgData"
                                           [accept]="'image/*'"
                                           [multiple]="true"
@@ -186,14 +187,25 @@
 
                 </dx-form>
 
-                <div *ngFor="let imagem of imgDataSource; let i = index" style="margin: 5px auto">
-                    <div style="display: flex; align-items: center; justify-content: start; max-width: 50vw;">
-                        <dx-button (onClick)="removerImagem(i)" class="mr"
-                                   icon="fa fa-trash">
-                        </dx-button>
-                        <img [src]="imagem" alt="Imagem {{ i }}" style="max-width: 100%; height: auto">
+                <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                    <div *ngFor="let imagem of imgDataSource; let i = index">
+                        <div class="containerDaImagem" (click)="abrirImagemPopUp(i)">
+                            <dx-button (onClick)="removerImagem(i)" class="iconeRemover"
+                                       icon="fa fa-trash">
+                            </dx-button>
+                            <img [src]="imagem" alt="Imagem {{ i }}" class="imagem">
+                        </div>
                     </div>
                 </div>
+
+                <dx-popup [(visible)]="popUpVisible"
+                          [showTitle]="true"
+                          [title]="'Imagem do Quarto'"
+                          [dragEnabled]="false"
+                          [hideOnOutsideClick]="true"
+                          [showCloseButton]="true">
+                    <img [src]="imagemDoPopUp" style="max-width: 100%; max-height: 100%; display: block; margin: auto;">
+                </dx-popup>
 
             </dxi-item>
 
