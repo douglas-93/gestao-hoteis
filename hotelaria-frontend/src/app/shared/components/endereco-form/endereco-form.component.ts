@@ -58,8 +58,7 @@ export class EnderecoFormComponent {
     }
 
     validateForm() {
-        this.enderecoForm.instance.validate();
-        return this.enderecoForm.instance.validate().isValid;
+        return this.getGridData().length != 0;
     }
 
     getGridData() {
@@ -119,7 +118,8 @@ export class EnderecoFormComponent {
     }
 
     addAddress() {
-        if (this.validateForm()) {
+        this.enderecoForm.instance.validate();
+        if (this.enderecoForm.instance.validate().isValid) {
             this.gridData.push(this.getFormData());
             this.clearEndereco();
             return;
