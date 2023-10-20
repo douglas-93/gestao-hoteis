@@ -11,22 +11,48 @@
     </div>
 
     <div list-result>
+        <dx-data-grid [dataSource]="gridResult">
+            <dxi-column dataField="nome"
+                        caption="Nome do Hotel">
+            </dxi-column>
+            <dxi-column dataField="cnpj"
+                        caption="CNPJ"
+                        cellTemplate="cnpjTemplate">
+            </dxi-column>
+            <dxi-column dataField="responsavel"
+                        caption="Responsável">
+            </dxi-column>
+            <dxi-column dataField="cpfResponsavel"
+                        caption="CPF"
+                        cellTemplate="cpfTemplate">
+            </dxi-column>
 
+            <div *dxTemplate="let data of 'cnpjTemplate'">
+                {{formatarCNPJ(data.data.cnpj)}}
+            </div>
+
+            <div *dxTemplate="let data of 'cpfTemplate'">
+                {{formatarCPF(data.data.cpfResponsavel)}}
+            </div>
+
+        </dx-data-grid>
     </div>
 
     <div edit-template>
 
         <dx-tab-panel>
             <dxi-item title='Dados'>
-                <dx-form>
+                <dx-form #hotelForm>
                     <dxi-item colCount="2" itemType="group">
                         <dxi-item [label]="{text: 'Nome do Hotel'}"
                                   dataField="nome"
-                                  template="nomeTemplate">
+                                  template="nomeTemplate"
+                                  [isRequired]="true">
                         </dxi-item>
                         <dxi-item [label]="{text: 'CNPJ'}"
                                   dataField="cnpj"
-                                  template="cnpjTemplate">
+                                  template="cnpjTemplate"
+                                  [isRequired]="true">
                         </dxi-item>
                     </dxi-item>
 
@@ -44,25 +70,28 @@
                     <!--          TEMPLATE      -->
 
                     <div *dxTemplate="let data of 'nomeTemplate'">
-                        <dx-text-box>
+                        <dx-text-box [(value)]="hotel.nome">
                         </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'cnpjTemplate'">
-                        <dx-text-box>
+                        <dx-text-box [(value)]="hotel.cnpj"
+                                     mask="##.###.###/####-##">
                         </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'responsavelTemplate'">
-                        <dx-text-box>
+                        <dx-text-box [(value)]="hotel.responsavel">
                         </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'cpfTemplate'">
-                        <dx-text-box>
+                        <dx-text-box [(value)]="hotel.cpfResponsavel"
+                                     mask="###.###.###-##">
                         </dx-text-box>
                     </div>
                 </dx-form>
             </dxi-item>
             <dxi-item title='Endereço'>
-                <app-endereco-form></app-endereco-form>
+                <app-endereco-form #enderecoForm>
+                </app-endereco-form>
             </dxi-item>
         </dx-tab-panel>
 
