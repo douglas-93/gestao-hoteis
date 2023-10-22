@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "cliente")
@@ -22,8 +23,8 @@ public class ClienteModel implements Serializable {
     private String email;
     private String telefone;
     private String celular;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private EnderecoModel endereco;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<EnderecoModel> endereco;
     private LocalDateTime dataCadastro;
     private LocalDateTime dataUltimaAtualizacao;
     @Version
