@@ -23,6 +23,7 @@ export class QuartoComponent implements OnInit {
     @ViewChild('listaItens') listaItens: DxListComponent;
     @ViewChild('cadForm', {static: false}) cadForm: DxFormComponent;
     @ViewChild('fileUploader', {static: false}) fileUploader: DxFileUploaderComponent;
+    @ViewChild('valorDiaria', {static: false}) valorDiariaTBox: DxTextBoxComponent;
 
     mode: ModeEnum = ModeEnum.LIST;
     quarto: QuartoModel;
@@ -34,6 +35,7 @@ export class QuartoComponent implements OnInit {
     arquivos: File[] = []
     popUpVisible: boolean = false;
     imagemDoPopUp: string = '';
+
 
     constructor(private router: Router,
                 private cdr: ChangeDetectorRef,
@@ -72,10 +74,11 @@ export class QuartoComponent implements OnInit {
     salvar() {
         if (this.cadForm.instance.validate().isValid) {
 
+            this.quarto.valorDiaria = parseFloat(this.valorDiariaTBox.value);
             this.quarto.itens = this.listaItens.items;
             this.imgDataSource.forEach(i => {
                 let tempModel: ImagemQuartoModel = new ImagemQuartoModel();
-                tempModel.imagem = i;
+                tempModel.imagem = i.replace('data:image/png;base64,', '');
                 this.quarto.imagem.push(tempModel);
             })
 

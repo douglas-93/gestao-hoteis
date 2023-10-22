@@ -9,22 +9,17 @@
     <div list-filter-fields></div>
     <div list-result></div>
     <div edit-template>
-        <dx-form>
-            <dxi-item itemType="group" colCount="3">
-                <dxi-item itemType="group">
-                    <dxi-item dataField="hospedes"></dxi-item>
-                </dxi-item>
 
-                <dxi-item itemType="group">
-                    <dxi-item dataField="quartos"></dxi-item>
-                </dxi-item>
-
-                <dxi-item itemType="group">
-                    <dxi-item dataField="data"></dxi-item>
-                </dxi-item>
-
-
+        <dx-tab-panel>
+            <dxi-item title="Hospede">
+                <dx-autocomplete>
+                </dx-autocomplete>
             </dxi-item>
-        </dx-form>
+            <dxi-item title="Quarto">
+            </dxi-item>
+            <dxi-item title="Data da Reserva">
+            </dxi-item>
+        </dx-tab-panel>
+
     </div>
 </base-crud>
