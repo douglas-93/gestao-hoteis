@@ -10,77 +10,132 @@
     </div>
 
     <div list-result>
-
+<dx-data-grid [dataSource]="gridResult">
+</dx-data-grid>
     </div>
 
     <div edit-template>
-        <dx-form>
-            <dxi-item itemType="group" colCount="5">
-                <dxi-item dataField="razaoSocial"
-                          [colSpan]="2"
-                          template="razaoSocialTemplate">
-                </dxi-item>
-                <dxi-item dataField="nomeFantasia"
-                          template="nomeFantasiaTemplate">
-                </dxi-item>
-                <dxi-item dataField="ativo"
-                          [colSpan]="2"
-                          template="ativoTemplate">
-                </dxi-item>
+        <dx-tab-panel>
+            <dxi-item title="Dados Cadastrais">
+                <dx-form #empresaForm>
+                    <dxi-item colCount="5" itemType="group">
+                        <dxi-item [colSpan]="2"
+                                  [label]="{text: 'Razão Social'}"
+                                  dataField="razaoSocial"
+                                  template="razaoSocialTemplate">
+                        </dxi-item>
+                        <dxi-item [colSpan]="2"
+                                  dataField="nomeFantasia"
+                                  template="nomeFantasiaTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="ativo"
+                                  template="ativoTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <dxi-item colCount="4" itemType="group">
+                        <dxi-item [label]="{text: 'CNPJ'}"
+                                  dataField="cnpj"
+                                  template="cnpjTemplate">
+                        </dxi-item>
+                        <dxi-item [label]="{text: 'Incrição Estadual'}"
+                                  dataField="inscricaoEstadual"
+                                  template="inscricaoEstadualTemplate">
+                        </dxi-item>
+                        <dxi-item [colSpan]="2"
+                                  [label]="{text: 'Ramo de Atividade'}"
+                                  dataField="ramoAtividade"
+                                  template="ramoAtividadeTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <dxi-item colCount="3" itemType="group">
+                        <dxi-item dataField="telefone"
+                                  template="telefoneTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="celular"
+                                  template="celularTemplate">
+                        </dxi-item>
+                        <dxi-item [label]="{text: 'E-mail'}"
+                                  dataField="email"
+                                  template="emailTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <!--            TEMPLATE            -->
+
+                    <div *dxTemplate="let data of 'razaoSocialTemplate'">
+                        <dx-text-box [(value)]="empresa.razaoSocial">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'nomeFantasiaTemplate'">
+                        <dx-text-box [(value)]="empresa.nomeFantasia">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'ativoTemplate'">
+                        <dx-switch [(value)]="empresa.ativo">
+                        </dx-switch>
+                    </div>
+
+                    <div *dxTemplate="let data of 'cnpjTemplate'">
+                        <dx-text-box [(value)]="empresa.cnpj"
+                                     mask="00.000.000/0000-00">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'inscricaoEstadualTemplate'">
+                        <dx-text-box [(value)]="empresa.inscricaoEstadual">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'ramoAtividadeTemplate'">
+                        <dx-text-box [(value)]="empresa.ramoAtividade">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'telefoneTemplate'">
+                        <dx-text-box [(value)]="empresa.telefone"
+                                     mask="(00) 0000-0000">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'celularTemplate'">
+                        <dx-text-box [(value)]="empresa.celular"
+                                     mask="(00) 00000-0000">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'emailTemplate'">
+                        <dx-text-box [(value)]="empresa.email">
+                        </dx-text-box>
+                    </div>
+
+                </dx-form>
+            </dxi-item>
+            <dxi-item title="Endereço">
+                <app-endereco-form #enderecoForm>
+                </app-endereco-form>
             </dxi-item>
 
-            <dxi-item itemType="group" colCount="4">
-                <dxi-item dataField="cnpj"
-                          template="cnpjTemplate">
-                </dxi-item>
-                <dxi-item dataField="inscricaoEstadual"
-                          template="inscricaoEstadualTemplate">
-                </dxi-item>
-                <dxi-item [colSpan]="2"
-                          dataField="ramoAtividade"
-                          template="ramoAtividadeTemplate">
-                </dxi-item>
+            <dxi-item title="Observações">
+                <dx-form>
+                    <dxi-item colCount="2" itemType="group">
+                        <dxi-item [colSpan]="2"
+                                  [label]="{text: 'Observações'}"
+                                  dataField="observacao"
+                                  template="observacaoTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <div *dxTemplate="let data of 'observacaoTemplate'">
+                        <dx-text-area [(value)]="empresa.observacao"
+                                      [minHeight]="160">
+                        </dx-text-area>
+                    </div>
+                </dx-form>
             </dxi-item>
-
-            <dxi-item itemType="group" colCount="2">
-                <dxi-item dataField="observacao"
-                          [colSpan]="2"
-                          template="observacaoTemplate">
-                </dxi-item>
-            </dxi-item>
-
-            <!--            TEMPLATE            -->
-
-            <div *dxTemplate="let data of 'razaoSocialTemplate'">
-                <dx-text-box></dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'nomeFantasiaTemplate'">
-                <dx-text-box></dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'ativoTemplate'">
-                <dx-switch></dx-switch>
-            </div>
-
-            <div *dxTemplate="let data of 'cnpjTemplate'">
-                <dx-text-box mask="00.000.000/0000-00">
-                </dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'inscricaoEstadualTemplate'">
-                <dx-text-box></dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'ramoAtividadeTemplate'">
-                <dx-text-box></dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'observacaoTemplate'">
-                <dx-text-area [minHeight]="200">
-                </dx-text-area>
-            </div>
-
-        </dx-form>
+        </dx-tab-panel>
     </div>
 </base-crud>
