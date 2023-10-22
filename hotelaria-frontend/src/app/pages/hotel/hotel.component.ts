@@ -6,6 +6,7 @@ import {EnderecoFormComponent} from "../../shared/components/endereco-form/ender
 import {HotelModel} from "../../shared/models/hotel.model";
 import {HotelService} from "../../shared/services/hotel.service";
 import notify from "devextreme/ui/notify";
+import {Utils} from "../../shared/Utils";
 
 @Component({
     selector: 'app-hotel', templateUrl: './hotel.component.html', styleUrls: ['./hotel.component.scss']
@@ -18,6 +19,7 @@ export class HotelComponent {
 
     hotel: HotelModel;
     gridResult: HotelModel[] = [];
+    protected readonly Utils = Utils;
 
     constructor(private router: Router, private hotelService: HotelService) {
     }
@@ -69,17 +71,5 @@ export class HotelComponent {
 
     private _findHotel(id: string) {
 
-    }
-
-    formatarCNPJ(cnpj: string): string {
-        cnpj = cnpj.replace(/\D/g, '');
-        cnpj = cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-        return cnpj;
-    }
-
-    formatarCPF(cpf: string): string {
-        cpf = cpf.replace(/\D/g, '');
-        cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-        return cpf;
     }
 }

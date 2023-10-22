@@ -28,11 +28,11 @@
             </dxi-column>
 
             <div *dxTemplate="let data of 'cnpjTemplate'">
-                {{formatarCNPJ(data.data.cnpj)}}
+                {{Utils.formatarCNPJ(data.data.cnpj)}}
             </div>
 
             <div *dxTemplate="let data of 'cpfTemplate'">
-                {{formatarCPF(data.data.cpfResponsavel)}}
+                {{Utils.formatarCPF(data.data.cpfResponsavel)}}
             </div>
 
         </dx-data-grid>
