@@ -6,6 +6,7 @@ import {DxFormComponent} from "devextreme-angular";
 import {EmpresaModel} from "../../shared/models/empresa.model";
 import {EmpresaService} from "../../shared/services/empresa.service";
 import notify from "devextreme/ui/notify";
+import {Utils} from "../../shared/Utils";
 
 @Component({
     selector: 'app-empresa', templateUrl: './empresa.component.html', styleUrls: ['./empresa.component.scss']
@@ -51,6 +52,7 @@ export class EmpresaComponent implements OnInit {
         this.empresaService.save(this.empresa).subscribe(resp => {
             if (resp.ok) {
                 notify('Salvo com sucesso', 'success', 3600);
+                window.history.back();
             }
         })
     }
@@ -58,4 +60,6 @@ export class EmpresaComponent implements OnInit {
     findEmpresa(id: string) {
 
     }
+
+    protected readonly Utils = Utils;
 }

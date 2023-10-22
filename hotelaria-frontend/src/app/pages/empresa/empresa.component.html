@@ -10,8 +10,39 @@
     </div>
 
     <div list-result>
-<dx-data-grid [dataSource]="gridResult">
-</dx-data-grid>
+        <dx-data-grid [dataSource]="gridResult">
+            <dxi-column dataField="razaoSocial">
+            </dxi-column>
+            <dxi-column dataField="nomeFantasia">
+            </dxi-column>
+            <dxi-column caption="CNPJ"
+                        cellTemplate="cnpjTemplate"
+                        dataField="cnpj">
+            </dxi-column>
+            <dxi-column cellTemplate="telefoneTemplate"
+                        dataField="telefone">
+            </dxi-column>
+            <dxi-column cellTemplate="celularTemplate"
+                        dataField="celular">
+            </dxi-column>
+            <dxi-column caption="E-mail"
+                        dataField="email">
+            </dxi-column>
+            <dxi-column dataField="ativo">
+            </dxi-column>
+
+            <!--            TEMPLATE        -->
+
+            <div *dxTemplate="let data of 'cnpjTemplate'">
+                {{Utils.formatarCNPJ(data.data.cnpj)}}
+            </div>
+            <div *dxTemplate="let data of 'telefoneTemplate'">
+                {{Utils.formatarTelefone(data.data.telefone)}}
+            </div>
+            <div *dxTemplate="let data of 'celularTemplate'">
+                {{Utils.formatarCelular(data.data.celular)}}
+            </div>
+        </dx-data-grid>
     </div>
 
     <div edit-template>
