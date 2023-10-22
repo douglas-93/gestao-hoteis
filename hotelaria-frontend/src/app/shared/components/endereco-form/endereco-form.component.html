@@ -2,40 +2,49 @@
          [formData]='endereco'>
 
     <dxi-item [colCount]="2" itemType="group">
-        <dxi-item dataField='cep' template='cepTemplate'></dxi-item>
+        <dxi-item dataField='cep'
+                  [label]="{text: 'CEP'}"
+                  template='cepTemplate'>
+        </dxi-item>
     </dxi-item>
 
-    <dxi-item [colCount]='3' itemType='group'>
+    <dxi-item [colCount]='4' itemType='group'>
         <dxi-item [isRequired]='true'
                   dataField='rua'
+                  [label]="{text: 'Logradouro'}"
                   template='ruaTemplate'>
-
         </dxi-item>
 
         <dxi-item [isRequired]='true'
                   dataField='bairro'
                   template='bairroTemplate'>
-
         </dxi-item>
 
         <dxi-item [isRequired]='true'
                   dataField='numero'
+                  [label]="{text: 'Número'}"
                   template='numeroTemplate'>
+        </dxi-item>
 
+        <dxi-item dataField='complemento'
+                  template='complementoTemplate'>
         </dxi-item>
     </dxi-item>
 
-    <dxi-item [colCount]='2' itemType='group'>
+    <dxi-item [colCount]='3' itemType='group'>
 
         <dxi-item [isRequired]='true'
                   dataField='cidade'
                   template='cidadeTemplate'>
-
         </dxi-item>
         <dxi-item [isRequired]='true'
                   dataField='estado'
                   template='estadoTemplate'>
-
+        </dxi-item>
+        <dxi-item [isRequired]='true'
+                  dataField='pais'
+                  [label]="{text: 'País'}"
+                  template='paisTemplate'>
         </dxi-item>
     </dxi-item>
 
@@ -63,9 +72,18 @@
         <dx-text-box [(value)]='endereco.estado'>
         </dx-text-box>
     </div>
+    <div *dxTemplate="let data of 'paisTemplate'">
+        <dx-text-box [(value)]='endereco.pais'>
+        </dx-text-box>
+    </div>
+    <div *dxTemplate="let data of 'complementoTemplate'">
+        <dx-text-box [(value)]='endereco.complemento'>
+        </dx-text-box>
+    </div>
     <div *dxTemplate="let data of 'numeroTemplate'">
         <dx-text-box #numero
-                     [(value)]='endereco.numero'>
+                     [(value)]='endereco.numero'
+                     (onEnterKey)="addAddress()">
         </dx-text-box>
     </div>
 </dx-form>
@@ -81,7 +99,9 @@
     <dxi-column dataField="bairro"></dxi-column>
     <dxi-column dataField="rua"></dxi-column>
     <dxi-column caption="Número" dataField="numero"></dxi-column>
+    <dxi-column dataField="complemento"></dxi-column>
     <dxi-column dataField="cidade"></dxi-column>
     <dxi-column dataField="estado"></dxi-column>
+    <dxi-column dataField="pais"></dxi-column>
 
 </dx-data-grid>

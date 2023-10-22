@@ -19,10 +19,11 @@ export class EnderecoFormComponent {
     endereco: EnderecoModel;
     enderecoSelecinado: EnderecoModel;
     gridData: EnderecoModel[];
-    lat: number;
-    long: number;
 
     constructor(private cepService: CepService) {
+    }
+
+    ngOnInit() {
         this.endereco = new EnderecoModel();
         this.gridData = [];
         this.addAddress = this.addAddress.bind(this);
@@ -39,6 +40,7 @@ export class EnderecoFormComponent {
                         this.endereco.bairro = res.body?.bairro!;
                         this.endereco.cidade = res.body?.localidade!;
                         this.endereco.estado = res.body?.uf!;
+                        this.endereco.pais = 'Brasil'
 
                         this.numeroTxtBox.instance.focus();
 
@@ -55,6 +57,12 @@ export class EnderecoFormComponent {
 
     clearEndereco() {
         this.endereco = new EnderecoModel();
+        /*this.endereco.cep = '';
+        this.endereco.rua = '';
+        this.endereco.bairro = '';
+        this.endereco.numero = '';
+        this.endereco.cidade = '';
+        this.endereco.estado = '';*/
     }
 
     validateForm() {
@@ -118,7 +126,6 @@ export class EnderecoFormComponent {
     }
 
     addAddress() {
-        this.enderecoForm.instance.validate();
         if (this.enderecoForm.instance.validate().isValid) {
             this.gridData.push(this.getFormData());
             this.clearEndereco();
