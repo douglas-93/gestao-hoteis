@@ -10,73 +10,151 @@
     </div>
 
     <div list-result>
+        <dx-data-grid [dataSource]="gridResult">
+            <dxi-column dataField="nome">
+            </dxi-column>
+            <dxi-column dataField="cpf"
+                        caption="CPF"
+                        cellTemplate="cpfTemplate">
+            </dxi-column>
+            <dxi-column dataField="telefone"
+                        cellTemplate="telefoneTemplate">
+            </dxi-column>
+            <dxi-column dataField="celular"
+                        cellTemplate="celularTemplate">
+            </dxi-column>
+            <dxi-column dataField="email"
+                        caption="E-mail">
+            </dxi-column>
+            <dxi-column dataField="ativo">
+            </dxi-column>
 
+            <!--            TEMPLATE        -->
+
+            <div *dxTemplate="let data of 'cpfTemplate'">
+                {{Utils.formatarCPF(data.data.cpf)}}
+            </div>
+
+            <div *dxTemplate="let data of 'telefoneTemplate'">
+                {{Utils.formatarTelefone(data.data.telefone)}}
+            </div>
+
+            <div *dxTemplate="let data of 'celularTemplate'">
+                {{Utils.formatarCelular(data.data.celular)}}
+            </div>
+        </dx-data-grid>
     </div>
 
     <div edit-template>
-        <dx-form>
-            <dxi-item itemType="group" colCount="5">
-                <dxi-item dataField="nome"
-                          [colSpan]="2"
-                          template="nomeTemplate">
-                </dxi-item>
-                <dxi-item dataField="dataNascimento"
-                          template="dataNascimentoTemplate">
-                </dxi-item>
-                <dxi-item dataField="ativo"
-                          [colSpan]="2"
-                          template="ativoTemplate">
-                </dxi-item>
+        <dx-tab-panel>
+            <dxi-item title='Dados Pessoais'>
+                <dx-form #hospedeForm>
+                    <dxi-item itemType="group" colCount="5">
+                        <dxi-item dataField="nome"
+                                  [colSpan]="2"
+                                  template="nomeTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="dataNascimento"
+                                  [label]="{text: 'Data de Nascimento'}"
+                                  template="dataNascimentoTemplate">
+                        </dxi-item>
+
+                        <dxi-item dataField="ativo"
+                                  template="ativoTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <dxi-item itemType="group" colCount="5">
+                        <dxi-item dataField="cpf"
+                                  [label]="{text: 'CPF'}"
+                                  template="cpfTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="rg"
+                                  [label]="{text: 'RG'}"
+                                  template="rgTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="telefone"
+                                  template="telefoneTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="celular"
+                                  template="celularTemplate">
+                        </dxi-item>
+                        <dxi-item dataField="email"
+                                  [label]="{text: 'E-mail'}"
+                                  template="emailTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <dxi-item itemType="group" colCount="2">
+                        <dxi-item dataField="observacao"
+                                  [label]="{text: 'Observações'}"
+                                  [colSpan]="2"
+                                  template="observacaoTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <!--            TEMPLATE            -->
+
+                    <div *dxTemplate="let data of 'nomeTemplate'">
+                        <dx-text-box [(value)]="hospede.nome">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'dataNascimentoTemplate'">
+                        <dx-date-box [useMaskBehavior]="true"
+                                     [max]="hoje"
+                                     displayFormat="dd/MM/yyyy"
+                                     [(value)]="hospede.dataNascimento">
+                        </dx-date-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'ativoTemplate'">
+                        <dx-switch [(value)]="hospede.ativo">
+                        </dx-switch>
+                    </div>
+
+                    <div *dxTemplate="let data of 'cpfTemplate'">
+                        <dx-text-box [(value)]="hospede.cpf"
+                                     mask="000.000.000-00">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'rgTemplate'">
+                        <dx-text-box [(value)]="hospede.rg"
+                                     mask="AA-00.000.000">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'observacaoTemplate'">
+                        <dx-text-area [(value)]="hospede.observacao"
+                                      [minHeight]="200">
+                        </dx-text-area>
+                    </div>
+
+                    <div *dxTemplate="let data of 'telefoneTemplate'">
+                        <dx-text-box [(value)]="hospede.telefone"
+                                     mask="(00) 0000-0000">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'celularTemplate'">
+                        <dx-text-box [(value)]="hospede.celular"
+                                     mask="(00) 0 0000-0000">
+                        </dx-text-box>
+                    </div>
+
+                    <div *dxTemplate="let data of 'emailTemplate'">
+                        <dx-text-box [(value)]="hospede.email">
+                        </dx-text-box>
+                    </div>
+
+                </dx-form>
             </dxi-item>
 
-            <dxi-item itemType="group" colCount="4">
-                <dxi-item dataField="cpf"
-                          template="cpfTemplate">
-                </dxi-item>
-                <dxi-item dataField="rg"
-                          template="rgTemplate">
-                </dxi-item>
+            <dxi-item title="Endereco">
+                <app-endereco-form #enderecoForm>
+                </app-endereco-form>
             </dxi-item>
-
-            <dxi-item itemType="group" colCount="2">
-                <dxi-item dataField="observacao"
-                          [colSpan]="2"
-                          template="observacaoTemplate">
-                </dxi-item>
-            </dxi-item>
-
-            <!--            TEMPLATE            -->
-
-            <div *dxTemplate="let data of 'nomeTemplate'">
-                <dx-text-box></dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'dataNascimentoTemplate'">
-                <dx-date-box [useMaskBehavior]="true"
-                             [max]="hoje"
-                             displayFormat="dd/MM/yyyy">
-                </dx-date-box>
-            </div>
-
-            <div *dxTemplate="let data of 'ativoTemplate'">
-                <dx-switch></dx-switch>
-            </div>
-
-            <div *dxTemplate="let data of 'cpfTemplate'">
-                <dx-text-box mask="000.000.000-00">
-                </dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'rgTemplate'">
-                <dx-text-box mask="AA-00.000.000">
-                </dx-text-box>
-            </div>
-
-            <div *dxTemplate="let data of 'observacaoTemplate'">
-                <dx-text-area [minHeight]="200">
-                </dx-text-area>
-            </div>
-
-        </dx-form>
+        </dx-tab-panel>
     </div>
 </base-crud>
