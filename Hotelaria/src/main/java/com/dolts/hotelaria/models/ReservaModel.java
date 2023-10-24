@@ -38,5 +38,5 @@ public class ReservaModel implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HospedeModel> hospedes = new ArrayList<>();
     @OneToMany
-    private List<QuartoModel> quarto = new ArrayList<>();
+    private List<QuartoModel> quartos = new ArrayList<>();
 }

@@ -43,9 +43,9 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
             );
         }
 
-        if (!entity.getQuarto().isEmpty()) {
-            entity.setQuarto(
-                    entity.getQuarto().stream()
+        if (!entity.getQuartos().isEmpty()) {
+            entity.setQuartos(
+                    entity.getQuartos().stream()
                             .map(quarto -> quartoRepository.findById(quarto.getId()).orElse(null))
                             .collect(Collectors.toList())
             );

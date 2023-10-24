@@ -10,6 +10,7 @@ import {DxAutocompleteComponent, DxDataGridComponent, DxSelectBoxComponent} from
 import notify from "devextreme/ui/notify";
 import _ from "lodash";
 import {Utils} from "../../shared/Utils";
+import {ReservaModel} from "../../shared/models/reserva.model";
 
 @Component({
     selector: 'app-reserva',
@@ -64,11 +65,14 @@ export class ReservaComponent implements OnInit {
     }
 
     salvar() {
-        console.log(this.hospedesNaReserva)
-        console.log(this.quartosNaReserva)
-        console.log(this.dataEntrada)
-        console.log(this.dataSaida)
-        console.log(Utils.diferencaEmDias(this.dataEntrada, this.dataSaida))
+        const reserva = new ReservaModel();
+        reserva.hospedes = this.hospedesNaReserva;
+        reserva.quartos = this.quartosNaReserva;
+        reserva.dataEntrada = <Date>this.dataEntrada;
+        reserva.dataPrevistaSaida = <Date>this.dataSaida;
+        reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida);
+
+        console.log(reserva)
     }
 
     buscaDadosIniciais() {

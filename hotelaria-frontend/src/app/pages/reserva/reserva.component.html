@@ -94,6 +94,7 @@
                     <div *dxTemplate="let data of 'quartoTemplate'">
                         <div class="exibe-linha">
                             <dx-select-box #quartoSelectBox
+                                           (onEnterKey)="adicionaQuartoGrid()"
                                            [dataSource]="quartos"
                                            displayExpr="nome"
                                            width="100%">
@@ -184,6 +185,57 @@
                         </div>
                     </div>
                 </dx-form>
+            </dxi-item>
+            <dxi-item title="Resumo da Reserva">
+                <dx-form>
+                    <dxi-item colCount="3" itemType="group">
+                        <dxi-item [label]="{text: 'Hospedes na Reserva'}"
+                                  template="resumoHospedeTemplate">
+                        </dxi-item>
+                        <dxi-item [label]="{text: 'Quartos Reservados'}"
+                                  template="resumoQuartoTemplate">
+                        </dxi-item>
+                        <dxi-item itemType="group">
+                            <dxi-item [label]="{text: 'Data da Entrada'}"
+                                      template="resumoDataEntradaTemplate">
+                            </dxi-item>
+                            <dxi-item [label]="{text: 'Data Prevista da Saída'}"
+                                      template="resumoDataSaidaTemplate">
+                            </dxi-item>
+                        </dxi-item>
+                    </dxi-item>
+
+                    <!--                TEMPLATES           -->
+                    <div *dxTemplate="let data of 'resumoHospedeTemplate'">
+                        <div *ngFor="let h of hospedesNaReserva">
+                            <dx-text-box [readOnly]="true"
+                                         [value]="h.nome">
+                            </dx-text-box>
+                        </div>
+                    </div>
+                    <div *dxTemplate="let data of 'resumoQuartoTemplate'">
+                        <div *ngFor="let q of quartosNaReserva">
+                            <dx-text-box [readOnly]="true"
+                                         [value]="q.nome"
+                                         class="mb">
+                            </dx-text-box>
+                        </div>
+                    </div>
+                    <div *dxTemplate="let data of 'resumoDataEntradaTemplate'">
+                        <dx-date-box [readOnly]="true"
+                                     [value]="dataEntrada"
+                                     class="mb"
+                                     displayFormat="dd/MM/yyyy">
+                        </dx-date-box>
+                    </div>
+                    <div *dxTemplate="let data of 'resumoDataSaidaTemplate'">
+                        <dx-date-box [readOnly]="true"
+                                     [value]="dataSaida"
+                                     displayFormat="dd/MM/yyyy">
+                        </dx-date-box>
+                    </div>
+                </dx-form>
+
             </dxi-item>
         </dx-tab-panel>
 

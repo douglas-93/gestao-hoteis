@@ -17,5 +17,5 @@ export class ReservaModel {
     valorDiaria: number;
     valorTotalEstadia: number;
     hospedes: HospedeModel[];
-    quarto: QuartoModel[];
+    quartos: QuartoModel[];
 }
