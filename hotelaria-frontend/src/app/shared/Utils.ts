@@ -27,4 +27,15 @@ export class Utils {
         celular = celular.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
         return celular;
     }
+
+    static diferencaEmDias(dataInicio, dataFim) {
+        // Calcular a diferença em milissegundos
+        const diferencaEmMilissegundos = Math.abs(dataFim.getTime() - dataInicio.getTime());
+
+        // Converter a diferença em milissegundos para dias
+        const umDiaEmMilissegundos = 24 * 60 * 60 * 1000;
+        const diferencaEmDias = Math.floor(diferencaEmMilissegundos / umDiaEmMilissegundos);
+
+        return diferencaEmDias;
+    }
 }

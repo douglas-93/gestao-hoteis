@@ -6,18 +6,18 @@ import {ProfileComponent} from './pages/profile/profile.component';
 import {TasksComponent} from './pages/tasks/tasks.component';
 import {
     DxAutocompleteModule,
-    DxButtonModule
-  , DxCheckBoxModule
-  , DxDataGridModule, DxDateBoxModule
-  , DxFileUploaderModule
-  , DxFormModule
-  , DxGalleryModule
-  , DxListModule
-  , DxNumberBoxModule, DxPopupModule
-  , DxSelectBoxModule
-  , DxSwitchModule
-  , DxTabPanelModule, DxTextAreaModule
-  , DxTextBoxModule
+    DxButtonModule, DxCalendarModule
+    , DxCheckBoxModule
+    , DxDataGridModule, DxDateBoxModule
+    , DxFileUploaderModule
+    , DxFormModule
+    , DxGalleryModule
+    , DxListModule
+    , DxNumberBoxModule, DxPopupModule
+    , DxSelectBoxModule
+    , DxSwitchModule
+    , DxTabPanelModule, DxTextAreaModule
+    , DxTextBoxModule
 } from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
@@ -151,8 +151,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule]
-  ,
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule]
+    ,
     providers: [AuthGuardService]
   ,
     exports: [RouterModule]

@@ -12,12 +12,178 @@
 
         <dx-tab-panel>
             <dxi-item title="Hospede">
-                <dx-autocomplete>
-                </dx-autocomplete>
+                <dx-form>
+                    <dxi-item [label]="{text: 'Hospede'}"
+                              template="hospedeTemplate">
+                    </dxi-item>
+                    <dxi-item [label]="{text: 'Hospedes na reserva'}"
+                              template="gridHospedeTemplate">
+                    </dxi-item>
+
+                    <!--                    TEMPLATE                -->
+                    <div *dxTemplate="let data of 'hospedeTemplate'">
+                        <div class="exibe-linha">
+                            <dx-autocomplete #hospedeAutoComplete
+                                             (onEnterKey)="adicionaHospedeGrid()"
+                                             [dataSource]="hospedes"
+                                             placeholder="Comece a digitar para pesquisar ..."
+                                             valueExpr="nome"
+                                             width="100%">
+                            </dx-autocomplete>
+                            <dx-button (onClick)="adicionaHospedeGrid()"
+                                       class="ml"
+                                       icon="fa fa-plus">
+                            </dx-button>
+                            <dx-button (onClick)="removeHospedeGrid()" class="ml"
+                                       icon="fa fa-minus">
+                            </dx-button>
+                        </div>
+                    </div>
+                    <div *dxTemplate="let data of 'gridHospedeTemplate'">
+                        <dx-data-grid #gridDeHospedesNaReserva
+                                      (onSelectionChanged)="selecionaHospede($event)"
+                                      [dataSource]="hospedesNaReserva">
+
+                            <dxo-selection mode="single"></dxo-selection>
+
+                            <dxi-column dataField="nome">
+                            </dxi-column>
+                            <dxi-column caption="CPF"
+                                        cellTemplate="cpfTemplate"
+                                        dataField="cpf">
+                            </dxi-column>
+                            <dxi-column cellTemplate="telefoneTemplate"
+                                        dataField="telefone">
+                            </dxi-column>
+                            <dxi-column cellTemplate="celularTemplate"
+                                        dataField="celular">
+                            </dxi-column>
+                            <dxi-column caption="E-mail"
+                                        dataField="email">
+                            </dxi-column>
+                            <dxi-column dataField="ativo">
+                            </dxi-column>
+
+                            <!--            TEMPLATE        -->
+
+                            <div *dxTemplate="let data of 'cpfTemplate'">
+                                {{Utils.formatarCPF(data.data.cpf)}}
+                            </div>
+
+                            <div *dxTemplate="let data of 'telefoneTemplate'">
+                                {{Utils.formatarTelefone(data.data.telefone)}}
+                            </div>
+
+                            <div *dxTemplate="let data of 'celularTemplate'">
+                                {{Utils.formatarCelular(data.data.celular)}}
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                </dx-form>
             </dxi-item>
             <dxi-item title="Quarto">
+                <dx-form>
+                    <dxi-item [label]="{text: 'Quarto'}"
+                              template="quartoTemplate">
+                    </dxi-item>
+                    <dxi-item [label]="{text: 'Quartos reservados'}"
+                              template="gridQuartoTemplate">
+                    </dxi-item>
+
+                    <!--                    TEMPLATE                -->
+                    <div *dxTemplate="let data of 'quartoTemplate'">
+                        <div class="exibe-linha">
+                            <dx-select-box #quartoSelectBox
+                                           [dataSource]="quartos"
+                                           displayExpr="nome"
+                                           width="100%">
+                            </dx-select-box>
+                            <dx-button (onClick)="adicionaQuartoGrid()"
+                                       class="ml"
+                                       icon="fa fa-plus">
+                            </dx-button>
+                            <dx-button (onClick)="removeQuartoGrid()" class="ml"
+                                       icon="fa fa-minus">
+                            </dx-button>
+                        </div>
+                    </div>
+                    <div *dxTemplate="let data of 'gridQuartoTemplate'">
+                        <dx-data-grid #gridDeQuartosNaReserva
+                                      (onSelectionChanged)="selecionaQuarto($event)"
+                                      [dataSource]="quartosNaReserva">
+
+                            <dxo-selection mode="single"></dxo-selection>
+
+                            <dxi-column caption="Nome"
+                                        dataField="nome">
+                            </dxi-column>
+                            <dxi-column caption="Capacidade de Pessoas"
+                                        dataField="capacidadePessoas">
+                            </dxi-column>
+                            <dxi-column caption="Valor da Diaria"
+                                        dataField="valorDiaria">
+                            </dxi-column>
+                            <dxi-column caption="Tipo"
+                                        cellTemplate="tipoTemplate"
+                                        dataField="tipo">
+                            </dxi-column>
+                            <dxi-column caption="Categoria"
+                                        cellTemplate="categoriaTemplate"
+                                        dataField="categoria">
+                            </dxi-column>
+                            <dxi-column caption="Ativo?"
+                                        dataField="ativo">
+                            </dxi-column>
+
+                            <!--            TEMPLATE        -->
+                            <div *dxTemplate="let data of 'tipoTemplate'">
+                                {{data.data.tipoQuarto.nome}}
+                            </div>
+
+                            <div *dxTemplate="let data of 'categoriaTemplate'">
+                                {{data.data.categoriaQuarto.nome}}
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                </dx-form>
             </dxi-item>
             <dxi-item title="Data da Reserva">
+                <dx-form>
+                    <dxi-item colCount="2" itemType="group">
+                        <dxi-item [label]="{text: 'Data da Entrada'}"
+                                  template="entradaTemplate">
+                        </dxi-item>
+                        <dxi-item [label]="{text: 'Data da Saída'}"
+                                  template="saidaTemplate">
+                        </dxi-item>
+                    </dxi-item>
+
+                    <!--               TEMPLATE           -->
+
+                    <div *dxTemplate="let data of 'entradaTemplate'">
+                        <div class="exibe-coluna">
+                            <dx-date-box [(value)]="dataEntrada"
+                                         class="mb"
+                                         displayFormat="dd/MM/yyyy">
+                            </dx-date-box>
+                            <dx-calendar [(value)]="dataEntrada"
+                                         [min]="hoje">
+                            </dx-calendar>
+                        </div>
+                    </div>
+
+                    <div *dxTemplate="let data of 'saidaTemplate'">
+                        <div class="exibe-coluna">
+                            <dx-date-box [(value)]="dataSaida"
+                                         class="mb"
+                                         displayFormat="dd/MM/yyyy">
+                            </dx-date-box>
+                            <dx-calendar [(value)]="dataSaida"
+                                         [min]="hoje">
+                            </dx-calendar>
+                        </div>
+                    </div>
+                </dx-form>
             </dxi-item>
         </dx-tab-panel>
 
