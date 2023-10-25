@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {forkJoin} from "rxjs";
@@ -11,6 +11,7 @@ import notify from "devextreme/ui/notify";
 import _ from "lodash";
 import {Utils} from "../../shared/Utils";
 import {ReservaModel} from "../../shared/models/reserva.model";
+import {ReservaService} from "../../shared/services/reserva.service";
 
 @Component({
     selector: 'app-reserva',
@@ -33,11 +34,13 @@ export class ReservaComponent implements OnInit {
     hoje: Date = new Date();
     dataEntrada: Date | number | string = new Date();
     dataSaida: Date | number | string = new Date();
+    reservas: ReservaModel[] = [];
     protected readonly Utils = Utils;
 
     constructor(private router: Router,
                 private quartoService: QuartoService,
-                private hospedeService: HospedeService) {
+                private hospedeService: HospedeService,
+                private reservaService: ReservaService) {
     }
 
     ngOnInit(): void {
@@ -57,7 +60,11 @@ export class ReservaComponent implements OnInit {
     }
 
     buscar() {
-
+        this.reservaService.findAll().subscribe(resp => {
+            if (resp.ok) {
+                this.reservas = resp.body!;
+            }
+        })
     }
 
     novo() {
@@ -72,7 +79,13 @@ export class ReservaComponent implements OnInit {
         reserva.dataPrevistaSaida = <Date>this.dataSaida;
         reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida);
 
-        console.log(reserva)
+        this.reservaService.save(reserva).subscribe(resp => {
+            if (resp.ok) {
+                notify('Reserva realizada', 'success', 3600);
+                window.history.back();
+                return;
+            }
+        })
     }
 
     buscaDadosIniciais() {
@@ -152,5 +165,9 @@ export class ReservaComponent implements OnInit {
                 this.quartoSelecinado = quarto;
             }
         });
+    }
+
+    logar(v) {
+        console.log(v)
     }
 }
