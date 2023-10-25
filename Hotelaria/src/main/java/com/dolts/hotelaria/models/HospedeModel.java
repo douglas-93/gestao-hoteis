@@ -1,10 +1,14 @@
 package com.dolts.hotelaria.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,4 +26,9 @@ public class HospedeModel extends ClienteModel{
     private LocalDate dataNascimento;
     private String observacao;
     private Boolean ativo = true;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "hospedes")
+    private List<ReservaModel> reservas = new ArrayList<>();
+
 }

@@ -1,5 +1,6 @@
 package com.dolts.hotelaria.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +26,6 @@ public class QuartoModel implements Serializable {
     private Boolean ativo = true;
     private Integer capacidadePessoas;
     private BigDecimal valorDiaria;
-    /*@OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ImagemQuartoModel> imagem;*/
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "quarto_id")
     private List<ImagemQuartoModel> imagem;
@@ -36,6 +35,10 @@ public class QuartoModel implements Serializable {
     private CategoriaQuartoModel categoriaQuarto;
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> itens = new ArrayList<>();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "quartos")
+    private List<ReservaModel> reservas = new ArrayList<>();
     @Version
     private Long versao;
 }

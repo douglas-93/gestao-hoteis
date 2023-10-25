@@ -35,8 +35,16 @@ public class ReservaModel implements Serializable {
     private Integer diasHospedado;
     private BigDecimal valorDiaria;
     private BigDecimal valorTotalEstadia;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HospedeModel> hospedes = new ArrayList<>();
-    @OneToMany
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "reserva_quarto",
+            joinColumns = @JoinColumn(name = "reserva_id"),
+            inverseJoinColumns = @JoinColumn(name = "quarto_id"))
     private List<QuartoModel> quartos = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "reserva_hospede",
+            joinColumns = @JoinColumn(name = "reserva_id"),
+            inverseJoinColumns = @JoinColumn(name = "hospede_id"))
+    private List<HospedeModel> hospedes = new ArrayList<>();
 }
