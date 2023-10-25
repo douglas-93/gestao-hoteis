@@ -9,7 +9,10 @@ import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +35,7 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
     @Override
     protected void beforeSave(ReservaModel entity) {
         super.beforeSave(entity);
+
         entity.setDataCriacaoReserva(LocalDateTime.now());
         entity.setDataAlteracaoReserva(LocalDateTime.now());
 
@@ -52,6 +56,27 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         }
 
     }
+
+    private List<LocalDate> geraDatas(LocalDate dataEntrada, LocalDate dataSaida) {
+        List<LocalDate> intervalo = new ArrayList<>();
+        LocalDate currentDate = dataEntrada;
+        while (currentDate.isBefore(dataSaida)) {
+            intervalo.add(currentDate);
+            currentDate = currentDate.plusDays(1);
+        }
+        intervalo.add(dataSaida);
+        return intervalo;
+    }
+
+    private List<ReservaModel> verificaReservas(ReservaModel entity) {
+        List<ReservaModel> reservasFeitas = reservaRepository.findByData(entity.getDataEntrada(), entity.getDataSaida());
+        List<ReservaModel> reservasSobrepostas = new ArrayList<>();
+
+
+
+        return reservasSobrepostas;
+    }
+
 
     @Override
     protected void beforeUpdate(ReservaModel entity) {

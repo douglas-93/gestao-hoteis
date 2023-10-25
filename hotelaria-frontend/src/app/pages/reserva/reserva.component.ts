@@ -72,20 +72,41 @@ export class ReservaComponent implements OnInit {
     }
 
     salvar() {
-        const reserva = new ReservaModel();
-        reserva.hospedes = this.hospedesNaReserva;
-        reserva.quartos = this.quartosNaReserva;
-        reserva.dataEntrada = <Date>this.dataEntrada;
-        reserva.dataPrevistaSaida = <Date>this.dataSaida;
-        reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida);
+        if (this.verificaAntesDeSalvar()) {
+            const reserva = new ReservaModel();
+            reserva.hospedes = this.hospedesNaReserva;
+            reserva.quartos = this.quartosNaReserva;
+            reserva.dataEntrada = <Date>this.dataEntrada;
+            reserva.dataPrevistaSaida = <Date>this.dataSaida;
+            reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida);
 
-        this.reservaService.save(reserva).subscribe(resp => {
-            if (resp.ok) {
-                notify('Reserva realizada', 'success', 3600);
-                window.history.back();
-                return;
-            }
-        })
+            this.reservaService.save(reserva).subscribe(resp => {
+                if (resp.ok) {
+                    notify('Reserva realizada', 'success', 3600);
+                    window.history.back();
+                }
+            })
+        }
+    }
+
+    verificaAntesDeSalvar() {
+        if (_.isNil(this.hospedesNaReserva)) {
+            notify('É necessário a inclusão de ao menos um hospede', 'error', 3600);
+            return false;
+        }
+        if (_.isNil(this.quartosNaReserva)) {
+            notify('É necessário a inclusão de ao menos um quarto', 'error', 3600);
+            return false;
+        }
+        if (_.isNil(this.dataEntrada)) {
+            notify('Informe a data de entrada', 'error', 3600);
+            return false;
+        }
+        if (_.isNil(this.dataSaida)) {
+            notify('Informe a data de saída', 'error', 3600);
+            return false;
+        }
+        return true;
     }
 
     buscaDadosIniciais() {
