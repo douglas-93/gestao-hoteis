@@ -68,13 +68,13 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         return intervalo;
     }
 
-    private List<ReservaModel> verificaReservas(ReservaModel entity) {
+    public List<ReservaModel> verificaReservas(ReservaModel entity) {
         List<ReservaModel> reservasFeitas = reservaRepository.findByData(entity.getDataEntrada(), entity.getDataSaida());
         List<ReservaModel> reservasSobrepostas = new ArrayList<>();
 
+        reservasFeitas.forEach(System.out::println);
 
-
-        return reservasSobrepostas;
+        return reservasFeitas;
     }
 
 

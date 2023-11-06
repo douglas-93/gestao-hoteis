@@ -1,5 +1,5 @@
 export class ImagemQuartoModel {
     id: number;
-    imagem: string;
+    imagem: string | File;
     version: number
 }

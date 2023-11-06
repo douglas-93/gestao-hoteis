@@ -76,9 +76,15 @@ export class QuartoComponent implements OnInit {
 
             this.quarto.valorDiaria = parseFloat(this.valorDiariaTBox.value);
             this.quarto.itens = this.listaItens.items;
-            this.imgDataSource.forEach(i => {
+            /*this.imgDataSource.forEach(i => {
                 let tempModel: ImagemQuartoModel = new ImagemQuartoModel();
                 tempModel.imagem = i.replace('data:image/png;base64,', '');
+                this.quarto.imagem.push(tempModel);
+            })*/
+
+            this.arquivos.forEach(i => {
+                let tempModel: ImagemQuartoModel = new ImagemQuartoModel();
+                tempModel.imagem = i;
                 this.quarto.imagem.push(tempModel);
             })
 
