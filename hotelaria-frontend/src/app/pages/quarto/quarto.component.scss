@@ -43,6 +43,22 @@
     opacity: 0;
 }
 
+ul {
+    list-style: none;
+    font-size: 12px;
+    margin: 0;
+    padding: 4.5px;
+}
+
+li {
+    width: 136px;
+    overflow: hidden;
+    word-wrap: break-word; /* quebra de palavra */
+}
+
+.dx-fileuploader-wrapper {
+    max-width: 30rem;
+}
 /*
 
 .containerDaImagem {

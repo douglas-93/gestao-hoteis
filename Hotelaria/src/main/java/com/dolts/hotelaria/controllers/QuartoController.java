@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/quartos")
+@CrossOrigin(value = "*", maxAge = 3600)
 public class QuartoController {
     @Autowired
     private QuartoService quartoService;

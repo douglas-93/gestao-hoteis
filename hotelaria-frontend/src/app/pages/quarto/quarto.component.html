@@ -174,27 +174,37 @@
                     </dxi-item>
 
                     <!--    TEMPLATES      -->
-                    <div *dxTemplate="let data of 'fileUploadTemplate'">
+                    <div *dxTemplate="let data of 'fileUploadTemplate'"
+                         style="display: flex; justify-content: space-between;">
                         <dx-file-uploader #fileUploader
                                           (onValueChanged)="carregarArquivo($event)"
                                           [(value)]="imgData"
                                           [accept]="'image/*'"
                                           [multiple]="true"
                                           [selectButtonText]="'Selecione a imagem'"
-                                          [uploadMode]="'useForm'">
+                                          [uploadMode]="'useForm'"
+                                          width="500px">
                         </dx-file-uploader>
+                        <dx-button text="Limpar"
+                                   icon="fa fa-trash"
+                                   (onClick)="limparImagensRenderizadas()">
+
+                        </dx-button>
                     </div>
 
                 </dx-form>
 
                 <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
-                    <div *ngFor="let imagem of imgDataSource; let i = index">
+                    <div *ngFor="let imagem of quartoImagens; let i = index">
                         <div class="containerDaImagem" (click)="abrirImagemPopUp(i)">
-                            <dx-button (onClick)="removerImagem(i)" class="iconeRemover"
-                                       icon="fa fa-trash">
-                            </dx-button>
-                            <img [src]="imagem" alt="Imagem {{ i }}" class="imagem">
+                            <dx-button (onClick)="removerImagem(i)" class="iconeRemover" icon="fa fa-trash"></dx-button>
+                            <img [src]="imagem.imagem" alt="Imagem {{ i }}" class="imagem">
                         </div>
+                        <ul>
+                            <li><strong>Nome:</strong> {{imagem.arquivo.name}}</li>
+                            <li><strong>Tamanho:</strong> {{formatFileSize(imagem.arquivo.size)}}</li>
+                            <li><strong>Tipo:</strong> {{imagem.arquivo.type}}</li>
+                        </ul>
                     </div>
                 </div>
 

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {DxFileUploaderComponent, DxFormComponent, DxListComponent, DxTextBoxComponent} from "devextreme-angular";
@@ -17,7 +17,7 @@ import {ImagemQuartoModel} from "../../shared/models/imagemQuarto.model";
     templateUrl: './quarto.component.html',
     styleUrls: ['./quarto.component.scss']
 })
-export class QuartoComponent implements OnInit {
+export class QuartoComponent implements OnInit, AfterViewInit {
 
     @ViewChild('itemTxBox') itemTxBox: DxTextBoxComponent;
     @ViewChild('listaItens') listaItens: DxListComponent;
@@ -27,18 +27,16 @@ export class QuartoComponent implements OnInit {
 
     mode: ModeEnum = ModeEnum.LIST;
     quarto: QuartoModel;
-    imgDataSource: string[] = [];
     imgData: any[] = [];
     tipos: TipoQuartoModel[] = [];
     categorias: CategoriaQuartoModel[] = [];
     quartosCadastrados: QuartoModel[] = [];
-    arquivos: File[] = []
     popUpVisible: boolean = false;
     imagemDoPopUp: string = '';
+    quartoImagens: any[] = [];
 
 
     constructor(private router: Router,
-                private cdr: ChangeDetectorRef,
                 private tipoService: TipoService,
                 private categoriaService: CategoriaService,
                 private quartoService: QuartoService) {
@@ -72,28 +70,13 @@ export class QuartoComponent implements OnInit {
     }
 
     salvar() {
+        console.log(this.quartoImagens)
+
         if (this.cadForm.instance.validate().isValid) {
 
             this.quarto.valorDiaria = parseFloat(this.valorDiariaTBox.value);
             this.quarto.itens = this.listaItens.items;
-            /*this.imgDataSource.forEach(i => {
-                let tempModel: ImagemQuartoModel = new ImagemQuartoModel();
-                tempModel.imagem = i.replace('data:image/png;base64,', '');
-                this.quarto.imagem.push(tempModel);
-            })*/
 
-            this.arquivos.forEach(i => {
-                let tempModel: ImagemQuartoModel = new ImagemQuartoModel();
-                tempModel.imagem = i;
-                this.quarto.imagem.push(tempModel);
-            })
-
-            this.quartoService.save(this.quarto).subscribe(resp => {
-                if (resp.ok) {
-                    notify('Salvo com sucesso', 'success', 3000);
-                    window.history.back();
-                }
-            });
             return;
         }
 
@@ -102,32 +85,6 @@ export class QuartoComponent implements OnInit {
 
     findQuarto(id: string) {
 
-    }
-
-    carregarArquivo(e: any) {
-        this.imgDataSource = []
-        this.arquivos = e.value
-        this.arquivos.forEach(a => {
-            this.lerArquivo(a)
-        })
-        this.fileUploader.instance.reset();
-    }
-
-    lerArquivo(arquivo?: File) {
-        if (arquivo) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const result = e.target!.result;
-                /* pegando a imagem como base64 e usando no atributo */
-                this.imgDataSource.push(<string>result!);
-            };
-            reader.readAsDataURL(arquivo);
-        }
-    }
-
-    removerImagem(index: number) {
-        this.imgDataSource.splice(index, 1)[0];
-        this.cdr.detectChanges();
     }
 
     adicionaItemLista() {
@@ -147,8 +104,64 @@ export class QuartoComponent implements OnInit {
         })
     }
 
+    /********************************************************************************/
+    /*                              LIDANDO COM AS IMAGENS                          */
+    /********************************************************************************/
+
+    carregarArquivo(event: any): void {
+        const files = event.value;
+        if (files && files.length > 0) {
+            // Adicione as imagens ao array
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                    this.quartoImagens.push({ imagem: e.target.result, arquivo: file });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        this.fileUploader.instance.reset();
+    }
+
+    removerImagem(index: number) {
+        this.quartoImagens.splice(index, 1);
+    }
+
+    ngAfterViewInit(): void {
+        // Obtenha a referência do componente de upload de arquivo após a visualização
+        const uploaderInstance = this.fileUploader.instance;
+
+        // Exemplo de como acessar o arquivo atualmente carregado
+        // console.log(uploaderInstance.option('value'));
+    }
+
+
+
     abrirImagemPopUp(i: number) {
-        this.imagemDoPopUp = this.imgDataSource[i];
+        this.imagemDoPopUp = this.quartoImagens[i].imagem;
         this.popUpVisible = true;
+    }
+
+    formatFileSize(sizeInBytes: number): string {
+        const kilobyte = 1024;
+        const megabyte = kilobyte * 1024;
+
+        if (sizeInBytes < kilobyte) {
+            return sizeInBytes + ' Bytes';
+        } else if (sizeInBytes < megabyte) {
+            return (sizeInBytes / kilobyte).toFixed(2) + ' KB';
+        } else {
+            return (sizeInBytes / megabyte).toFixed(2) + ' MB';
+        }
+    }
+
+    limparImagensRenderizadas() {
+        if (this.quartoImagens.length > 0) {
+            this.quartoImagens = [];
+            notify('Imagens removidas com sucesso', 'success', 3600);
+            return;
+        }
+
+        notify('Adicione ao menos uma imagem', 'warning', 3600);
     }
 }

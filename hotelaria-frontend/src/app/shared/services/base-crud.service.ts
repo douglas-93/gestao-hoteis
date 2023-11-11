@@ -6,7 +6,7 @@ export class BaseCRUDService<T> {
     url: string = environment.BASE_URL;
 
     constructor(servicePath: string,
-                private http: HttpClient) {
+                protected http: HttpClient) {
         this.url = this.url.concat(`${servicePath}`)
     }
 
