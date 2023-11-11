@@ -3,6 +3,7 @@ package com.dolts.hotelaria.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.File;
 import java.io.Serializable;
 
 @Entity
@@ -18,8 +19,9 @@ public class ImagemQuartoModel implements Serializable {
     private Long id;
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "imagem", columnDefinition = "BLOB")
     private byte[] imagem;
+
 
     @Version
     private Long version;

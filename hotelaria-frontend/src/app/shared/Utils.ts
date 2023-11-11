@@ -17,12 +17,13 @@ export class Utils {
         return rg;
     }
 
-    static formatarTelefone(telefone: string) : string {
+    static formatarTelefone(telefone: string): string {
         telefone = telefone.replace(/\D/g, '');
         telefone = telefone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
         return telefone;
     }
-    static formatarCelular(celular: string) : string {
+
+    static formatarCelular(celular: string): string {
         celular = celular.replace(/\D/g, '');
         celular = celular.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
         return celular;
@@ -37,5 +38,13 @@ export class Utils {
         const diferencaEmDias = Math.floor(diferencaEmMilissegundos / umDiaEmMilissegundos);
 
         return diferencaEmDias;
+    }
+
+    static formatarComoMoeda(valor: number): string {
+        const formatador = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        });
+        return formatador.format(valor);
     }
 }

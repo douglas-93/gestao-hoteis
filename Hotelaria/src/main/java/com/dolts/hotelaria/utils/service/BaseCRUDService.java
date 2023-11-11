@@ -2,6 +2,7 @@ package com.dolts.hotelaria.utils.service;
 
 import com.dolts.hotelaria.utils.repository.AbstractCRUDRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -36,10 +37,12 @@ public class BaseCRUDService<T, D> implements AbstractCRUDService<T, D> {
         var2 = entity;
     }
 
+    @Transactional
     public List<T> findAll() {
         return this.getRepository().findAll();
     }
 
+    @Transactional
     public T getById(D id) {
         return this.getRepository().findById(id).orElseThrow(EntityNotFoundException::new);
     }

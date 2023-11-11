@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,33 +34,36 @@ public class QuartoController {
         return ResponseEntity.ok(savedEntity);
     }*/
     @PostMapping
-    public ResponseEntity<QuartoModel> create(@RequestParam("imagens") List<MultipartFile> imagens,
+    public ResponseEntity<QuartoModel> create(@RequestParam(value = "imagens", required = false) List<MultipartFile> imagens,
                                               @RequestParam("nome") String nome,
                                               @RequestParam("ativo") Boolean ativo,
                                               @RequestParam("capacidadePessoas") Integer capacidadePessoas,
                                               @RequestParam("valorDiaria") BigDecimal valorDiaria,
-                                              @RequestParam("tipoQuarto") TipoQuartoModel tipoQuarto,
-                                              @RequestParam("categoriaQuarto") CategoriaQuartoModel categoriaQuarto,
+                                              @RequestParam("tipoQuarto") Long tipoQuarto,
+                                              @RequestParam("categoriaQuarto") Long categoriaQuarto,
                                               @RequestParam("itens") List<String> itens) {
 
         QuartoModel entity = new QuartoModel();
+        entity.setImagem(new ArrayList<>());
         entity.setNome(nome);
         entity.setAtivo(ativo ? ativo : true);
         entity.setCapacidadePessoas(capacidadePessoas);
         entity.setValorDiaria(valorDiaria);
         entity.setItens(itens);
-        entity.setTipoQuarto(tipoQuartoService.getById(tipoQuarto.getId()));
-        entity.setCategoriaQuarto(categoriaQuartoService.getById(categoriaQuarto.getId()));
+        entity.setTipoQuarto(tipoQuartoService.getById(tipoQuarto));
+        entity.setCategoriaQuarto(categoriaQuartoService.getById(categoriaQuarto));
 
-        imagens.forEach(i -> {
-            ImagemQuartoModel novaImg = new ImagemQuartoModel();
-            try {
-                novaImg.setImagem(i.getBytes());
-                entity.getImagem().add(novaImg);
-            } catch (IOException e) {
-                throw new RuntimeException("Falha ao salvar imagem: " + e);
-            }
-        });
+        if (imagens != null) {
+            imagens.forEach(i -> {
+                ImagemQuartoModel novaImg = new ImagemQuartoModel();
+                try {
+                    novaImg.setImagem(i.getBytes());
+                    entity.getImagem().add(novaImg);
+                } catch (IOException e) {
+                    throw new RuntimeException("Falha ao salvar imagem: " + e);
+                }
+            });
+        }
 
         QuartoModel savedEntity = quartoService.save(entity);
         return ResponseEntity.ok(savedEntity);

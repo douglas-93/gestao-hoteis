@@ -14,40 +14,24 @@ export class QuartoService extends BaseCRUDService<QuartoModel> {
     }
 
 
-    override save(entity: QuartoModel): Observable<HttpResponse<any>> {
+    // @ts-ignore
+    override save(entity: QuartoModel, imagens: any): Observable<HttpResponse<any>> {
 
         const form = new FormData();
 
-        form.append("imagens", JSON.stringify(entity.imagem));
-        form.append("nome", JSON.stringify(entity.nome));
+        // form.append("imagens", JSON.stringify(entity.imagem));
+        form.append("nome", entity.nome);
         form.append("ativo", JSON.stringify(entity.ativo));
         form.append("capacidadePessoas", JSON.stringify(entity.capacidadePessoas));
         form.append("valorDiaria", JSON.stringify(entity.valorDiaria));
-        form.append("tipoQuarto", JSON.stringify(entity.tipoQuarto));
-        form.append("categoriaQuarto", JSON.stringify(entity.categoriaQuarto));
+        form.append("tipoQuarto", entity.tipoQuarto.id.toString());
+        form.append("categoriaQuarto", entity.categoriaQuarto.id.toString());
         form.append("itens", JSON.stringify(entity.itens));
 
-        return this.http.post(this.url, form, {observe: 'response'});
-    }
-
-    fileToBlob(file: File): Promise<Blob> {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                if (reader.result instanceof ArrayBuffer) {
-                    const blob = new Blob([reader.result], { type: file.type });
-                    resolve(blob);
-                } else {
-                    reject(new Error('Failed to convert File to Blob'));
-                }
-            };
-
-            reader.onerror = () => {
-                reject(new Error('Error reading File'));
-            };
-
-            reader.readAsArrayBuffer(file);
+        imagens.forEach((imagem) => {
+            form.append(`imagens`, imagem.arquivo, imagem.arquivo.name);
         });
+
+        return this.http.post(this.url, form, {observe: 'response'});
     }
 }

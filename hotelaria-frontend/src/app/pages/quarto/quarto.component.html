@@ -19,7 +19,8 @@
                         caption="Capacidade de Pessoas">
             </dxi-column>
             <dxi-column dataField="valorDiaria"
-                        caption="Valor da Diaria">
+                        caption="Valor da Diaria"
+                        cellTemplate="valorDaDiariaTemplate">
             </dxi-column>
             <dxi-column dataField="tipo"
                         caption="Tipo"
@@ -40,6 +41,10 @@
 
             <div *dxTemplate="let data of 'categoriaTemplate'">
                 {{data.data.categoriaQuarto.nome}}
+            </div>
+
+            <div *dxTemplate="let data of 'valorDaDiariaTemplate'">
+                {{Utils.formatarComoMoeda(data.data.valorDiaria)}}
             </div>
         </dx-data-grid>
     </div>
@@ -99,7 +104,8 @@
                         </dx-number-box>
                     </div>
                     <div *dxTemplate="let data of 'valorDiaraTemplate'">
-                        <dx-text-box #valorDiaria>
+                        <dx-text-box #valorDiaria
+                                     (onChange)="formataValor($event)">
                         </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'tipoQuartoTemplate'">
@@ -188,7 +194,6 @@
                         <dx-button text="Limpar"
                                    icon="fa fa-trash"
                                    (onClick)="limparImagensRenderizadas()">
-
                         </dx-button>
                     </div>
 

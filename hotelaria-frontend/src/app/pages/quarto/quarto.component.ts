@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {DxFileUploaderComponent, DxFormComponent, DxListComponent, DxTextBoxComponent} from "devextreme-angular";
@@ -10,7 +10,10 @@ import {CategoriaQuartoModel} from "../../shared/models/categoriaQuarto.model";
 import {QuartoModel} from "../../shared/models/quarto.model";
 import notify from "devextreme/ui/notify";
 import {QuartoService} from "../../shared/services/quarto.service";
-import {ImagemQuartoModel} from "../../shared/models/imagemQuarto.model";
+import DevExpress from "devextreme";
+import {Utils} from "../../shared/Utils";
+import _ from "lodash";
+import ChangeEvent = DevExpress.ui.dxTextBox.ChangeEvent;
 
 @Component({
     selector: 'app-quarto',
@@ -34,7 +37,7 @@ export class QuartoComponent implements OnInit, AfterViewInit {
     popUpVisible: boolean = false;
     imagemDoPopUp: string = '';
     quartoImagens: any[] = [];
-
+    protected readonly Utils = Utils;
 
     constructor(private router: Router,
                 private tipoService: TipoService,
@@ -74,9 +77,19 @@ export class QuartoComponent implements OnInit, AfterViewInit {
 
         if (this.cadForm.instance.validate().isValid) {
 
-            this.quarto.valorDiaria = parseFloat(this.valorDiariaTBox.value);
+            this.quarto.valorDiaria = parseFloat(this.valorDiariaTBox.value
+                .replace(/[^0-9.,]/g, '')
+                .replace('.', '')
+                .replace(',', '.'));
             this.quarto.itens = this.listaItens.items;
 
+            this.quartoService.save(this.quarto, this.quartoImagens).subscribe(resp => {
+                if (resp.ok) {
+                    notify('Salvo com sucesso', 'success', 3600);
+                    window.history.back();
+                    return;
+                }
+            })
             return;
         }
 
@@ -106,7 +119,26 @@ export class QuartoComponent implements OnInit, AfterViewInit {
 
     /********************************************************************************/
     /*                              LIDANDO COM AS IMAGENS                          */
+
     /********************************************************************************/
+
+    formataValor(e: ChangeEvent) {
+        let valor = e.component.option('value')?.replace(',', '.').replace(/[^0-9.,]/g, '');
+
+        if (!_.isNil(valor)) {
+            let currency = parseFloat(valor).toFixed(2)
+            valor = Utils.formatarComoMoeda(parseFloat(currency));
+
+            if (valor.includes('NaN')) {
+                this.valorDiariaTBox.isValid = false;
+                notify('Valor informado inválido', 'error', 3600);
+                return;
+            }
+
+            this.valorDiariaTBox.value = valor;
+            return;
+        }
+    }
 
     carregarArquivo(event: any): void {
         const files = event.value;
@@ -115,7 +147,7 @@ export class QuartoComponent implements OnInit, AfterViewInit {
             for (const file of files) {
                 const reader = new FileReader();
                 reader.onload = (e: any) => {
-                    this.quartoImagens.push({ imagem: e.target.result, arquivo: file });
+                    this.quartoImagens.push({imagem: e.target.result, arquivo: file});
                 };
                 reader.readAsDataURL(file);
             }
@@ -134,8 +166,6 @@ export class QuartoComponent implements OnInit, AfterViewInit {
         // Exemplo de como acessar o arquivo atualmente carregado
         // console.log(uploaderInstance.option('value'));
     }
-
-
 
     abrirImagemPopUp(i: number) {
         this.imagemDoPopUp = this.quartoImagens[i].imagem;
