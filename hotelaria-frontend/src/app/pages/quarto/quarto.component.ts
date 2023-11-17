@@ -37,6 +37,7 @@ export class QuartoComponent implements OnInit, AfterViewInit {
     popUpVisible: boolean = false;
     imagemDoPopUp: string = '';
     quartoImagens: any[] = [];
+    quartoSelecionado: QuartoModel;
     protected readonly Utils = Utils;
 
     constructor(private router: Router,
@@ -97,7 +98,13 @@ export class QuartoComponent implements OnInit, AfterViewInit {
     }
 
     findQuarto(id: string) {
-
+        if (_.isNumber(id)) {
+            this.quartoService.findById(parseInt(id)).subscribe(resp => {
+                if (resp.ok) {
+                    this.quarto = resp.body!
+                }
+            })
+        }
     }
 
     adicionaItemLista() {
@@ -115,6 +122,19 @@ export class QuartoComponent implements OnInit, AfterViewInit {
                 this.categorias = respCat.body!;
             }
         })
+    }
+
+    editar(event: any) {
+        console.log(this.quartoSelecionado)
+        this.router.navigate(['quartos', 'edit', this.quartoSelecionado.id])
+    }
+
+    selecionaQuarto(event: any) {
+        event.component.byKey(event.currentSelectedRowKeys[0]).done(quarto => {
+            if (quarto) {
+                this.quartoSelecionado = quarto;
+            }
+        });
     }
 
     /********************************************************************************/

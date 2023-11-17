@@ -11,7 +11,12 @@
     </div>
 
     <div list-result>
-        <dx-data-grid [dataSource]="quartosCadastrados">
+        <dx-data-grid [dataSource]="quartosCadastrados"
+                      (onRowDblClick)="editar($event)"
+                      (onSelectionChanged)="selecionaQuarto($event)">
+
+            <dxo-selection mode="single"></dxo-selection>
+
             <dxi-column dataField="nome"
                         caption="Nome">
             </dxi-column>

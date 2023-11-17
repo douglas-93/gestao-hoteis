@@ -17,6 +17,7 @@ export class QuartoService extends BaseCRUDService<QuartoModel> {
     // @ts-ignore
     override save(entity: QuartoModel, imagens: any): Observable<HttpResponse<any>> {
 
+        // @ts-ignore
         const form = new FormData();
 
         // form.append("imagens", JSON.stringify(entity.imagem));
