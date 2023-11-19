@@ -12,7 +12,7 @@ import {
     , DxFileUploaderModule
     , DxFormModule
     , DxGalleryModule
-    , DxListModule
+    , DxListModule, DxLoadIndicatorModule
     , DxNumberBoxModule, DxPopupModule
     , DxSelectBoxModule
     , DxSwitchModule
@@ -151,7 +151,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule]
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule]
     ,
     providers: [AuthGuardService]
   ,

@@ -105,7 +105,8 @@
                         </dx-switch>
                     </div>
                     <div *dxTemplate="let data of 'capacidadePessoasTemplate'">
-                        <dx-number-box [(value)]="quarto.capacidadePessoas">
+                        <dx-number-box [(value)]="quarto.capacidadePessoas"
+                                       [min]="1">
                         </dx-number-box>
                     </div>
                     <div *dxTemplate="let data of 'valorDiaraTemplate'">
@@ -178,7 +179,7 @@
 
             <dxi-item title='Imagens'>
 
-                <dx-form>
+                <dx-form #formDaImagem>
 
                     <dxi-item dataField="Imagens"
                               template="fileUploadTemplate">
@@ -204,6 +205,14 @@
 
                 </dx-form>
 
+                <div style="display: flex; align-content: center; justify-content: center">
+                    <dx-load-indicator
+                        [(visible)]="isLoadImagemVisible"
+                        [height]="40"
+                        [width]="40">
+                    </dx-load-indicator>
+                </div>
+
                 <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
                     <div *ngFor="let imagem of quartoImagens; let i = index">
                         <div class="containerDaImagem" (click)="abrirImagemPopUp(i)">
@@ -214,6 +223,14 @@
                             <li><strong>Nome:</strong> {{imagem.arquivo.name}}</li>
                             <li><strong>Tamanho:</strong> {{formatFileSize(imagem.arquivo.size)}}</li>
                             <li><strong>Tipo:</strong> {{imagem.arquivo.type}}</li>
+                            <dx-button (onClick)="downloadImagem(imagem)"
+                                       icon="download"
+                                       text="Download"
+                                       style="font-size: 8px"
+                                       type="default"
+                                       height="22px"
+                                       width="100%">
+                            </dx-button>
                         </ul>
                     </div>
                 </div>

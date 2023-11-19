@@ -2,12 +2,12 @@ package com.dolts.hotelaria.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
-import java.io.File;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "imagens_quarto")
+@Table(name = "imagens")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,10 +18,13 @@ public class ImagemQuartoModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
-    @Column(name = "imagem", columnDefinition = "BLOB")
-    private byte[] imagem;
+    private String nome;
+    private String formato;
+    private Long tamanho;
+    private Long idDoQuartoDaImagem;
 
+    @Lob
+    private byte[] imagem;
 
     @Version
     private Long version;

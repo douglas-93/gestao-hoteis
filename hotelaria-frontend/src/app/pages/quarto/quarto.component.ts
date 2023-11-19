@@ -1,10 +1,10 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {DxFileUploaderComponent, DxFormComponent, DxListComponent, DxTextBoxComponent} from "devextreme-angular";
 import {TipoService} from "../../shared/services/tipo.service";
 import {CategoriaService} from "../../shared/services/categoria.service";
-import {forkJoin} from "rxjs";
+import {forkJoin, map} from "rxjs";
 import {TipoQuartoModel} from "../../shared/models/tipoQuarto.model";
 import {CategoriaQuartoModel} from "../../shared/models/categoriaQuarto.model";
 import {QuartoModel} from "../../shared/models/quarto.model";
@@ -14,13 +14,15 @@ import DevExpress from "devextreme";
 import {Utils} from "../../shared/Utils";
 import _ from "lodash";
 import ChangeEvent = DevExpress.ui.dxTextBox.ChangeEvent;
+import {type} from "devextreme/core/utils/type";
+import {ImagemQuartoService} from "../../shared/services/imagemQuarto.service";
 
 @Component({
     selector: 'app-quarto',
     templateUrl: './quarto.component.html',
     styleUrls: ['./quarto.component.scss']
 })
-export class QuartoComponent implements OnInit, AfterViewInit {
+export class QuartoComponent implements OnInit {
 
     @ViewChild('itemTxBox') itemTxBox: DxTextBoxComponent;
     @ViewChild('listaItens') listaItens: DxListComponent;
@@ -38,12 +40,14 @@ export class QuartoComponent implements OnInit, AfterViewInit {
     imagemDoPopUp: string = '';
     quartoImagens: any[] = [];
     quartoSelecionado: QuartoModel;
+    isLoadImagemVisible: boolean = false;
     protected readonly Utils = Utils;
 
     constructor(private router: Router,
                 private tipoService: TipoService,
                 private categoriaService: CategoriaService,
-                private quartoService: QuartoService) {
+                private quartoService: QuartoService,
+                private imagemQuartoService: ImagemQuartoService) {
     }
 
     ngOnInit(): void {
@@ -53,7 +57,6 @@ export class QuartoComponent implements OnInit, AfterViewInit {
 
         this.quarto = new QuartoModel();
         this.quarto.ativo = true;
-        this.quarto.imagem = [];
         this.getTipoECategoria();
 
         if (edit) {
@@ -74,8 +77,6 @@ export class QuartoComponent implements OnInit, AfterViewInit {
     }
 
     salvar() {
-        console.log(this.quartoImagens)
-
         if (this.cadForm.instance.validate().isValid) {
 
             this.quarto.valorDiaria = parseFloat(this.valorDiariaTBox.value
@@ -98,13 +99,47 @@ export class QuartoComponent implements OnInit, AfterViewInit {
     }
 
     findQuarto(id: string) {
-        if (_.isNumber(id)) {
-            this.quartoService.findById(parseInt(id)).subscribe(resp => {
-                if (resp.ok) {
-                    this.quarto = resp.body!
-                }
-            })
-        }
+        this.quartoService.findById(parseInt(id)).subscribe(resp => {
+            if (resp.ok) {
+                this.setaPropriedadesEdit(this.quarto, resp.body!);
+
+                const imagensCall = resp.body!.idDasImagensDoQuarto.map(i => this.imagemQuartoService.findById(i));
+                this.isLoadImagemVisible = true;
+                forkJoin(imagensCall.map(obs => obs.pipe(
+                    // Mapear para os dados desejados
+                    map(i => {
+                        const blob = new Blob([i.body!.imagem], { type: i.body!.formato });
+                        const file = new File([blob], i.body!.nome, { type: i.body!.formato });
+                        return { imagem: `data:${i.body!.formato};base64,${i.body!.imagem}`, arquivo: file };
+                    })
+                ))).subscribe(
+                    // Sucesso: Todas as observações foram concluídas
+                    resp => {
+                        this.isLoadImagemVisible = false;
+                        this.quartoImagens = resp;
+                    },
+                    // Erro: Tratar erros, se necessário
+                    error => {
+                        console.error('Erro ao carregar imagens', error);
+                        notify('Erro ao carregar imagens', 'error', 3600);
+                    }
+                );
+
+            }
+        })
+    }
+
+    setaPropriedadesEdit(quartoOriginal: QuartoModel, quartoRequest: QuartoModel) {
+        quartoOriginal.id = quartoRequest.id;
+        quartoOriginal.nome = quartoRequest.nome;
+        quartoOriginal.capacidadePessoas = quartoRequest.capacidadePessoas;
+        this.valorDiariaTBox.value = quartoRequest.valorDiaria.toString();
+        this.formataValor(quartoRequest.valorDiaria.toString());
+        quartoOriginal.ativo = quartoRequest.ativo;
+        quartoOriginal.idDasImagensDoQuarto = quartoRequest.idDasImagensDoQuarto;
+        quartoOriginal.categoriaQuarto = this.categorias.filter(c => c.id = quartoRequest.categoriaQuarto.id)[0];
+        quartoOriginal.tipoQuarto = this.tipos.filter(t => t.id = quartoRequest.tipoQuarto.id)[0];
+        quartoOriginal.itens = quartoRequest.itens.map(i => i.replace(/["\[\]]/g, ''));
     }
 
     adicionaItemLista() {
@@ -137,13 +172,16 @@ export class QuartoComponent implements OnInit, AfterViewInit {
         });
     }
 
-    /********************************************************************************/
-    /*                              LIDANDO COM AS IMAGENS                          */
+    formataValor(e: ChangeEvent | String) {
 
-    /********************************************************************************/
+        let valor;
 
-    formataValor(e: ChangeEvent) {
-        let valor = e.component.option('value')?.replace(',', '.').replace(/[^0-9.,]/g, '');
+        if (typeof e === 'string') {
+            valor = e.replace(',', '.').replace(/[^0-9.,]/g, '');
+        } else {
+            // @ts-ignore
+            valor = e.component.option('value')?.replace(',', '.').replace(/[^0-9.,]/g, '');
+        }
 
         if (!_.isNil(valor)) {
             let currency = parseFloat(valor).toFixed(2)
@@ -159,6 +197,11 @@ export class QuartoComponent implements OnInit, AfterViewInit {
             return;
         }
     }
+
+    /********************************************************************************/
+    /*                              LIDANDO COM AS IMAGENS                          */
+
+    /********************************************************************************/
 
     carregarArquivo(event: any): void {
         const files = event.value;
@@ -179,13 +222,13 @@ export class QuartoComponent implements OnInit, AfterViewInit {
         this.quartoImagens.splice(index, 1);
     }
 
-    ngAfterViewInit(): void {
+    /*ngAfterViewInit(): void {
         // Obtenha a referência do componente de upload de arquivo após a visualização
         const uploaderInstance = this.fileUploader.instance;
 
         // Exemplo de como acessar o arquivo atualmente carregado
         // console.log(uploaderInstance.option('value'));
-    }
+    }*/
 
     abrirImagemPopUp(i: number) {
         this.imagemDoPopUp = this.quartoImagens[i].imagem;
@@ -214,4 +257,14 @@ export class QuartoComponent implements OnInit, AfterViewInit {
 
         notify('Adicione ao menos uma imagem', 'warning', 3600);
     }
+    downloadImagem(imagem: any) {
+        const link = document.createElement('a');
+        link.href = imagem.imagem;
+        link.download = imagem.arquivo.name;
+        link.target = '_blank'; // Opcional: abre o link em uma nova guia
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
 }
