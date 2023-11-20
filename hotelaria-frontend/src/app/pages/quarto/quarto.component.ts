@@ -16,6 +16,7 @@ import _ from "lodash";
 import ChangeEvent = DevExpress.ui.dxTextBox.ChangeEvent;
 import {type} from "devextreme/core/utils/type";
 import {ImagemQuartoService} from "../../shared/services/imagemQuarto.service";
+import {ImagemQuartoModel} from "../../shared/models/imagemQuarto.model";
 
 @Component({
     selector: 'app-quarto',
@@ -38,7 +39,7 @@ export class QuartoComponent implements OnInit {
     quartosCadastrados: QuartoModel[] = [];
     popUpVisible: boolean = false;
     imagemDoPopUp: string = '';
-    quartoImagens: any[] = [];
+    quartoImagens: (ImagemQuartoModel | null)[] = [];
     quartoSelecionado: QuartoModel;
     isLoadImagemVisible: boolean = false;
     protected readonly Utils = Utils;
@@ -85,7 +86,23 @@ export class QuartoComponent implements OnInit {
                 .replace(',', '.'));
             this.quarto.itens = this.listaItens.items;
 
-            this.quartoService.save(this.quarto, this.quartoImagens).subscribe(resp => {
+            const imagensNovas = this.quartoImagens.filter( i => _.isNil(i?.id));
+            let imagensExcluidas = this.quartoImagens.filter( i => this.quarto.idDasImagensDoQuarto.includes(i?.id!)).map(i => i?.id);
+
+
+            if (!_.isNil(this.quarto.id)) {
+                this.quartoService.update(this.quarto.id, this.quarto, imagensNovas, imagensExcluidas)
+                    .subscribe(resp => {
+                    if (resp.ok) {
+                        notify('Salvo com sucesso', 'success', 3600);
+                        window.history.back();
+                        return;
+                    }
+                })
+                return;
+            }
+
+            this.quartoService.save(this.quarto, imagensNovas).subscribe(resp => {
                 if (resp.ok) {
                     notify('Salvo com sucesso', 'success', 3600);
                     window.history.back();
@@ -104,13 +121,12 @@ export class QuartoComponent implements OnInit {
                 this.setaPropriedadesEdit(this.quarto, resp.body!);
 
                 const imagensCall = resp.body!.idDasImagensDoQuarto.map(i => this.imagemQuartoService.findById(i));
-                this.isLoadImagemVisible = true;
+                this.isLoadImagemVisible = imagensCall.length != 0;
                 forkJoin(imagensCall.map(obs => obs.pipe(
                     // Mapear para os dados desejados
                     map(i => {
-                        const blob = new Blob([i.body!.imagem], { type: i.body!.formato });
-                        const file = new File([blob], i.body!.nome, { type: i.body!.formato });
-                        return { imagem: `data:${i.body!.formato};base64,${i.body!.imagem}`, arquivo: file };
+                        i.body!.imagem = `data:${i.body!.formato};base64,${i.body!.imagem}`;
+                        return i.body;
                     })
                 ))).subscribe(
                     // Sucesso: Todas as observações foram concluídas
@@ -200,7 +216,6 @@ export class QuartoComponent implements OnInit {
 
     /********************************************************************************/
     /*                              LIDANDO COM AS IMAGENS                          */
-
     /********************************************************************************/
 
     carregarArquivo(event: any): void {
@@ -210,7 +225,14 @@ export class QuartoComponent implements OnInit {
             for (const file of files) {
                 const reader = new FileReader();
                 reader.onload = (e: any) => {
-                    this.quartoImagens.push({imagem: e.target.result, arquivo: file});
+                    const img: ImagemQuartoModel = new ImagemQuartoModel();
+                    img.nome = file.name;
+                    img.formato = file.type;
+                    img.tamanho = file.size;
+                    img.imagem = e.target.result;
+                    img.arquivo = file;
+                    this.quartoImagens.push(img);
+                    // this.quartoImagens.push({imagem: e.target.result, arquivo: file});
                 };
                 reader.readAsDataURL(file);
             }
@@ -231,21 +253,25 @@ export class QuartoComponent implements OnInit {
     }*/
 
     abrirImagemPopUp(i: number) {
-        this.imagemDoPopUp = this.quartoImagens[i].imagem;
+        this.imagemDoPopUp = <string>this.quartoImagens[i]!.imagem;
         this.popUpVisible = true;
     }
 
-    formatFileSize(sizeInBytes: number): string {
-        const kilobyte = 1024;
-        const megabyte = kilobyte * 1024;
+    formatFileSize(sizeInBytes: number | undefined): string {
+        if (sizeInBytes != undefined) {
+            const kilobyte = 1024;
+            const megabyte = kilobyte * 1024;
 
-        if (sizeInBytes < kilobyte) {
-            return sizeInBytes + ' Bytes';
-        } else if (sizeInBytes < megabyte) {
-            return (sizeInBytes / kilobyte).toFixed(2) + ' KB';
-        } else {
-            return (sizeInBytes / megabyte).toFixed(2) + ' MB';
+            if (sizeInBytes < kilobyte) {
+                return sizeInBytes + ' Bytes';
+            } else if (sizeInBytes < megabyte) {
+                return (sizeInBytes / kilobyte).toFixed(2) + ' KB';
+            } else {
+                return (sizeInBytes / megabyte).toFixed(2) + ' MB';
+            }
         }
+
+        return '';
     }
 
     limparImagensRenderizadas() {
@@ -260,11 +286,24 @@ export class QuartoComponent implements OnInit {
     downloadImagem(imagem: any) {
         const link = document.createElement('a');
         link.href = imagem.imagem;
-        link.download = imagem.arquivo.name;
+        link.download = imagem.nome;
         link.target = '_blank'; // Opcional: abre o link em uma nova guia
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
 
+    excluir() {
+        let id = this.router.url.split('/').pop();
+        console.log(id)
+        if (!_.isNil(id)) {
+            this.quartoService.delete(parseInt(id)).subscribe(resp => {
+                if (resp.ok) {
+                    notify('Exclusão realizada com sucesso', 'success', 3600);
+                    window.history.back();
+                    return;
+                }
+            });
+        }
+    }
 }

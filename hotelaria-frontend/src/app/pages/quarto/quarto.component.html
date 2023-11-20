@@ -2,6 +2,7 @@
            (filterFunction)="buscar()"
            (novoCadastroFunction)="novo()"
            (saveFunction)="salvar()"
+           (deleteFunction)="excluir()"
            [editTitle]="'Cadastro de Quartos'"
            [listTitle]="'Listagem de Quartos'"
            [mode]="mode">
@@ -217,12 +218,12 @@
                     <div *ngFor="let imagem of quartoImagens; let i = index">
                         <div class="containerDaImagem" (click)="abrirImagemPopUp(i)">
                             <dx-button (onClick)="removerImagem(i)" class="iconeRemover" icon="fa fa-trash"></dx-button>
-                            <img [src]="imagem.imagem" alt="Imagem {{ i }}" class="imagem">
+                            <img [src]="imagem?.imagem" alt="Imagem {{ i }}" class="imagem">
                         </div>
                         <ul>
-                            <li><strong>Nome:</strong> {{imagem.arquivo.name}}</li>
-                            <li><strong>Tamanho:</strong> {{formatFileSize(imagem.arquivo.size)}}</li>
-                            <li><strong>Tipo:</strong> {{imagem.arquivo.type}}</li>
+                            <li><strong>Nome:</strong> {{imagem?.nome}}</li>
+                            <li><strong>Tamanho:</strong> {{formatFileSize(imagem?.tamanho)}}</li>
+                            <li><strong>Tipo:</strong> {{imagem?.formato}}</li>
                             <dx-button (onClick)="downloadImagem(imagem)"
                                        icon="download"
                                        text="Download"

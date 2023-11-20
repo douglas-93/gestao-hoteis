@@ -72,6 +72,7 @@ public class QuartoController {
 
                     novaImg.setImagem(bytes);
 
+
                     novaImg.setIdDoQuartoDaImagem(finalSavedEntity.getId()); // Obtém o ID do quarto salvo
                     novaImg = imagemQuartoService.save(novaImg);
                     Long idImagem = novaImg.getId();
@@ -89,8 +90,70 @@ public class QuartoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<QuartoModel> update(@PathVariable Long id, @RequestBody QuartoModel entity) {
+    public ResponseEntity<QuartoModel> update(@PathVariable Long id,
+                                              @RequestParam(value = "imagens", required = false) List<MultipartFile> imagens,
+                                              @RequestParam("nome") String nome,
+                                              @RequestParam("ativo") Boolean ativo,
+                                              @RequestParam("capacidadePessoas") Integer capacidadePessoas,
+                                              @RequestParam("valorDiaria") BigDecimal valorDiaria,
+                                              @RequestParam("tipoQuarto") Long tipoQuarto,
+                                              @RequestParam("categoriaQuarto") Long categoriaQuarto,
+                                              @RequestParam("imagensExcluidas") List<String> imagensExcluidas,
+                                              @RequestParam(value = "itens", required = false) List<String> itens) {
+
+        QuartoModel entity = quartoService.getById(id);
+        entity.setNome(nome);
+        entity.setAtivo(ativo != null ? ativo : true);
+        entity.setCapacidadePessoas(capacidadePessoas);
+        entity.setValorDiaria(valorDiaria);
+        entity.setItens(itens);
+        entity.setTipoQuarto(tipoQuartoService.getById(tipoQuarto));
+        entity.setCategoriaQuarto(categoriaQuartoService.getById(categoriaQuarto));
+
         QuartoModel updatedEntity = quartoService.update(entity);
+
+        if (imagens != null) {
+            QuartoModel finalSavedEntity = updatedEntity;
+            imagens.forEach(i -> {
+                ImagemQuartoModel novaImg = new ImagemQuartoModel();
+                try {
+                    novaImg.setNome(i.getOriginalFilename());
+                    novaImg.setFormato(i.getContentType());
+                    novaImg.setTamanho(i.getSize());
+
+                    // Use o InputStream para obter os bytes da imagem
+                    InputStream inputStream = i.getInputStream();
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                    byte[] bytes = outputStream.toByteArray();
+
+                    novaImg.setImagem(bytes);
+
+
+                    novaImg.setIdDoQuartoDaImagem(finalSavedEntity.getId()); // Obtém o ID do quarto salvo
+                    novaImg = imagemQuartoService.save(novaImg);
+                    Long idImagem = novaImg.getId();
+                    finalSavedEntity.getIdDasImagensDoQuarto().add(idImagem);
+                } catch (IOException e) {
+                    throw new RuntimeException("Falha ao salvar imagem: " + e);
+                }
+            });
+        }
+
+        if (!imagensExcluidas.isEmpty()) {
+            imagensExcluidas.forEach( i -> {
+                Long idTemp = Long.parseLong(i.replaceAll("[\"\\[\\]]", ""));
+                imagemQuartoService.delete(imagemQuartoService.getById(idTemp));
+                entity.getIdDasImagensDoQuarto().remove(idTemp);
+            });
+        }
+
+        updatedEntity = quartoService.update(entity);
+
         return ResponseEntity.ok(updatedEntity);
     }
 
@@ -100,6 +163,9 @@ public class QuartoController {
         if (entity == null) {
             return ResponseEntity.notFound().build();
         }
+        entity.getIdDasImagensDoQuarto().forEach( i -> {
+            imagemQuartoService.delete(imagemQuartoService.getById(i));
+        });
         quartoService.delete(entity);
         return ResponseEntity.noContent().build();
     }

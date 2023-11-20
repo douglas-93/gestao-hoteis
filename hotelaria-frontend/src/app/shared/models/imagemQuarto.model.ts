@@ -5,5 +5,6 @@ export class ImagemQuartoModel {
     tamanho: number;
     idDoQuartoDaImagem: number;
     imagem: string | File | ArrayBuffer | Blob;
+    arquivo: File | Blob;
     version: number;
 }
