@@ -4,6 +4,7 @@ import {HttpClient, HttpResponse} from "@angular/common/http";
 import {QuartoModel} from "../models/quarto.model";
 import {Observable} from "rxjs";
 import _ from "lodash";
+import {ImagemQuartoModel} from "../models/imagemQuarto.model";
 
 @Injectable({
     providedIn: 'root'
@@ -15,42 +16,36 @@ export class QuartoService extends BaseCRUDService<QuartoModel> {
     }
 
 
-    // @ts-ignore
-    override save(entity: QuartoModel, imagens: any, imagensExcluidas: (number | undefined)[] = []): Observable<HttpResponse<any>> {
-
-        const form = this.createForm(entity, imagens, imagensExcluidas);
-
-        return this.http.post(this.url, form, {observe: 'response'});
+    create(entity: QuartoModel, imagens: (ImagemQuartoModel | null)[]): Observable<HttpResponse<any>> {
+        return this.http.post(this.url, this.createForm(entity, imagens), {observe: 'response'});
     }
 
 
-    // @ts-ignore
-    override update(id: number, entity: QuartoModel, imagens: any, imagensExcluidas?: (number | undefined)[] = []): Observable<HttpResponse<any>> {
-
-        const form = this.createForm(entity, imagens, imagensExcluidas);
-
-        return this.http.put(`${this.url}/${id}`, form, {observe: 'response'});
+    updateQuarto(id: number, entity: QuartoModel, imagens: (ImagemQuartoModel | null)[], imagensExcluidas: (number | undefined)[]): Observable<HttpResponse<any>> {
+        return this.http.put(`${this.url}/${id}`, this.createForm(entity, imagens, imagensExcluidas), {observe: 'response'});
     }
 
-    createForm(entity: QuartoModel, imagens: any, imagensExcluidas: (number | undefined)[]) {
-        // @ts-ignore
+    createForm(entity: QuartoModel, imagens: any, imagensExcluidas: (number | undefined)[] = []) {
+
         const form = new FormData();
 
         form.append("nome", entity.nome);
-        form.append("ativo", JSON.stringify(entity.ativo));
-        form.append("capacidadePessoas", JSON.stringify(entity.capacidadePessoas));
-        form.append("valorDiaria", JSON.stringify(entity.valorDiaria));
+        form.append("ativo", entity.ativo.toString());
+        form.append("capacidadePessoas", entity.capacidadePessoas.toString());
+        form.append("valorDiaria", entity.valorDiaria.toString());
         form.append("tipoQuarto", entity.tipoQuarto.id.toString());
         form.append("categoriaQuarto", entity.categoriaQuarto.id.toString());
-        form.append("itens", JSON.stringify(entity.itens));
+        form.append("itens", entity.itens.toString());
+
         if (!_.isNil(imagensExcluidas)) {
-            form.append("imagensExcluidas", JSON.stringify(imagensExcluidas));
+            form.append("imagensExcluidas", imagensExcluidas.toString());
         }
 
-
-        imagens.forEach((imagem) => {
-            form.append(`imagens`, imagem.arquivo, imagem.arquivo.name);
-        });
+        if (!_.isNil(imagens)) {
+            imagens.forEach((imagem) => {
+                form.append(`imagens`, imagem.arquivo, imagem.arquivo.name);
+            });
+        }
 
         return form;
     }

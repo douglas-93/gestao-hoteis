@@ -13,10 +13,9 @@ import {QuartoService} from "../../shared/services/quarto.service";
 import DevExpress from "devextreme";
 import {Utils} from "../../shared/Utils";
 import _ from "lodash";
-import ChangeEvent = DevExpress.ui.dxTextBox.ChangeEvent;
-import {type} from "devextreme/core/utils/type";
 import {ImagemQuartoService} from "../../shared/services/imagemQuarto.service";
 import {ImagemQuartoModel} from "../../shared/models/imagemQuarto.model";
+import ChangeEvent = DevExpress.ui.dxTextBox.ChangeEvent;
 
 @Component({
     selector: 'app-quarto',
@@ -78,45 +77,71 @@ export class QuartoComponent implements OnInit {
     }
 
     salvar() {
+        console.log(this.quartoImagens);
         if (this.cadForm.instance.validate().isValid) {
 
-            this.quarto.valorDiaria = parseFloat(this.valorDiariaTBox.value
-                .replace(/[^0-9.,]/g, '')
-                .replace('.', '')
-                .replace(',', '.'));
+            this.quarto.valorDiaria = this.valorDiariaNumber(this.valorDiariaTBox.value);
             this.quarto.itens = this.listaItens.items;
 
-            const imagensNovas = this.quartoImagens.filter( i => _.isNil(i?.id));
-            let imagensExcluidas = this.quartoImagens.filter( i => this.quarto.idDasImagensDoQuarto.includes(i?.id!)).map(i => i?.id);
+            const imagensNovas = this.filtraImagensNovas(this.quartoImagens);
+            console.log("Imagens Novas: " + imagensNovas)
+
+            const imagensExcluidas = this.filtraImagensExcluidas(this.quartoImagens);
+            console.log("Imagens Excluidas: " + imagensExcluidas)
 
 
-            if (!_.isNil(this.quarto.id)) {
-                this.quartoService.update(this.quarto.id, this.quarto, imagensNovas, imagensExcluidas)
-                    .subscribe(resp => {
-                    if (resp.ok) {
-                        notify('Salvo com sucesso', 'success', 3600);
-                        window.history.back();
-                        return;
+            const salvarQuarto = () => {
+                const serviceCall = _.isNil(this.quarto.id)
+                    ? this.quartoService.create(this.quarto, imagensNovas)
+                    : this.quartoService.updateQuarto(this.quarto.id, this.quarto, imagensNovas, imagensExcluidas);
+
+                serviceCall.subscribe(
+                    resp => {
+                        if (resp.ok) {
+                            notify('Salvo com sucesso', 'success', 3600);
+                            window.history.back();
+                        }
+                    },
+                    error => {
+                        console.error('Erro ao salvar quarto', error);
+                        notify('Erro ao salvar quarto', 'error', 3000);
                     }
-                })
-                return;
-            }
+                );
+            };
 
-            this.quartoService.save(this.quarto, imagensNovas).subscribe(resp => {
-                if (resp.ok) {
-                    notify('Salvo com sucesso', 'success', 3600);
-                    window.history.back();
-                    return;
-                }
-            })
-            return;
+            salvarQuarto();
+        } else {
+            notify('Preencha os campos obrigatórios', 'warning', 3000);
+        }
+    }
+
+    filtraImagensExcluidas(imagens: (ImagemQuartoModel | null)[]) {
+        if (_.isNil(imagens)) {
+            console.log('Sem imagens a serem excluídas')
+            return [];
         }
 
-        notify('Preencha os campos obrigatórios', 'warning', 3000);
+        return imagens.filter(i => !_.isNil(this.quarto.idDasImagensDoQuarto) && this.quarto.idDasImagensDoQuarto.includes(i?.id!))
+            .map(i => i?.id);
+    }
+
+    filtraImagensNovas(imagens: (ImagemQuartoModel | null)[]) {
+        if (_.isNil(imagens)) {
+            console.log('Sem imagens novas')
+            return [];
+        }
+
+        return imagens.filter(i => _.isNil(i?.id));
+    }
+
+    valorDiariaNumber(valor: string): number {
+        return Number(valor.replace(/[^0-9.,]/g, '')
+            .replace('.', '')
+            .replace(',', '.'));
     }
 
     findQuarto(id: string) {
-        this.quartoService.findById(parseInt(id)).subscribe(resp => {
+        this.quartoService.findById(Number(id)).subscribe(resp => {
             if (resp.ok) {
                 this.setaPropriedadesEdit(this.quarto, resp.body!);
 
@@ -138,9 +163,9 @@ export class QuartoComponent implements OnInit {
                     error => {
                         console.error('Erro ao carregar imagens', error);
                         notify('Erro ao carregar imagens', 'error', 3600);
+                        this.isLoadImagemVisible = false;
                     }
                 );
-
             }
         })
     }
@@ -176,7 +201,6 @@ export class QuartoComponent implements OnInit {
     }
 
     editar(event: any) {
-        console.log(this.quartoSelecionado)
         this.router.navigate(['quartos', 'edit', this.quartoSelecionado.id])
     }
 
@@ -216,12 +240,12 @@ export class QuartoComponent implements OnInit {
 
     /********************************************************************************/
     /*                              LIDANDO COM AS IMAGENS                          */
+
     /********************************************************************************/
 
     carregarArquivo(event: any): void {
         const files = event.value;
         if (files && files.length > 0) {
-            // Adicione as imagens ao array
             for (const file of files) {
                 const reader = new FileReader();
                 reader.onload = (e: any) => {
@@ -232,7 +256,6 @@ export class QuartoComponent implements OnInit {
                     img.imagem = e.target.result;
                     img.arquivo = file;
                     this.quartoImagens.push(img);
-                    // this.quartoImagens.push({imagem: e.target.result, arquivo: file});
                 };
                 reader.readAsDataURL(file);
             }
@@ -243,14 +266,6 @@ export class QuartoComponent implements OnInit {
     removerImagem(index: number) {
         this.quartoImagens.splice(index, 1);
     }
-
-    /*ngAfterViewInit(): void {
-        // Obtenha a referência do componente de upload de arquivo após a visualização
-        const uploaderInstance = this.fileUploader.instance;
-
-        // Exemplo de como acessar o arquivo atualmente carregado
-        // console.log(uploaderInstance.option('value'));
-    }*/
 
     abrirImagemPopUp(i: number) {
         this.imagemDoPopUp = <string>this.quartoImagens[i]!.imagem;
@@ -283,6 +298,7 @@ export class QuartoComponent implements OnInit {
 
         notify('Adicione ao menos uma imagem', 'warning', 3600);
     }
+
     downloadImagem(imagem: any) {
         const link = document.createElement('a');
         link.href = imagem.imagem;
@@ -295,15 +311,6 @@ export class QuartoComponent implements OnInit {
 
     excluir() {
         let id = this.router.url.split('/').pop();
-        console.log(id)
-        if (!_.isNil(id)) {
-            this.quartoService.delete(parseInt(id)).subscribe(resp => {
-                if (resp.ok) {
-                    notify('Exclusão realizada com sucesso', 'success', 3600);
-                    window.history.back();
-                    return;
-                }
-            });
-        }
+        console.log(id);
     }
 }
