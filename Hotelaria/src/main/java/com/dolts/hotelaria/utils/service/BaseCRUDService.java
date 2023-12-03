@@ -3,6 +3,7 @@ package com.dolts.hotelaria.utils.service;
 import com.dolts.hotelaria.utils.repository.AbstractCRUDRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -39,7 +40,8 @@ public class BaseCRUDService<T, D> implements AbstractCRUDService<T, D> {
 
     @Transactional
     public List<T> findAll() {
-        return this.getRepository().findAll();
+        Sort sort = Sort.by(Sort.Order.asc("id"));
+        return this.getRepository().findAll(sort);
     }
 
     @Transactional
