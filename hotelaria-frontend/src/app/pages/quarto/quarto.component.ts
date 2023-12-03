@@ -123,7 +123,7 @@ export class QuartoComponent implements OnInit {
         const idsNaPagina = _.isNil(imagens) ? [] : imagens.map(im => im?.id);
         /* Pegando os ids que estão na entidade mas não estão na página */
         if (!_.isNil(this.quarto.idDasImagensDoQuarto)) {
-           return this.quarto.idDasImagensDoQuarto.filter(i => !idsNaPagina.includes(i));
+            return this.quarto.idDasImagensDoQuarto.filter(i => !idsNaPagina.includes(i));
         }
         return [];
     }
@@ -241,6 +241,21 @@ export class QuartoComponent implements OnInit {
         }
     }
 
+    excluir() {
+        let id = this.router.url.split('/').pop();
+        let idAsNumber = Number(id);
+        this.quartoService.delete(idAsNumber).subscribe(resp => {
+            if (resp.ok) {
+                notify('Quarto removido com sucesso!', 'success', 3600);
+                window.history.back();
+            }
+        });
+    }
+
+    baixarTodas() {
+        this.quartoImagens.forEach(i => this.downloadImagem(i));
+    }
+
     /********************************************************************************/
     /*                              LIDANDO COM AS IMAGENS                          */
 
@@ -310,16 +325,5 @@ export class QuartoComponent implements OnInit {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }
-
-    excluir() {
-        let id = this.router.url.split('/').pop();
-        let idAsNumber = Number(id);
-        this.quartoService.delete(idAsNumber).subscribe(resp => {
-            if (resp.ok){
-                notify('Quarto removido com sucesso!', 'success', 3600);
-                window.history.back();
-            }
-        });
     }
 }

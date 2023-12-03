@@ -64,6 +64,10 @@ public class QuartoService extends BaseCRUDService<QuartoModel, Long> {
         Long idQuarto = quarto.getId();
         List<Long> idDasImagens = new ArrayList<>();
 
+        if (!quarto.getIdDasImagensDoQuarto().isEmpty()) {
+            idDasImagens.addAll(quarto.getIdDasImagensDoQuarto());
+        }
+
         if (idQuarto == null) {
             throw new RuntimeException("ID do quarto precisa ser informado!");
         }
@@ -75,7 +79,7 @@ public class QuartoService extends BaseCRUDService<QuartoModel, Long> {
                         try {
                             ImagemQuartoModel i = new ImagemQuartoModel();
                             i.setImagem(imagem.getBytes());
-                            i.setNome(imagem.getName());
+                            i.setNome(imagem.getOriginalFilename());
                             i.setFormato(imagem.getContentType());
                             i.setTamanho(imagem.getSize());
                             i.setIdDoQuartoDaImagem(idQuarto);
@@ -111,6 +115,7 @@ public class QuartoService extends BaseCRUDService<QuartoModel, Long> {
         entity.setItens(itens);
         entity.setTipoQuarto(tipoQuartoService.getById(tipoQuarto));
         entity.setCategoriaQuarto(categoriaQuartoService.getById(categoriaQuarto));
+        entity.setIdDasImagensDoQuarto(entity.getIdDasImagensDoQuarto());
     }
 
     @Override

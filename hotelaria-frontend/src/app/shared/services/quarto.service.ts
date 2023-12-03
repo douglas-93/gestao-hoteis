@@ -41,9 +41,11 @@ export class QuartoService extends BaseCRUDService<QuartoModel> {
             form.append("imagensExcluidas", imagensExcluidas.toString());
         }
 
+        console.log(imagens)
+
         if (!_.isNil(imagens)) {
             imagens.forEach((imagem) => {
-                form.append(`imagens`, imagem.arquivo, imagem.arquivo.name);
+                form.append(`imagens`, imagem.arquivo, imagem.nome);
             });
         }
 
