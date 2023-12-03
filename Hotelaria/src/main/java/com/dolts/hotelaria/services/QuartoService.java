@@ -44,7 +44,7 @@ public class QuartoService extends BaseCRUDService<QuartoModel, Long> {
 
     public QuartoModel updateQuarto(Long id, String nome, Boolean ativo, Integer capacidadePessoas,
                                     BigDecimal valorDiaria, Long tipoQuarto, Long categoriaQuarto,
-                                    List<String> itens, List<MultipartFile> imagens, List<String> imagensExcluidas) throws IOException {
+                                    List<String> itens, List<MultipartFile> imagens, List<Long> imagensExcluidas) throws IOException {
 
 
         QuartoModel entity = quartoRepository.getReferenceById(id);
@@ -54,6 +54,8 @@ public class QuartoService extends BaseCRUDService<QuartoModel, Long> {
 
         handleImagens(imagens, updatedEntity);
         handleImagensExcluidas(imagensExcluidas, updatedEntity);
+
+        updatedEntity = quartoRepository.save(updatedEntity);
 
         return updatedEntity;
     }
@@ -90,13 +92,10 @@ public class QuartoService extends BaseCRUDService<QuartoModel, Long> {
     }
 
 
-    private void handleImagensExcluidas(List<String> imagensExcluidas, QuartoModel quarto) {
+    private void handleImagensExcluidas(List<Long> imagensExcluidas, QuartoModel quarto) {
         if (imagensExcluidas != null && !imagensExcluidas.isEmpty()) {
-            for (String idImagemStr : imagensExcluidas) {
-                if (idImagemStr.equals("[]")) {
-                    continue;
-                }
-                Long idImagem = Long.parseLong(idImagemStr.replaceAll("[\"\\[\\]]", ""));
+            for (Long idImagem : imagensExcluidas) {
+                System.out.println(idImagem);
                 imagemQuartoService.delete(imagemQuartoService.getById(idImagem));
                 quarto.getIdDasImagensDoQuarto().remove(idImagem);
             }

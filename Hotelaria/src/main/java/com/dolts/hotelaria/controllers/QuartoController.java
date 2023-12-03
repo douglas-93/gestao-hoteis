@@ -53,7 +53,7 @@ public class QuartoController {
                                               @RequestParam("valorDiaria") BigDecimal valorDiaria,
                                               @RequestParam("tipoQuarto") Long tipoQuarto,
                                               @RequestParam("categoriaQuarto") Long categoriaQuarto,
-                                              @RequestParam("imagensExcluidas") List<String> imagensExcluidas,
+                                              @RequestParam("imagensExcluidas") List<Long> imagensExcluidas,
                                               @RequestParam(value = "itens", required = false) List<String> itens) throws IOException {
 
         QuartoModel entity = quartoService.updateQuarto(id, nome, ativo, capacidadePessoas, valorDiaria, tipoQuarto, categoriaQuarto, itens, imagens, imagensExcluidas);

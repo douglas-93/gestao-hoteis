@@ -77,7 +77,6 @@ export class QuartoComponent implements OnInit {
     }
 
     salvar() {
-        console.log(this.quartoImagens);
         if (this.cadForm.instance.validate().isValid) {
 
             this.quarto.valorDiaria = this.valorDiariaNumber(this.valorDiariaTBox.value);
@@ -117,12 +116,16 @@ export class QuartoComponent implements OnInit {
 
     filtraImagensExcluidas(imagens: (ImagemQuartoModel | null)[]) {
         if (_.isNil(imagens)) {
-            console.log('Sem imagens a serem excluídas')
+            console.log('Sem imagens a serem excluídas');
             return [];
         }
 
-        return imagens.filter(i => !_.isNil(this.quarto.idDasImagensDoQuarto) && this.quarto.idDasImagensDoQuarto.includes(i?.id!))
-            .map(i => i?.id);
+        const idsNaPagina = _.isNil(imagens) ? [] : imagens.map(im => im?.id);
+        /* Pegando os ids que estão na entidade mas não estão na página */
+        if (!_.isNil(this.quarto.idDasImagensDoQuarto)) {
+           return this.quarto.idDasImagensDoQuarto.filter(i => !idsNaPagina.includes(i));
+        }
+        return [];
     }
 
     filtraImagensNovas(imagens: (ImagemQuartoModel | null)[]) {
