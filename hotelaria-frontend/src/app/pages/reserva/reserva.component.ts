@@ -78,7 +78,9 @@ export class ReservaComponent implements OnInit {
             reserva.quartos = this.quartosNaReserva;
             reserva.dataEntrada = <Date>this.dataEntrada;
             reserva.dataPrevistaSaida = <Date>this.dataSaida;
-            reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida);
+            reserva.valorDiaria = this.quartosNaReserva.reduce((total, quarto) => total + quarto.valorDiaria, 0);
+            /* +1 para contar com o dia de hoje */
+            reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida) + 1;
 
             this.reservaService.save(reserva).subscribe(resp => {
                 if (resp.ok) {

@@ -9,6 +9,7 @@ export class ReservaModel {
     dataEntrada: Date;
     dataPrevistaSaida: Date;
     dataSaida: Date;
+    estadia: Date[];
     checkedIn: boolean;
     checkedOut: boolean;
     cancelada: boolean;

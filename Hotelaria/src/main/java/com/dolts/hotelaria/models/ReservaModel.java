@@ -27,6 +27,8 @@ public class ReservaModel implements Serializable {
     private LocalDateTime dataCancelamento;
     private LocalDate dataEntrada;
     private LocalDate dataPrevistaSaida;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<LocalDate> estadia;
     private LocalDate dataSaida;
     private Boolean checkedIn;
     private Boolean checkedOut;

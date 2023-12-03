@@ -55,6 +55,8 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
             );
         }
 
+        entity.setEstadia(geraDatas(entity.getDataEntrada(), entity.getDataPrevistaSaida()));
+
     }
 
     private List<LocalDate> geraDatas(LocalDate dataEntrada, LocalDate dataSaida) {
@@ -68,13 +70,20 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         return intervalo;
     }
 
-    public List<ReservaModel> verificaReservas(ReservaModel entity) {
-        List<ReservaModel> reservasFeitas = reservaRepository.findByData(entity.getDataEntrada(), entity.getDataSaida());
-        List<ReservaModel> reservasSobrepostas = new ArrayList<>();
+    public List<ReservaModel> verificaDisponibilidade(ReservaModel entity) {
 
-        reservasFeitas.forEach(System.out::println);
+        List<ReservaModel> reservasJaRealizadas = new ArrayList<>();
 
-        return reservasFeitas;
+        entity.getQuartos().forEach(q -> {
+            List<ReservaModel> reservas = reservaRepository.findReservasSobrepostas(q.getId(),
+                    entity.getDataEntrada(), entity.getDataPrevistaSaida());
+
+            if (!reservas.isEmpty()) {
+                reservasJaRealizadas.addAll(reservas);
+            }
+        });
+
+        return reservasJaRealizadas;
     }
 
 

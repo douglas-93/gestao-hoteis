@@ -4,6 +4,7 @@ import com.dolts.hotelaria.models.QuartoModel;
 import com.dolts.hotelaria.models.ReservaModel;
 import com.dolts.hotelaria.utils.repository.AbstractCRUDRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -11,11 +12,12 @@ import java.util.List;
 
 @Repository
 public interface ReservaRepository extends AbstractCRUDRepository<ReservaModel, Long> {
-
-    @Query("SELECT r FROM ReservaModel r WHERE ((:entrada BETWEEN r.dataEntrada AND r.dataPrevistaSaida) OR (:saida BETWEEN r.dataEntrada AND r.dataPrevistaSaida)" +
-            " OR (r.dataEntrada BETWEEN :entrada AND :saida) OR (r.dataPrevistaSaida BETWEEN :entrada AND :saida)) ORDER BY r.dataEntrada DESC")
-    List<ReservaModel> findByData(LocalDate entrada, LocalDate saida);
-
-    @Query(nativeQuery = true, value = "select rq.quartos_id from reservas r join reservas_quartos rq on rq.reserva_model_id = r.id where r.data_entrada >= :entrada and r.data_prevista_saida <= :saida")
-    List<QuartoModel> findQuartosOcupadosByData(LocalDate entrada, LocalDate saida);
+    @Query("SELECT r FROM ReservaModel r JOIN r.quartos q " +
+            "WHERE q.id = :quartoId " +
+            "AND ((r.dataEntrada BETWEEN :dataEntrada AND :dataSaida) OR " +
+            "(r.dataSaida BETWEEN :dataEntrada AND :dataSaida) OR " +
+            "(:dataEntrada BETWEEN r.dataEntrada AND r.dataSaida))")
+    List<ReservaModel> findReservasSobrepostas(@Param("quartoId") Long quartoId,
+                                               @Param("dataEntrada") LocalDate dataEntrada,
+                                               @Param("dataSaida") LocalDate dataSaida);
 }
