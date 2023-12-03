@@ -314,6 +314,12 @@ export class QuartoComponent implements OnInit {
 
     excluir() {
         let id = this.router.url.split('/').pop();
-        console.log(id);
+        let idAsNumber = Number(id);
+        this.quartoService.delete(idAsNumber).subscribe(resp => {
+            if (resp.ok){
+                notify('Quarto removido com sucesso!', 'success', 3600);
+                window.history.back();
+            }
+        });
     }
 }

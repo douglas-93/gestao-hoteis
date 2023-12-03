@@ -66,9 +66,13 @@ public class QuartoController {
         if (entity == null) {
             return ResponseEntity.notFound().build();
         }
-        entity.getIdDasImagensDoQuarto().forEach(i -> {
-            imagemQuartoService.delete(imagemQuartoService.getById(i));
-        });
+
+        if (!entity.getIdDasImagensDoQuarto().isEmpty()) {
+            entity.getIdDasImagensDoQuarto().parallelStream().forEach(i -> {
+                imagemQuartoService.delete(imagemQuartoService.getById(i));
+            });
+        }
+
         quartoService.delete(entity);
         return ResponseEntity.noContent().build();
     }
