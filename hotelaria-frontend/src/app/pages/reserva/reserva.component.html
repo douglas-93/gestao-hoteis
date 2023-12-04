@@ -278,6 +278,10 @@
                     </div>
                 </dx-form>
 
+                <dx-data-grid *ngIf="reservasJaRealizadas.length > 0"
+                              [dataSource]="reservasJaRealizadas">
+                </dx-data-grid>
+
             </dxi-item>
         </dx-tab-panel>
 

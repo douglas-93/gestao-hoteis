@@ -36,6 +36,7 @@ export class ReservaComponent implements OnInit {
     dataSaida: Date | number | string = new Date();
     reservas: ReservaModel[] = [];
     protected readonly Utils = Utils;
+    reservasJaRealizadas: ReservaModel[] = [];
 
     constructor(private router: Router,
                 private quartoService: QuartoService,
@@ -85,6 +86,7 @@ export class ReservaComponent implements OnInit {
             this.reservaService.verificaDisponibilidade(reserva).subscribe(resp => {
                 if (resp.ok) {
                     console.log(resp.body);
+                    this.reservasJaRealizadas = _.isNil(resp.body) ? [] : <ReservaModel[]>resp.body;
                     return;
                 }
 
