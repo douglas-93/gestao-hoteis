@@ -91,6 +91,7 @@ export class ReservaComponent implements OnInit {
                 }
 
                 if (resp.status === 204) {
+                    notify('Data e quarto disponíveis', 'success', 3600);
                     /*this.reservaService.save(reserva).subscribe(resp => {
                         if (resp.ok) {
                             notify('Reserva realizada', 'success', 3600);

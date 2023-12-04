@@ -5,6 +5,7 @@ import {QuartoModel} from "../models/quarto.model";
 import {Observable} from "rxjs";
 import _ from "lodash";
 import {ImagemQuartoModel} from "../models/imagemQuarto.model";
+import FormData from "form-data";
 
 @Injectable({
     providedIn: 'root'
