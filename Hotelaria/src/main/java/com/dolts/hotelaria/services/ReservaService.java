@@ -7,6 +7,7 @@ import com.dolts.hotelaria.repositories.ReservaRepository;
 import com.dolts.hotelaria.utils.repository.AbstractCRUDRepository;
 import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -56,7 +57,6 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         }
 
         entity.setEstadia(geraDatas(entity.getDataEntrada(), entity.getDataPrevistaSaida()));
-
     }
 
     private List<LocalDate> geraDatas(LocalDate dataEntrada, LocalDate dataSaida) {

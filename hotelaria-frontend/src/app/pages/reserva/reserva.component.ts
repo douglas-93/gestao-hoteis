@@ -82,12 +82,18 @@ export class ReservaComponent implements OnInit {
             /* +1 para contar com o dia de hoje */
             reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida) + 1;
 
-            this.reservaService.save(reserva).subscribe(resp => {
+            this.reservaService.verificaDisponibilidade(reserva).subscribe(resp => {
+                if (resp.ok) {
+                    console.log(resp.body);
+                }
+            })
+
+            /*this.reservaService.save(reserva).subscribe(resp => {
                 if (resp.ok) {
                     notify('Reserva realizada', 'success', 3600);
                     window.history.back();
                 }
-            })
+            })*/
         }
     }
 

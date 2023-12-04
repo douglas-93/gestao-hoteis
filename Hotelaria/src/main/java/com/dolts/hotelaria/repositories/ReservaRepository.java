@@ -15,8 +15,8 @@ public interface ReservaRepository extends AbstractCRUDRepository<ReservaModel, 
     @Query("SELECT r FROM ReservaModel r JOIN r.quartos q " +
             "WHERE q.id = :quartoId " +
             "AND ((r.dataEntrada BETWEEN :dataEntrada AND :dataSaida) OR " +
-            "(r.dataSaida BETWEEN :dataEntrada AND :dataSaida) OR " +
-            "(:dataEntrada BETWEEN r.dataEntrada AND r.dataSaida))")
+            "(COALESCE(r.dataPrevistaSaida, r.dataSaida) BETWEEN :dataEntrada AND :dataSaida) OR " +
+            "(:dataEntrada BETWEEN r.dataEntrada AND COALESCE(r.dataPrevistaSaida, r.dataSaida)))")
     List<ReservaModel> findReservasSobrepostas(@Param("quartoId") Long quartoId,
                                                @Param("dataEntrada") LocalDate dataEntrada,
                                                @Param("dataSaida") LocalDate dataSaida);

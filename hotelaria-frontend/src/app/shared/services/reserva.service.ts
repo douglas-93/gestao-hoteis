@@ -11,4 +11,8 @@ export class ReservaService extends BaseCRUDService<ReservaModel> {
     constructor(http: HttpClient) {
         super('/reservas', http);
     }
+
+    verificaDisponibilidade(reserva: ReservaModel) {
+        return this.http.post(`${this.url}/v`, reserva, {observe: 'response'});
+    }
 }

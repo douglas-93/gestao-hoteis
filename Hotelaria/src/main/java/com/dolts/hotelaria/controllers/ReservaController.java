@@ -46,10 +46,15 @@ public class ReservaController {
         return ResponseEntity.ok(entities);
     }
 
-    @GetMapping("/v")
+    @PostMapping("/v")
     public ResponseEntity<List<ReservaModel>> findReservasFeitas(@RequestBody ReservaModel entity) {
-//        List<ReservaModel> entities = reservaService.verificaReservas(entity);
-        return ResponseEntity.ok(reservaService.verificaReservas(entity));
+        List<ReservaModel> reservasFeitas = reservaService.verificaDisponibilidade(entity);
+
+        if (!reservasFeitas.isEmpty()) {
+            return ResponseEntity.ok(reservasFeitas);
+        }
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
