@@ -90,9 +90,7 @@ export class ReservaComponent implements OnInit {
             reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida) + 1;
 
             this.reservaService.verificaDisponibilidade(reserva).subscribe(resp => {
-                console.log('Status Code:', resp.status);
-                console.log('Response Body:', resp.body);
-                console.log('Resp: ', resp)
+
                 if (resp.status === 200 && resp.body != null) {
                     this.tabPanel.selectedIndex = this.tabPanel.items.length - 1;
                     this.reservasJaRealizadas = _.isNil(resp.body) ? [] : <ReservaModel[]>resp.body;
