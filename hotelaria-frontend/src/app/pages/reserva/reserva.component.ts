@@ -85,15 +85,18 @@ export class ReservaComponent implements OnInit {
             this.reservaService.verificaDisponibilidade(reserva).subscribe(resp => {
                 if (resp.ok) {
                     console.log(resp.body);
+                    return;
+                }
+
+                if (resp.status === 204) {
+                    /*this.reservaService.save(reserva).subscribe(resp => {
+                        if (resp.ok) {
+                            notify('Reserva realizada', 'success', 3600);
+                            window.history.back();
+                        }
+                    })*/
                 }
             })
-
-            /*this.reservaService.save(reserva).subscribe(resp => {
-                if (resp.ok) {
-                    notify('Reserva realizada', 'success', 3600);
-                    window.history.back();
-                }
-            })*/
         }
     }
 
