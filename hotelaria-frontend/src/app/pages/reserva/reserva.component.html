@@ -15,11 +15,17 @@
             <dxi-column cellTemplate="quartosTemplate"
                         dataField="quartos">
             </dxi-column>
-            <dxi-column dataField="dataEntrada">
+            <dxi-column dataField="dataEntrada"
+                        dataType="date"
+                        format="dd-MM-yyyy">
             </dxi-column>
-            <dxi-column dataField="dataPrevistaSaida">
+            <dxi-column dataField="dataPrevistaSaida"
+                        dataType="date"
+                        format="dd-MM-yyyy">
             </dxi-column>
-            <dxi-column dataField="dataSaida">
+            <dxi-column dataField="dataSaida"
+                        dataType="date"
+                        format="dd-MM-yyyy">
             </dxi-column>
             <dxi-column dataField="checkedIn">
             </dxi-column>
@@ -51,7 +57,7 @@
 
     <div edit-template>
 
-        <dx-tab-panel>
+        <dx-tab-panel #tabPanel>
             <dxi-item title="Hospede">
                 <dx-form>
                     <dxi-item [label]="{text: 'Hospede'}"
@@ -278,9 +284,59 @@
                     </div>
                 </dx-form>
 
-                <dx-data-grid *ngIf="reservasJaRealizadas.length > 0"
-                              [dataSource]="reservasJaRealizadas">
-                </dx-data-grid>
+                <div *ngIf="reservasJaRealizadas.length > 0" style="width: 100%">
+
+                    <div class="alert alert-danger" role="alert">
+                        A reserva atual <strong>sobrepõe</strong> a(s) reserva(s) já existente(s) abaixo, impossível
+                        inclusão!
+                    </div>
+
+
+                    <dx-data-grid [dataSource]="reservasJaRealizadas">
+
+                        <dxi-column dataField="id"
+                                    caption="Reserva">
+
+                        </dxi-column>
+                        <dxi-column dataField="dataEntrada"
+                                    caption="Data da Entrada"
+                                    dataType="date"
+                                    format="dd-MM-yyyy">
+
+                        </dxi-column>
+                        <dxi-column dataField="dataPrevistaSaida"
+                                    caption="Data da Saída"
+                                    dataType="date"
+                                    format="dd-MM-yyyy">
+
+                        </dxi-column>
+                        <dxi-column dataField="quartos"
+                                    cellTemplate="quartosTemplate"
+                                    caption="Quarto(s)">
+
+                        </dxi-column>
+                        <dxi-column dataField="hospedes"
+                                    cellTemplate="hospedesTemplate"
+                                    caption="Hospede(s)">
+
+                        </dxi-column>
+
+                        <!--                        TEMPLATE                    -->
+
+                        <div *dxTemplate="let data of 'quartosTemplate'">
+                                <span *ngFor="let q of data.data.quartos">
+                                    {{q.nome}}
+                                </span>
+                        </div>
+
+                        <div *dxTemplate="let data of 'hospedesTemplate'">
+                                <span *ngFor="let h of data.data.hospedes">
+                                    {{h.nome}}
+                                </span>
+                        </div>
+
+                    </dx-data-grid>
+                </div>
 
             </dxi-item>
         </dx-tab-panel>

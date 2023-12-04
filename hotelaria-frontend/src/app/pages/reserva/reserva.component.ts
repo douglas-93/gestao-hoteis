@@ -6,7 +6,12 @@ import {QuartoService} from "../../shared/services/quarto.service";
 import {HospedeService} from "../../shared/services/hospede.service";
 import {HospedeModel} from "../../shared/models/hospede.model";
 import {QuartoModel} from "../../shared/models/quarto.model";
-import {DxAutocompleteComponent, DxDataGridComponent, DxSelectBoxComponent} from "devextreme-angular";
+import {
+    DxAutocompleteComponent
+  , DxDataGridComponent
+  , DxSelectBoxComponent
+  , DxTabPanelComponent
+} from "devextreme-angular";
 import notify from "devextreme/ui/notify";
 import _ from "lodash";
 import {Utils} from "../../shared/Utils";
@@ -23,6 +28,7 @@ export class ReservaComponent implements OnInit {
     @ViewChild('hospedeAutoComplete') hospedeAutoComplete: DxAutocompleteComponent;
     @ViewChild('gridDeHospedesNaReserva') gridDeHospedesNaReserva: DxDataGridComponent;
     @ViewChild('quartoSelectBox') quartoSelectBox: DxSelectBoxComponent;
+    @ViewChild('tabPanel') tabPanel: DxTabPanelComponent;
 
     mode: ModeEnum = ModeEnum.LIST;
     hospedes: HospedeModel[] = [];
@@ -84,13 +90,16 @@ export class ReservaComponent implements OnInit {
             reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida) + 1;
 
             this.reservaService.verificaDisponibilidade(reserva).subscribe(resp => {
-                if (resp.ok) {
-                    console.log(resp.body);
+                console.log('Status Code:', resp.status);
+                console.log('Response Body:', resp.body);
+                console.log('Resp: ', resp)
+                if (resp.status === 200 && resp.body != null) {
+                    this.tabPanel.selectedIndex = this.tabPanel.items.length - 1;
                     this.reservasJaRealizadas = _.isNil(resp.body) ? [] : <ReservaModel[]>resp.body;
                     return;
                 }
 
-                if (resp.status === 204) {
+                if (resp.status === 204 && resp.body === null) {
                     notify('Data e quarto disponíveis', 'success', 3600);
                     /*this.reservaService.save(reserva).subscribe(resp => {
                         if (resp.ok) {
@@ -104,11 +113,11 @@ export class ReservaComponent implements OnInit {
     }
 
     verificaAntesDeSalvar() {
-        if (_.isNil(this.hospedesNaReserva)) {
+        if (_.isNil(this.hospedesNaReserva) || _.isEmpty(this.hospedesNaReserva)) {
             notify('É necessário a inclusão de ao menos um hospede', 'error', 3600);
             return false;
         }
-        if (_.isNil(this.quartosNaReserva)) {
+        if (_.isNil(this.quartosNaReserva) || _.isEmpty(this.quartosNaReserva)) {
             notify('É necessário a inclusão de ao menos um quarto', 'error', 3600);
             return false;
         }
