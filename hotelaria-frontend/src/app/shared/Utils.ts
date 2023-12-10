@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export class Utils {
     static formatarCNPJ(cnpj: string): string {
         cnpj = cnpj.replace(/\D/g, '');
@@ -18,12 +20,20 @@ export class Utils {
     }
 
     static formatarTelefone(telefone: string): string {
+        if (_.isNil(telefone)) {
+            return '';
+        }
+
         telefone = telefone.replace(/\D/g, '');
         telefone = telefone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
         return telefone;
     }
 
     static formatarCelular(celular: string): string {
+        if (_.isNil(celular)) {
+            return '';
+        }
+
         celular = celular.replace(/\D/g, '');
         celular = celular.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
         return celular;

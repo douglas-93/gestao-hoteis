@@ -49,4 +49,6 @@ public class ReservaModel implements Serializable {
             joinColumns = @JoinColumn(name = "reserva_id"),
             inverseJoinColumns = @JoinColumn(name = "hospede_id"))
     private List<HospedeModel> hospedes = new ArrayList<>();
+    @OneToOne
+    private EmpresaModel empresa;
 }

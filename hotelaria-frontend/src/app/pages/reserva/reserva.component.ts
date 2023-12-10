@@ -17,6 +17,8 @@ import _ from "lodash";
 import {Utils} from "../../shared/Utils";
 import {ReservaModel} from "../../shared/models/reserva.model";
 import {ReservaService} from "../../shared/services/reserva.service";
+import {EmpresaModel} from "../../shared/models/empresa.model";
+import {EmpresaService} from "../../shared/services/empresa.service";
 
 @Component({
     selector: 'app-reserva',
@@ -28,6 +30,7 @@ export class ReservaComponent implements OnInit {
     @ViewChild('hospedeAutoComplete') hospedeAutoComplete: DxAutocompleteComponent;
     @ViewChild('gridDeHospedesNaReserva') gridDeHospedesNaReserva: DxDataGridComponent;
     @ViewChild('quartoSelectBox') quartoSelectBox: DxSelectBoxComponent;
+    @ViewChild('empresaSelect') empresaSelect: DxSelectBoxComponent;
     @ViewChild('tabPanel') tabPanel: DxTabPanelComponent;
 
     mode: ModeEnum = ModeEnum.LIST;
@@ -43,11 +46,15 @@ export class ReservaComponent implements OnInit {
     reservas: ReservaModel[] = [];
     protected readonly Utils = Utils;
     reservasJaRealizadas: ReservaModel[] = [];
+    isEmpresa: boolean = false;
+    empresas: EmpresaModel[] = [];
+    empresaSelecionada: EmpresaModel;
 
     constructor(private router: Router,
                 private quartoService: QuartoService,
                 private hospedeService: HospedeService,
-                private reservaService: ReservaService) {
+                private reservaService: ReservaService,
+                private empresaService: EmpresaService) {
     }
 
     ngOnInit(): void {
@@ -83,6 +90,7 @@ export class ReservaComponent implements OnInit {
             const reserva = new ReservaModel();
             reserva.hospedes = this.hospedesNaReserva;
             reserva.quartos = this.quartosNaReserva;
+            reserva.empresa = this.empresaSelecionada;
             reserva.dataEntrada = <Date>this.dataEntrada;
             reserva.dataPrevistaSaida = <Date>this.dataSaida;
             reserva.valorDiaria = this.quartosNaReserva.reduce((total, quarto) => total + quarto.valorDiaria, 0);
@@ -99,12 +107,12 @@ export class ReservaComponent implements OnInit {
 
                 if (resp.status === 204 && resp.body === null) {
                     notify('Data e quarto disponíveis', 'success', 3600);
-                    /*this.reservaService.save(reserva).subscribe(resp => {
+                    this.reservaService.save(reserva).subscribe(resp => {
                         if (resp.ok) {
                             notify('Reserva realizada', 'success', 3600);
                             window.history.back();
                         }
-                    })*/
+                    })
                 }
             })
         }
@@ -117,6 +125,10 @@ export class ReservaComponent implements OnInit {
         }
         if (_.isNil(this.quartosNaReserva) || _.isEmpty(this.quartosNaReserva)) {
             notify('É necessário a inclusão de ao menos um quarto', 'error', 3600);
+            return false;
+        }
+        if (_.isNil(this.empresaSelecionada) && !this.isEmpresa) {
+            notify('É necessário selecionar a empresa', 'error', 3600);
             return false;
         }
         if (_.isNil(this.dataEntrada)) {
@@ -209,7 +221,17 @@ export class ReservaComponent implements OnInit {
         });
     }
 
-    logar(v) {
-        console.log(v)
+    buscaEmpresas() {
+        if (this.isEmpresa && _.isEmpty(this.empresas)) {
+            this.empresaService.findAll().subscribe(resp => {
+                if (resp.ok) {
+                    this.empresas = resp.body!
+                }
+            })
+        }
+    }
+
+    defineEmpresa() {
+        this.empresaSelecionada = this.empresaSelect.selectedItem;
     }
 }

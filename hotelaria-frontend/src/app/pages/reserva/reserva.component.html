@@ -38,13 +38,13 @@
 
             <div *dxTemplate="let data of 'hospedesTemplate'">
                 <div *ngFor="let h of data.data.hospedes">
-                    {{h.nome + ' - ' + h.cpf}}
+                    {{ h.nome + ' - ' + h.cpf }}
                 </div>
             </div>
 
             <div *dxTemplate="let data of 'quartosTemplate'">
                 <div *ngFor="let q of data.data.quartos">
-                    {{q.nome}}
+                    {{ q.nome }}
                 </div>
             </div>
 
@@ -114,15 +114,15 @@
                             <!--            TEMPLATE        -->
 
                             <div *dxTemplate="let data of 'cpfTemplate'">
-                                {{Utils.formatarCPF(data.data.cpf)}}
+                                {{ Utils.formatarCPF(data.data.cpf) }}
                             </div>
 
                             <div *dxTemplate="let data of 'telefoneTemplate'">
-                                {{Utils.formatarTelefone(data.data.telefone)}}
+                                {{ Utils.formatarTelefone(data.data.telefone) }}
                             </div>
 
                             <div *dxTemplate="let data of 'celularTemplate'">
-                                {{Utils.formatarCelular(data.data.celular)}}
+                                {{ Utils.formatarCelular(data.data.celular) }}
                             </div>
                         </dx-data-grid>
                     </div>
@@ -185,11 +185,11 @@
 
                             <!--            TEMPLATE        -->
                             <div *dxTemplate="let data of 'tipoTemplate'">
-                                {{data.data.tipoQuarto.nome}}
+                                {{ data.data.tipoQuarto.nome }}
                             </div>
 
                             <div *dxTemplate="let data of 'categoriaTemplate'">
-                                {{data.data.categoriaQuarto.nome}}
+                                {{ data.data.categoriaQuarto.nome }}
                             </div>
                         </dx-data-grid>
                     </div>
@@ -233,8 +233,47 @@
                     </div>
                 </dx-form>
             </dxi-item>
+            <dxi-item title="Empresa">
+                <dx-form>
+                    <dxi-item template="empresaTemplate">
+                    </dxi-item>
+
+                    <!--            TEMPLATE             -->
+                    <div *dxTemplate="let data of 'empresaTemplate'">
+                        <div class="empresa">
+                            <span>
+                                É reserva para empresa?
+                            </span>
+                            <br>
+                            <div style="display: flex; align-items: flex-start; margin-top: 10px;">
+                                <dx-switch [(value)]="isEmpresa"
+                                           (onValueChanged)="buscaEmpresas()">
+                                </dx-switch>
+                                <span style="margin-left: 10px">
+                                    {{ isEmpresa ? 'Sim' : 'Não' }}
+                                </span>
+                            </div>
+                        </div>
+                        <dx-select-box *ngIf="isEmpresa"
+                                       #empresaSelect
+                                       [dataSource]="empresas"
+                                       (onValueChanged)="defineEmpresa()"
+                                       [searchEnabled]="true"
+                                       searchMode="contains"
+                                       searchExpr="razaoSocial"
+                                       displayExpr="razaoSocial"
+                                       style="margin-top: 15px">
+                        </dx-select-box>
+                    </div>
+                </dx-form>
+            </dxi-item>
             <dxi-item title="Resumo da Reserva">
                 <dx-form>
+                    <dxi-item itemType="group" *ngIf="empresaSelecionada != null">
+                        <dxi-item [label]="{text: 'Empresa responsável'}"
+                                  template="resumoEmpresaTemplate">
+                        </dxi-item>
+                    </dxi-item>
                     <dxi-item colCount="3" itemType="group">
                         <dxi-item [label]="{text: 'Hospedes na Reserva'}"
                                   template="resumoHospedeTemplate">
@@ -253,6 +292,12 @@
                     </dxi-item>
 
                     <!--                TEMPLATES           -->
+                    <div *dxTemplate="let data of 'resumoEmpresaTemplate'">
+                            <dx-text-box [readOnly]="true"
+                                         [value]="empresaSelecionada.razaoSocial"
+                                         class="mb">
+                            </dx-text-box>
+                    </div>
                     <div *dxTemplate="let data of 'resumoHospedeTemplate'">
                         <div *ngFor="let h of hospedesNaReserva">
                             <dx-text-box [readOnly]="true"
@@ -325,13 +370,13 @@
 
                         <div *dxTemplate="let data of 'quartosTemplate'">
                                 <span *ngFor="let q of data.data.quartos">
-                                    {{q.nome}}
+                                    {{ q.nome }}
                                 </span>
                         </div>
 
                         <div *dxTemplate="let data of 'hospedesTemplate'">
                                 <span *ngFor="let h of data.data.hospedes">
-                                    {{h.nome}}
+                                    {{ h.nome }}
                                 </span>
                         </div>
 

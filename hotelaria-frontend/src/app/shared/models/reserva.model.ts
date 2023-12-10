@@ -1,5 +1,6 @@
 import {HospedeModel} from "./hospede.model";
 import {QuartoModel} from "./quarto.model";
+import {EmpresaModel} from "./empresa.model";
 
 export class ReservaModel {
     id: number;
@@ -19,4 +20,5 @@ export class ReservaModel {
     valorTotalEstadia: number;
     hospedes: HospedeModel[];
     quartos: QuartoModel[];
+    empresa: EmpresaModel;
 }
