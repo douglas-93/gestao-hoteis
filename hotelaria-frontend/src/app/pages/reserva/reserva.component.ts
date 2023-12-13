@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {forkJoin} from "rxjs";
@@ -49,13 +49,17 @@ export class ReservaComponent implements OnInit {
     isEmpresa: boolean = false;
     empresas: EmpresaModel[] = [];
     empresaSelecionada: EmpresaModel;
+    reservaSelecionada: ReservaModel;
 
     constructor(private router: Router,
                 private quartoService: QuartoService,
                 private hospedeService: HospedeService,
                 private reservaService: ReservaService,
-                private empresaService: EmpresaService) {
+                private empresaService: EmpresaService,
+                private cdr: ChangeDetectorRef,
+                private zone: NgZone) {
     }
+
 
     ngOnInit(): void {
         this.buscaDadosIniciais();
@@ -69,8 +73,30 @@ export class ReservaComponent implements OnInit {
         }
     }
 
-    findReserva(id: string) {
 
+    findReserva(id: string) {
+        let idAsNumber = Number(id);
+        let calls = forkJoin([this.empresaService.findAll(), this.reservaService.findById(idAsNumber)]);
+        calls.subscribe(([respEmpresa, respReserva]) => {
+                if (respEmpresa.ok && respReserva.ok) {
+                    this.isEmpresa = !_.isNil(respReserva.body!.empresa);
+                    this.cdr.detectChanges();
+                    this.empresas = respEmpresa.body!;
+                    /*this.empresaSelect.dataSource = this.empresas*/
+                    let reserva = new ReservaModel();
+                    reserva = respReserva.body!
+                    this.montaReservaEdit(reserva);
+                }
+            }
+        )
+
+        /*this.reservaService.findById(idAsNumber).subscribe(resp => {
+            if (resp.ok) {
+                let reserva = new ReservaModel();
+                reserva = resp.body!;
+                this.montaReservaEdit(reserva);
+            }
+        });*/
     }
 
     buscar() {
@@ -87,15 +113,7 @@ export class ReservaComponent implements OnInit {
 
     salvar() {
         if (this.verificaAntesDeSalvar()) {
-            const reserva = new ReservaModel();
-            reserva.hospedes = this.hospedesNaReserva;
-            reserva.quartos = this.quartosNaReserva;
-            reserva.empresa = this.empresaSelecionada;
-            reserva.dataEntrada = <Date>this.dataEntrada;
-            reserva.dataPrevistaSaida = <Date>this.dataSaida;
-            reserva.valorDiaria = this.quartosNaReserva.reduce((total, quarto) => total + quarto.valorDiaria, 0);
-            /* +1 para contar com o dia de hoje */
-            reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida) + 1;
+            const reserva = this.montaReserva();
 
             this.reservaService.verificaDisponibilidade(reserva).subscribe(resp => {
 
@@ -233,5 +251,65 @@ export class ReservaComponent implements OnInit {
 
     defineEmpresa() {
         this.empresaSelecionada = this.empresaSelect.selectedItem;
+    }
+
+    selecionaReserva(event: any) {
+        event.component.byKey(event.currentSelectedRowKeys[0]).done(reserva => {
+            if (reserva) {
+                this.reservaSelecionada = reserva;
+            }
+        });
+    }
+
+    editar(event: any) {
+        this.router.navigate(['reservas', 'edit', this.reservaSelecionada.id])
+    }
+
+    montaReserva() {
+        const reserva = new ReservaModel();
+        reserva.hospedes = this.hospedesNaReserva;
+        reserva.quartos = this.quartosNaReserva;
+        reserva.empresa = this.empresaSelecionada;
+        reserva.dataEntrada = <Date>this.dataEntrada;
+        reserva.dataPrevistaSaida = <Date>this.dataSaida;
+        reserva.valorDiaria = this.quartosNaReserva.reduce((total, quarto) => total + quarto.valorDiaria, 0);
+        /* +1 para contar com o dia de hoje */
+        console.log(this.dataSaida)
+        reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida) + 1;
+
+        return reserva;
+    }
+
+    montaReservaEdit(reserva: ReservaModel) {
+        this.hospedesNaReserva = reserva.hospedes;
+        this.quartosNaReserva = reserva.quartos;
+        this.dataEntrada = this.parseDataStringParaDate(reserva.dataEntrada.toString());
+        this.dataSaida = this.parseDataStringParaDate(reserva.dataPrevistaSaida.toString());
+        if (this.isEmpresa) {
+            /*this.empresaSelect.value = this.empresas.find(e => e.razaoSocial === reserva.empresa.razaoSocial);
+            this.cdr.detectChanges();*/
+
+            /*
+            *
+            * Gambiarra pois não consegui fazer de forma alguma a função ser executada só após o empresaSelect ser renderizado
+            * tentei promises, async/await, ngAfterViewInit dentre outras ...
+            *
+            */
+            const defEmpr = setInterval(() => {
+                if (!_.isNil(this.empresaSelect && this.empresas.length > 0)) {
+                    this.empresaSelect.value = this.empresas.find(e => e.razaoSocial === reserva.empresa.razaoSocial);
+                    clearInterval(defEmpr);
+                }
+            }, 100);
+        }
+    }
+
+    parseDataStringParaDate(data: string) : Date {
+        const partes = data.split('-');
+        const ano = parseInt(partes[0]);
+        const mes = parseInt(partes[1]) - 1; // Meses em JavaScript são baseados em zero
+        const dia = parseInt(partes[2]);
+
+        return new Date(ano, mes, dia);
     }
 }

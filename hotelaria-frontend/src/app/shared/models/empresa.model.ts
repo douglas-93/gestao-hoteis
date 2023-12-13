@@ -1,15 +1,12 @@
 import {EnderecoModel} from "./endereco.model";
+import {ClienteModel} from "./cliente.model";
 
-export class EmpresaModel {
+export class EmpresaModel extends ClienteModel{
     razaoSocial: string;
     nomeFantasia: string;
     cnpj: string;
     inscricaoEstadual: string;
     ramoAtividade: string;
-    telefone: string;
-    celular: string;
-    email: string;
-    endereco: EnderecoModel[];
     observacao: string;
     ativo: boolean = true;
 }

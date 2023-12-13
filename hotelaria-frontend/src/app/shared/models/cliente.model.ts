@@ -5,7 +5,7 @@ export class ClienteModel {
     email: string;
     telefone: string;
     celular: string;
-    endereco: EnderecoModel;
+    endereco: EnderecoModel[];
     dataCadastro: Date;
     dataUltimaAtualizacao: Date;
     versao: number;

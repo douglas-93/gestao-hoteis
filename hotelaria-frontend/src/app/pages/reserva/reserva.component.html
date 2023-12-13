@@ -8,7 +8,12 @@
 
     <div list-filter-fields></div>
     <div list-result>
-        <dx-data-grid [dataSource]="reservas">
+        <dx-data-grid [dataSource]="reservas"
+                      (onSelectionChanged)="selecionaReserva($event)"
+                      (onRowDblClick)="editar($event)">
+
+            <dxo-selection mode="single"></dxo-selection>
+
             <dxi-column cellTemplate="hospedesTemplate"
                         dataField="hospedes">
             </dxi-column>
@@ -293,10 +298,10 @@
 
                     <!--                TEMPLATES           -->
                     <div *dxTemplate="let data of 'resumoEmpresaTemplate'">
-                            <dx-text-box [readOnly]="true"
-                                         [value]="empresaSelecionada.razaoSocial"
-                                         class="mb">
-                            </dx-text-box>
+                        <dx-text-box [readOnly]="true"
+                                     [value]="empresaSelecionada.razaoSocial"
+                                     class="mb">
+                        </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'resumoHospedeTemplate'">
                         <div *ngFor="let h of hospedesNaReserva">
