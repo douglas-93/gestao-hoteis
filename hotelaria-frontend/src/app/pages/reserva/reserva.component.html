@@ -94,7 +94,7 @@
                     <div *dxTemplate="let data of 'gridHospedeTemplate'">
                         <dx-data-grid #gridDeHospedesNaReserva
                                       (onSelectionChanged)="selecionaHospede($event)"
-                                      [dataSource]="hospedesNaReserva">
+                                      [dataSource]="reserva.hospedes">
 
                             <dxo-selection mode="single"></dxo-selection>
 
@@ -163,7 +163,7 @@
                     <div *dxTemplate="let data of 'gridQuartoTemplate'">
                         <dx-data-grid #gridDeQuartosNaReserva
                                       (onSelectionChanged)="selecionaQuarto($event)"
-                                      [dataSource]="quartosNaReserva">
+                                      [dataSource]="reserva.quartos">
 
                             <dxo-selection mode="single"></dxo-selection>
 
@@ -215,11 +215,11 @@
 
                     <div *dxTemplate="let data of 'entradaTemplate'">
                         <div class="exibe-coluna">
-                            <dx-date-box [(value)]="dataEntrada"
+                            <dx-date-box [(value)]="reserva.dataEntrada"
                                          class="mb"
                                          displayFormat="dd/MM/yyyy">
                             </dx-date-box>
-                            <dx-calendar [(value)]="dataEntrada"
+                            <dx-calendar [(value)]="reserva.dataEntrada"
                                          [min]="hoje">
                             </dx-calendar>
                         </div>
@@ -227,11 +227,11 @@
 
                     <div *dxTemplate="let data of 'saidaTemplate'">
                         <div class="exibe-coluna">
-                            <dx-date-box [(value)]="dataSaida"
+                            <dx-date-box [(value)]="reserva.dataPrevistaSaida"
                                          class="mb"
                                          displayFormat="dd/MM/yyyy">
                             </dx-date-box>
-                            <dx-calendar [(value)]="dataSaida"
+                            <dx-calendar [(value)]="reserva.dataPrevistaSaida"
                                          [min]="hoje">
                             </dx-calendar>
                         </div>
@@ -251,8 +251,7 @@
                             </span>
                             <br>
                             <div style="display: flex; align-items: flex-start; margin-top: 10px;">
-                                <dx-switch [(value)]="isEmpresa"
-                                           (onValueChanged)="buscaEmpresas()">
+                                <dx-switch [(value)]="isEmpresa">
                                 </dx-switch>
                                 <span style="margin-left: 10px">
                                     {{ isEmpresa ? 'Sim' : 'Não' }}
@@ -264,6 +263,7 @@
                                        [dataSource]="empresas"
                                        (onValueChanged)="defineEmpresa()"
                                        [searchEnabled]="true"
+                                       [value]="reserva.empresa"
                                        searchMode="contains"
                                        searchExpr="razaoSocial"
                                        displayExpr="razaoSocial"
@@ -274,7 +274,7 @@
             </dxi-item>
             <dxi-item title="Resumo da Reserva">
                 <dx-form>
-                    <dxi-item itemType="group" *ngIf="empresaSelecionada != null">
+                    <dxi-item itemType="group" *ngIf="reserva.empresa != null">
                         <dxi-item [label]="{text: 'Empresa responsável'}"
                                   template="resumoEmpresaTemplate">
                         </dxi-item>
@@ -299,12 +299,12 @@
                     <!--                TEMPLATES           -->
                     <div *dxTemplate="let data of 'resumoEmpresaTemplate'">
                         <dx-text-box [readOnly]="true"
-                                     [value]="empresaSelecionada.razaoSocial"
+                                     [value]="reserva.empresa.razaoSocial"
                                      class="mb">
                         </dx-text-box>
                     </div>
                     <div *dxTemplate="let data of 'resumoHospedeTemplate'">
-                        <div *ngFor="let h of hospedesNaReserva">
+                        <div *ngFor="let h of reserva.hospedes">
                             <dx-text-box [readOnly]="true"
                                          [value]="h.nome"
                                          class="mb">
@@ -312,7 +312,7 @@
                         </div>
                     </div>
                     <div *dxTemplate="let data of 'resumoQuartoTemplate'">
-                        <div *ngFor="let q of quartosNaReserva">
+                        <div *ngFor="let q of reserva.quartos">
                             <dx-text-box [readOnly]="true"
                                          [value]="q.nome"
                                          class="mb">
@@ -321,14 +321,14 @@
                     </div>
                     <div *dxTemplate="let data of 'resumoDataEntradaTemplate'">
                         <dx-date-box [readOnly]="true"
-                                     [value]="dataEntrada"
+                                     [value]="reserva.dataEntrada"
                                      class="mb"
                                      displayFormat="dd/MM/yyyy">
                         </dx-date-box>
                     </div>
                     <div *dxTemplate="let data of 'resumoDataSaidaTemplate'">
                         <dx-date-box [readOnly]="true"
-                                     [value]="dataSaida"
+                                     [value]="reserva.dataPrevistaSaida"
                                      displayFormat="dd/MM/yyyy">
                         </dx-date-box>
                     </div>

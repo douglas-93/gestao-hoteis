@@ -4,13 +4,13 @@ import {EmpresaModel} from "./empresa.model";
 
 export class ReservaModel {
     id: number;
-    dataCriacaoReserva: Date;
-    dataAlteracaoReserva: Date;
-    dataCancelamento: Date;
-    dataEntrada: Date;
-    dataPrevistaSaida: Date;
-    dataSaida: Date;
-    estadia: Date[];
+    dataCriacaoReserva: string | number | Date;
+    dataAlteracaoReserva: string | number | Date;
+    dataCancelamento: string | number | Date;
+    dataEntrada: string | number | Date;
+    dataPrevistaSaida: string | number | Date;
+    dataSaida: string | number | Date;
+    estadia: (string | number | Date)[];
     checkedIn: boolean;
     checkedOut: boolean;
     cancelada: boolean;
