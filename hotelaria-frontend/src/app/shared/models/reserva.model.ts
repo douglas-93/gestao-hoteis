@@ -18,7 +18,7 @@ export class ReservaModel {
     diasHospedado: number;
     valorDiaria: number;
     valorTotalEstadia: number;
-    hospedes: HospedeModel[];
-    quartos: QuartoModel[];
+    hospedes: HospedeModel[] = [];
+    quartos: QuartoModel[] = [];
     empresa: EmpresaModel;
 }

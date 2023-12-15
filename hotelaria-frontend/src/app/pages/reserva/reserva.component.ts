@@ -56,6 +56,7 @@ export class ReservaComponent implements OnInit {
 
 
     ngOnInit(): void {
+        this.reserva = new ReservaModel();
         this.buscaDadosIniciais();
 
         let edit: boolean = this.router.url.includes('edit');
@@ -64,8 +65,6 @@ export class ReservaComponent implements OnInit {
 
         if (edit) {
             this.findReserva(this.router.url.split('/').pop()!)
-        } else {
-            this.reserva = new ReservaModel();
         }
     }
 
@@ -132,7 +131,7 @@ export class ReservaComponent implements OnInit {
             notify('É necessário a inclusão de ao menos um quarto', 'error', 3600);
             return false;
         }
-        if (_.isNil(this.reserva.empresa) && !this.isEmpresa) {
+        if (_.isNil(this.reserva.empresa) && this.isEmpresa) {
             notify('É necessário selecionar a empresa', 'error', 3600);
             return false;
         }
