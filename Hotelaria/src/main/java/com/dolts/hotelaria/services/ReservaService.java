@@ -1,6 +1,7 @@
 package com.dolts.hotelaria.services;
 
 import com.dolts.hotelaria.models.ReservaModel;
+import com.dolts.hotelaria.repositories.EmpresaRepository;
 import com.dolts.hotelaria.repositories.HospedeRepository;
 import com.dolts.hotelaria.repositories.QuartoRepository;
 import com.dolts.hotelaria.repositories.ReservaRepository;
@@ -26,6 +27,9 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
 
     @Autowired
     private QuartoRepository quartoRepository;
+
+    @Autowired
+    EmpresaRepository empresaRepository;
 
     @Override
     public AbstractCRUDRepository<ReservaModel, Long> getRepository() {
@@ -57,6 +61,31 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         }
 
         entity.setEstadia(geraDatas(entity.getDataEntrada(), entity.getDataPrevistaSaida()));
+    }
+
+    @Override
+    protected void beforeDelete(ReservaModel entity) {
+        super.beforeDelete(entity);
+
+        if (!entity.getHospedes().isEmpty()) {
+            entity.setHospedes(
+                    entity.getHospedes().stream()
+                            .map(hospede -> hospedeRepository.findById(hospede.getId()).orElse(null))
+                            .collect(Collectors.toList())
+            );
+        }
+
+        if (!entity.getQuartos().isEmpty()) {
+            entity.setQuartos(
+                    entity.getQuartos().stream()
+                            .map(quarto -> quartoRepository.findById(quarto.getId()).orElse(null))
+                            .collect(Collectors.toList())
+            );
+        }
+
+        if (entity.getEmpresa() != null) {
+            entity.setEmpresa(empresaRepository.getReferenceById(entity.getEmpresa().getId()));
+        }
     }
 
     private List<LocalDate> geraDatas(LocalDate dataEntrada, LocalDate dataSaida) {

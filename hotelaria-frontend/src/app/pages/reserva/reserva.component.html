@@ -2,6 +2,7 @@
            (filterFunction)="buscar()"
            (novoCadastroFunction)="novo()"
            (saveFunction)="salvar()"
+           (deleteFunction)="exclui()"
            [editTitle]="'Cadastro de Reserva'"
            [listTitle]="'Listagem de Reservas'"
            [mode]="mode">
@@ -251,14 +252,14 @@
                             </span>
                             <br>
                             <div style="display: flex; align-items: flex-start; margin-top: 10px;">
-                                <dx-switch [(value)]="isEmpresa">
+                                <dx-switch [(value)]="reserva.isEmpresa">
                                 </dx-switch>
                                 <span style="margin-left: 10px">
-                                    {{ isEmpresa ? 'Sim' : 'Não' }}
+                                    {{ reserva.isEmpresa ? 'Sim' : 'Não' }}
                                 </span>
                             </div>
                         </div>
-                        <dx-select-box *ngIf="isEmpresa"
+                        <dx-select-box *ngIf="reserva.isEmpresa"
                                        #empresaSelect
                                        [dataSource]="empresas"
                                        (onValueChanged)="defineEmpresa()"

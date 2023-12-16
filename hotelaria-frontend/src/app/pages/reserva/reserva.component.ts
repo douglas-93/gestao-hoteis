@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {forkJoin} from "rxjs";
@@ -25,12 +25,12 @@ import {EmpresaService} from "../../shared/services/empresa.service";
     templateUrl: './reserva.component.html',
     styleUrls: ['./reserva.component.scss']
 })
-export class ReservaComponent implements OnInit {
+export class ReservaComponent implements OnInit, AfterViewInit {
 
     @ViewChild('hospedeAutoComplete') hospedeAutoComplete: DxAutocompleteComponent;
     @ViewChild('gridDeHospedesNaReserva') gridDeHospedesNaReserva: DxDataGridComponent;
     @ViewChild('quartoSelectBox') quartoSelectBox: DxSelectBoxComponent;
-    @ViewChild('empresaSelect') empresaSelect: DxSelectBoxComponent;
+    @ViewChild('empresaSelect', {static: false}) empresaSelect: DxSelectBoxComponent;
     @ViewChild('tabPanel') tabPanel: DxTabPanelComponent;
 
     mode: ModeEnum = ModeEnum.LIST;
@@ -38,7 +38,6 @@ export class ReservaComponent implements OnInit {
     hospedeSelecinado: HospedeModel | null;
     quartoSelecinado: QuartoModel | null;
     reservaSelecionada: ReservaModel;
-    isEmpresa: boolean = false;
     hoje: Date = new Date();
     protected readonly Utils = Utils;
     hospedes: HospedeModel[] = [];
@@ -68,20 +67,25 @@ export class ReservaComponent implements OnInit {
         }
     }
 
+    ngAfterViewInit(): void {
+    }
+
 
     findReserva(id: string) {
         let idAsNumber = Number(id);
 
         this.reservaService.findById(idAsNumber).subscribe(resp => {
             if (resp.ok) {
-                if(!_.isNil(resp.body!.empresa)) {
-                    this.isEmpresa = true;
-                    this.buscaEmpresas();
-                }
                 this.reserva = resp.body!;
                 this.reserva.dataEntrada = this.parseDataStringParaDate(this.reserva.dataEntrada.toString());
                 this.reserva.dataPrevistaSaida = this.parseDataStringParaDate(this.reserva.dataPrevistaSaida.toString());
-                this.empresaSelect.value = this.empresaSelect.items.find(e => e.id === this.reserva.empresa.id);
+                /*const defineEmpresa = setTimeout(() => {
+                    this.empresaSelect.value = this.empresaSelect.items.find(e => e.id === this.reserva.empresa.id);
+                    this.empresaSelect?.instance.repaint();
+                    if (!_.isNil(this.empresaSelect.value)) {
+                        clearTimeout(defineEmpresa);
+                    }
+                }, 100)*/
             }
         });
     }
@@ -131,7 +135,7 @@ export class ReservaComponent implements OnInit {
             notify('É necessário a inclusão de ao menos um quarto', 'error', 3600);
             return false;
         }
-        if (_.isNil(this.reserva.empresa) && this.isEmpresa) {
+        if (_.isNil(this.reserva.empresa) && this.reserva.isEmpresa) {
             notify('É necessário selecionar a empresa', 'error', 3600);
             return false;
         }
@@ -147,14 +151,14 @@ export class ReservaComponent implements OnInit {
     }
 
     buscaDadosIniciais() {
-        forkJoin([this.hospedeService.findAll(), this.quartoService.findAll()])
-            .subscribe(([hospResp, quartResp]) => {
-                if (hospResp.ok && quartResp.ok) {
+        forkJoin([this.hospedeService.findAll(), this.quartoService.findAll(), this.empresaService.findAll()])
+            .subscribe(([hospResp, quartResp, empResp]) => {
+                if (hospResp.ok && quartResp.ok && empResp.ok) {
                     this.hospedes = hospResp.body!;
                     this.quartos = quartResp.body!;
+                    this.empresas = empResp.body!;
                 }
             })
-        this.buscaEmpresas();
     }
 
     adicionaHospedeGrid() {
@@ -226,16 +230,6 @@ export class ReservaComponent implements OnInit {
         });
     }
 
-    buscaEmpresas() {
-        if (this.isEmpresa && _.isEmpty(this.empresas)) {
-            this.empresaService.findAll().subscribe(resp => {
-                if (resp.ok) {
-                    this.empresas = resp.body!
-                }
-            })
-        }
-    }
-
     defineEmpresa() {
         this.reserva.empresa = this.empresaSelect.selectedItem;
     }
@@ -252,51 +246,36 @@ export class ReservaComponent implements OnInit {
         this.router.navigate(['reservas', 'edit', this.reservaSelecionada.id])
     }
 
-    /*montaReserva() {
-        const reserva = new ReservaModel();
-        reserva.hospedes = this.hospedesNaReserva;
-        reserva.quartos = this.quartosNaReserva;
-        reserva.empresa = this.empresaSelecionada;
-        reserva.dataEntrada = <Date>this.dataEntrada;
-        reserva.dataPrevistaSaida = <Date>this.dataSaida;
-        reserva.valorDiaria = this.quartosNaReserva.reduce((total, quarto) => total + quarto.valorDiaria, 0);
-        /!* +1 para contar com o dia de hoje *!/
-        console.log(this.dataSaida)
-        reserva.diasHospedado = Utils.diferencaEmDias(this.dataEntrada, this.dataSaida) + 1;
-
-        return reserva;
-    }
-
-    montaReservaEdit(reserva: ReservaModel) {
-        this.hospedesNaReserva = reserva.hospedes;
-        this.quartosNaReserva = reserva.quartos;
-        this.dataEntrada = this.parseDataStringParaDate(reserva.dataEntrada.toString());
-        this.dataSaida = this.parseDataStringParaDate(reserva.dataPrevistaSaida.toString());
-        if (this.isEmpresa) {
-            /!*this.empresaSelect.value = this.empresas.find(e => e.razaoSocial === reserva.empresa.razaoSocial);
-            this.cdr.detectChanges();*!/
-
-            /!*
-            *
-            * Gambiarra pois não consegui fazer de forma alguma a função ser executada só após o empresaSelect ser renderizado
-            * tentei promises, async/await, ngAfterViewInit dentre outras ...
-            *
-            *!/
-            const defEmpr = setInterval(() => {
-                if (!_.isNil(this.empresaSelect && this.empresas.length > 0)) {
-                    this.empresaSelect.value = this.empresas.find(e => e.razaoSocial === reserva.empresa.razaoSocial);
-                    clearInterval(defEmpr);
-                }
-            }, 100);
-        }
-    }*/
-
-    parseDataStringParaDate(data: string) : Date {
+    parseDataStringParaDate(data: string): Date {
         const partes = data.split('-');
         const ano = parseInt(partes[0]);
         const mes = parseInt(partes[1]) - 1; // Meses em JavaScript são baseados em zero
         const dia = parseInt(partes[2]);
 
         return new Date(ano, mes, dia);
+    }
+
+    exclui(): void {
+        const id = this.reserva.id;
+
+        if (!_.isNil(this.reserva.id)) {
+
+            if (!_.isNil(this.reserva.checkedIn) || !_.isNil(this.reserva.checkedOut) ||
+                !_.isNil(this.reserva.cancelada) || !_.isNil(this.reserva.dataSaida)) {
+                notify('Impossível exclusão, etapas posteriores já foram executadas.', 'error', 3600);
+                return;
+            }
+
+            this.reservaService.delete(id).subscribe(resp => {
+                if (resp.ok) {
+                    notify('Reserva Excluida com sucesso!', 'success', 3600);
+                    window.history.back();
+                    return;
+                }
+            })
+        }
+
+        /*notify('Não foi possível encontrar a reserva, verifique ou entre em contato com seu suporte técnico.'
+            , 'error', 3600);*/
     }
 }
