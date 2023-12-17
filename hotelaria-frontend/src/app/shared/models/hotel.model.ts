@@ -7,5 +7,7 @@ export class HotelModel {
     responsavel: string;
     cpfResponsavel: string;
     endereco: EnderecoModel[];
+    logoMarca: File | null | undefined;
+    logoAsDataSource: string | null | undefined;
     versao: number;
 }

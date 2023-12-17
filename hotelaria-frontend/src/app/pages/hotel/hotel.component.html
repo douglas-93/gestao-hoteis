@@ -28,11 +28,11 @@
             </dxi-column>
 
             <div *dxTemplate="let data of 'cnpjTemplate'">
-                {{Utils.formatarCNPJ(data.data.cnpj)}}
+                {{ Utils.formatarCNPJ(data.data.cnpj) }}
             </div>
 
             <div *dxTemplate="let data of 'cpfTemplate'">
-                {{Utils.formatarCPF(data.data.cpfResponsavel)}}
+                {{ Utils.formatarCPF(data.data.cpfResponsavel) }}
             </div>
 
         </dx-data-grid>
@@ -92,6 +92,46 @@
             <dxi-item title='Endereço'>
                 <app-endereco-form #enderecoForm>
                 </app-endereco-form>
+            </dxi-item>
+            <dxi-item title='Logo'>
+                <dx-form>
+                    <dxi-item itemType="group">
+                        <dxi-item template="logoTemplate"></dxi-item>
+                    </dxi-item>
+
+                    <!--        TEMPLATES       -->
+
+                    <div *dxTemplate="let data of 'logoTemplate'">
+                        <div class="container">
+                            <div>
+                                <!-- Verifica se logoAsDataSource está definido antes de tentar exibir a imagem -->
+                                <img *ngIf="hotel.logoAsDataSource" [src]="hotel.logoAsDataSource" class="imagem img-border">
+                                <!-- Se logoAsDataSource não estiver definido, exibe apenas o quadro em branco -->
+                                <div *ngIf="!hotel.logoAsDataSource" class="imagem img-border"></div>
+                            </div>
+                            <dx-file-uploader #fileUploader
+                                              (onValueChanged)="carregarArquivo($event)"
+                                              [(value)]="imgData"
+                                              [accept]="'image/*'"
+                                              [multiple]="false"
+                                              [selectButtonText]="'Selecione a imagem'"
+                                              [uploadMode]="'useForm'"
+                                              width="500px">
+                            </dx-file-uploader>
+                            <ul style="justify-content: flex-start">
+                                <li><strong>Nome:</strong> {{ hotel.logoMarca?.name }}</li>
+                                <li><strong>Tamanho:</strong> {{ Utils.formatFileSize(hotel.logoMarca?.size) }}</li>
+                                <li><strong>Tipo:</strong> {{ hotel.logoMarca?.type }}</li>
+                            </ul>
+                            <div>
+                                <dx-button icon="fa fa-download" (onClick)="baixar()"></dx-button>
+                                <dx-button icon="fa fa-trash" (onClick)="limparImagem()"></dx-button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </dx-form>
             </dxi-item>
         </dx-tab-panel>
 
