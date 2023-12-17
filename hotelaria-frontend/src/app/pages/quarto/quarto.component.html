@@ -226,7 +226,7 @@
                         </div>
                         <ul>
                             <li><strong>Nome:</strong> {{imagem?.nome}}</li>
-                            <li><strong>Tamanho:</strong> {{formatFileSize(imagem?.tamanho)}}</li>
+                            <li><strong>Tamanho:</strong> {{Utils.formatFileSize(imagem?.tamanho)}}</li>
                             <li><strong>Tipo:</strong> {{imagem?.formato}}</li>
                             <dx-button (onClick)="downloadImagem(imagem)"
                                        icon="download"
