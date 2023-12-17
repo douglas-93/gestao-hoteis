@@ -19,6 +19,7 @@ export class EmpresaComponent implements OnInit {
     mode: ModeEnum = ModeEnum.LIST;
     empresa: EmpresaModel;
     gridResult: EmpresaModel[] = [];
+    empresaSelecinado: EmpresaModel;
 
     constructor(private router: Router,
                 private empresaService: EmpresaService) {
@@ -58,8 +59,26 @@ export class EmpresaComponent implements OnInit {
     }
 
     findEmpresa(id: string) {
-
+        const idAsNumber = Number(id)
+        this.empresaService.findById(idAsNumber).subscribe(resp => {
+            if (resp.ok) {
+                this.empresa = resp.body!
+                this.enderecoForm.setGridData(this.empresa.endereco);
+            }
+        })
     }
 
     protected readonly Utils = Utils;
+
+    selecionaEmpresa(e: any) {
+        e.component.byKey(e.currentSelectedRowKeys[0]).done(empresa => {
+            if (empresa) {
+                this.empresaSelecinado = empresa;
+            }
+        });
+    }
+
+    editar() {
+        this.router.navigate(['empresas', 'edit', this.empresaSelecinado.id])
+    }
 }
