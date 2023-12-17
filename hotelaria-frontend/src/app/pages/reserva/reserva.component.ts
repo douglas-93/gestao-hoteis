@@ -109,24 +109,39 @@ export class ReservaComponent implements OnInit, AfterViewInit {
     salvar() {
         if (this.verificaAntesDeSalvar()) {
 
-            this.reservaService.verificaDisponibilidade(this.reserva).subscribe(resp => {
+            if (_.isNil(this.reserva.id)) {
 
-                if (resp.status === 200 && resp.body != null) {
-                    this.tabPanel.selectedIndex = this.tabPanel.items.length - 1;
-                    this.reservasJaRealizadas = _.isNil(resp.body) ? [] : <ReservaModel[]>resp.body;
-                    return;
-                }
+                this.reservaService.verificaDisponibilidade(this.reserva).subscribe(resp => {
 
-                if (resp.status === 204 && resp.body === null) {
-                    notify('Data e quarto disponíveis', 'success', 3600);
-                    this.reservaService.save(this.reserva).subscribe(resp => {
+                    if (resp.status === 200 && resp.body != null) {
+                        this.tabPanel.selectedIndex = this.tabPanel.items.length - 1;
+                        this.reservasJaRealizadas = _.isNil(resp.body) ? [] : <ReservaModel[]>resp.body;
+                        return;
+                    }
+
+                    if (resp.status === 204 && resp.body === null) {
+                        notify('Data e quarto disponíveis', 'success', 3600);
+                        this.reservaService.save(this.reserva).subscribe(resp => {
+                            if (resp.ok) {
+                                notify('Reserva realizada', 'success', 3600);
+                                window.history.back();
+                            }
+                        })
+                    }
+                })
+            } else {
+                if (!_.isNil(this.reserva.checkedIn) || !_.isNil(this.reserva.checkedOut) ||
+                    !_.isNil(this.reserva.cancelada) || !_.isNil(this.reserva.dataSaida)) {
+                    notify('Impossível alterar, etapas posteriores já foram executadas.', 'error', 3600);
+                } else {
+                    this.reservaService.update(this.reserva.id, this.reserva).subscribe(resp => {
                         if (resp.ok) {
-                            notify('Reserva realizada', 'success', 3600);
+                            notify('Reserva alterada com sucesso', 'success', 3600);
                             window.history.back();
                         }
                     })
                 }
-            })
+            }
         }
     }
 
