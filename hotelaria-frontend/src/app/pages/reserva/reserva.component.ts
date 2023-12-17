@@ -261,8 +261,8 @@ export class ReservaComponent implements OnInit, AfterViewInit {
         });
     }
 
-    editar(event: any) {
-        this.router.navigate(['reservas', 'edit', this.reservaSelecionada.id])
+    editar() {
+        this.router.navigate(['reservas', 'edit', this.reservaSelecionada.id]);
     }
 
     parseDataStringParaDate(data: string): Date {

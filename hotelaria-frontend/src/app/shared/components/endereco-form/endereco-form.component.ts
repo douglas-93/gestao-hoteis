@@ -73,6 +73,10 @@ export class EnderecoFormComponent {
         return this.gridData;
     }
 
+    setGridData(enderecos: EnderecoModel[]) {
+        this.gridData = enderecos;
+    }
+
     onToolbarPreparing(e: any) {
         // Adicione botões personalizados à toolbar
         e.toolbarOptions.items.push(

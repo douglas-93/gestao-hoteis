@@ -23,6 +23,7 @@ export class HospedeComponent implements OnInit {
     hospede: HospedeModel;
     gridResult: HospedeModel[] = [];
     protected readonly Utils = Utils;
+    hospedeSelecinado: HospedeModel;
 
     constructor(private router: Router,
                 private hospedeServide: HospedeService) {
@@ -70,6 +71,24 @@ export class HospedeComponent implements OnInit {
     }
 
     findHospede(id: string) {
+        const idAsNumber = Number(id);
+        this.hospedeServide.findById(idAsNumber).subscribe(resp => {
+            if (resp.ok) {
+                this.hospede = resp.body!;
+                this.enderecoForm.setGridData(this.hospede.endereco);
+            }
+        })
+    }
 
+    selecionaHospede(e: any) {
+        e.component.byKey(e.currentSelectedRowKeys[0]).done(hospede => {
+            if (hospede) {
+                this.hospedeSelecinado = hospede;
+            }
+        });
+    }
+
+    editar() {
+        this.router.navigate(['hospedes', 'edit', this.hospedeSelecinado.id])
     }
 }

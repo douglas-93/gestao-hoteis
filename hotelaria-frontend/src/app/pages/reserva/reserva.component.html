@@ -11,7 +11,7 @@
     <div list-result>
         <dx-data-grid [dataSource]="reservas"
                       (onSelectionChanged)="selecionaReserva($event)"
-                      (onRowDblClick)="editar($event)">
+                      (onRowDblClick)="editar()">
 
             <dxo-selection mode="single"></dxo-selection>
 
