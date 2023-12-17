@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {forkJoin} from "rxjs";
@@ -50,7 +50,8 @@ export class ReservaComponent implements OnInit, AfterViewInit {
                 private quartoService: QuartoService,
                 private hospedeService: HospedeService,
                 private reservaService: ReservaService,
-                private empresaService: EmpresaService) {
+                private empresaService: EmpresaService,
+                private cdr: ChangeDetectorRef) {
     }
 
 
@@ -79,13 +80,16 @@ export class ReservaComponent implements OnInit, AfterViewInit {
                 this.reserva = resp.body!;
                 this.reserva.dataEntrada = this.parseDataStringParaDate(this.reserva.dataEntrada.toString());
                 this.reserva.dataPrevistaSaida = this.parseDataStringParaDate(this.reserva.dataPrevistaSaida.toString());
-                /*const defineEmpresa = setTimeout(() => {
-                    this.empresaSelect.value = this.empresaSelect.items.find(e => e.id === this.reserva.empresa.id);
-                    this.empresaSelect?.instance.repaint();
-                    if (!_.isNil(this.empresaSelect.value)) {
+                const defineEmpresa = setTimeout(() => {
+                    const empresa = this.empresas.find(e => e.id === this.reserva.empresa.id);
+                    if (empresa) {
+                        this.empresaSelect.instance.option('value', empresa);
+                        this.empresaSelect?.instance.repaint();
+                        this.cdr.detectChanges();
                         clearTimeout(defineEmpresa);
+
                     }
-                }, 100)*/
+                }, 500);
             }
         });
     }
