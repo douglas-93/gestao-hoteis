@@ -14,9 +14,9 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/arquivo-digital")
 public class ArquivoDigitalController {
+
     @Autowired
     private ArquivoDigitalService arquivoDigitalService;
-
 
     @PostMapping
     public ResponseEntity<ArquivoDigitalModel> uploadArquivo(@RequestParam("arquivo") MultipartFile arquivo) {
