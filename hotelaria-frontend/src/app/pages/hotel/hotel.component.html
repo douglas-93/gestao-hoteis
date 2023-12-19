@@ -43,7 +43,7 @@
         <dx-tab-panel>
             <dxi-item title='Dados'>
                 <dx-form #hotelForm>
-                    <dxi-item colCount="2" itemType="group">
+                    <dxi-item [colCount]="2" itemType="group">
                         <dxi-item [label]="{text: 'Nome do Hotel'}"
                                   dataField="nome"
                                   template="nomeTemplate"
@@ -56,7 +56,7 @@
                         </dxi-item>
                     </dxi-item>
 
-                    <dxi-item colCount="2" itemType="group">
+                    <dxi-item [colCount]="2" itemType="group">
                         <dxi-item [label]="{text: 'Responsável'}"
                                   dataField="responsavel"
                                   template="responsavelTemplate">

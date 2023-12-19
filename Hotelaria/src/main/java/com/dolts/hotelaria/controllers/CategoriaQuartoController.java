@@ -5,11 +5,13 @@ import com.dolts.hotelaria.services.CategoriaQuartoService;
 import com.dolts.hotelaria.utils.controller.AbstractCRUDController;
 import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/categorias")
+@CrossOrigin(origins = "*",maxAge = 3600)
 public class CategoriaQuartoController extends AbstractCRUDController<CategoriaQuartoModel, Long> {
 
     @Autowired
