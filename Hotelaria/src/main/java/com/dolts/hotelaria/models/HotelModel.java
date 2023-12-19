@@ -25,6 +25,8 @@ public class HotelModel implements Serializable {
     private String cpfResponsavel;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<EnderecoModel> endereco;
+    @OneToOne
+    private ArquivoDigitalModel logoMarca;
     @Version
     private Long versao;
 }
