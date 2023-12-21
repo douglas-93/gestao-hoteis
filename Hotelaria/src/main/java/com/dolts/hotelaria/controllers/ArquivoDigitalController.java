@@ -13,6 +13,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/arquivo-digital")
+@CrossOrigin(origins = "*",maxAge = 3600)
 public class ArquivoDigitalController {
 
     @Autowired

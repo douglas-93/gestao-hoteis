@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/categorias")
-@CrossOrigin(origins = "*",maxAge = 3600)
 public class CategoriaQuartoController extends AbstractCRUDController<CategoriaQuartoModel, Long> {
 
     @Autowired
