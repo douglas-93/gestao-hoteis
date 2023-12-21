@@ -22,4 +22,7 @@ public class ArquivoDigitalModel implements Serializable {
     private String tipo;
     @Lob
     private byte[] dados;
+
+    @Version
+    private Long versao;
 }

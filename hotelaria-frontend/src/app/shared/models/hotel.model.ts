@@ -1,4 +1,5 @@
 import {EnderecoModel} from "./endereco.model";
+import {ArquivoDIgitalModel} from "./ArquivoDIgitalModel";
 
 export class HotelModel {
     id: number;
@@ -7,7 +8,7 @@ export class HotelModel {
     responsavel: string;
     cpfResponsavel: string;
     endereco: EnderecoModel[];
-    logoMarca: File | null | undefined;
+    logoMarca: ArquivoDIgitalModel;
     logoAsDataSource: string | null | undefined;
     versao: number;
 }
