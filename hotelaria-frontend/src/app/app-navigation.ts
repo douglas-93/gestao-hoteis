@@ -58,5 +58,25 @@ export const navigation = [
         text: 'Reserva',
         path: '/reservas',
         icon: 'fa-solid fa-calendar'
-    }
+    },
+  {
+    text: 'Configurações',
+    path: '/pages/configuracoes',
+    icon: 'fa fa-gear'
+  },
+  {
+    text: 'Check In',
+    path: '/pages/check-in',
+    icon: 'fa-solid fa-money-check'
+  },
+  {
+    text: 'Check Out',
+    path: '/pages/check-out',
+    icon: 'fa-solid fa-check-double'
+  },
+  {
+    text: 'Consumo',
+    path: '/pages/consumo',
+    icon: 'fa-solid fa-cart-shopping'
+  }
 ];

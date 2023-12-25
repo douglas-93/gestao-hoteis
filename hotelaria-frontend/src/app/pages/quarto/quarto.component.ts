@@ -203,7 +203,7 @@ export class QuartoComponent implements OnInit {
         })
     }
 
-    editar(event: any) {
+    editar() {
         this.router.navigate(['quartos', 'edit', this.quartoSelecionado.id])
     }
 

@@ -32,8 +32,32 @@ import {ReservaComponent} from './pages/reserva/reserva.component';
 import {FormsModule} from "@angular/forms";
 import {AppModule} from "./app.module";
 import {EnderecoFormComponent} from "./shared/components/endereco-form/endereco-form.component";
+import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.component';
+import { CheckInComponent } from './pages/check-in/check-in.component';
+import { CheckOutComponent } from './pages/check-out/check-out.component';
+import { ConsumoComponent } from './pages/consumo/consumo.component';
 
 const routes: Routes = [
+  {
+    path: 'pages/consumo',
+    component: ConsumoComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'pages/check-out',
+    component: CheckOutComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'pages/check-in',
+    component: CheckInComponent,
+    canActivate: [ AuthGuardService ]
+  },
+  {
+    path: 'pages/configuracoes',
+    component: ConfiguracoesComponent,
+    canActivate: [ AuthGuardService ]
+  },
     {
         path: 'reservas',
         component: ReservaComponent,
@@ -170,7 +194,11 @@ const routes: Routes = [
         HospedeComponent,
         EmpresaComponent,
         ReservaComponent,
-        EnderecoFormComponent
+        EnderecoFormComponent,
+        ConfiguracoesComponent,
+        CheckInComponent,
+        CheckOutComponent,
+        ConsumoComponent
     ]
 })
 export class AppRoutingModule {

@@ -28,6 +28,7 @@ export class HotelComponent implements OnInit {
     file: File | undefined;
     arquivoDigital: ArquivoDIgitalModel;
     protected readonly Utils = Utils;
+    hotelSelecionado: HotelModel;
 
     constructor(private router: Router,
                 private hotelService: HotelService,
@@ -107,19 +108,21 @@ export class HotelComponent implements OnInit {
             (resp) => {
                 this.hotel = resp.body!
                 this.enderecoForm.setGridData(this.hotel.endereco);
-                this.arquivoDigitalService.findById(this.hotel.logoMarcaId).subscribe(
-                    (resp) => {
-                        if (resp.ok) {
-                            this.arquivoDigital = resp.body!;
-                            this.hotel.logoAsDataSource = `data:${this.arquivoDigital.tipo};base64,${this.arquivoDigital.dados}`;
-                            this.file = new File([this.arquivoDigital.dados], this.arquivoDigital.nome,
-                                {type: this.arquivoDigital.tipo});
+                if (!_.isNil(this.hotel.logoMarcaId)) {
+                    this.arquivoDigitalService.findById(this.hotel.logoMarcaId).subscribe(
+                        (resp) => {
+                            if (resp.ok) {
+                                this.arquivoDigital = resp.body!;
+                                this.hotel.logoAsDataSource = `data:${this.arquivoDigital.tipo};base64,${this.arquivoDigital.dados}`;
+                                this.file = new File([this.arquivoDigital.dados], this.arquivoDigital.nome,
+                                    {type: this.arquivoDigital.tipo});
+                            }
+                        },
+                        (error) => {
+                            notify('Erro ao carregar logomarca!', 'error', 3600);
                         }
-                    },
-                    (error) => {
-                        notify('Erro ao carregar logomarca!', 'error', 3600);
-                    }
-                );
+                    );
+                }
             },
             (error) => {
                 notify('Erro ao carregar Hotel!', 'error', 3600);
@@ -161,5 +164,17 @@ export class HotelComponent implements OnInit {
     limparImagem() {
         this.hotel.logoAsDataSource = undefined;
         this.file = undefined;
+    }
+
+    selecionaHotel(event: any) {
+        event.component.byKey(event.currentSelectedRowKeys[0]).done(hotel => {
+            if (hotel) {
+                this.hotelSelecionado = hotel;
+            }
+        });
+    }
+
+    editar() {
+        this.router.navigate(['hotel', 'edit', this.hotelSelecionado.id])
     }
 }
