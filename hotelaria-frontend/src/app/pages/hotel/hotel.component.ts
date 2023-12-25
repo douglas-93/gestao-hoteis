@@ -26,6 +26,7 @@ export class HotelComponent implements OnInit {
     gridResult: HotelModel[] = [];
     imgData: any[] = [];
     file: File | undefined;
+    arquivoDigital: ArquivoDIgitalModel;
     protected readonly Utils = Utils;
 
     constructor(private router: Router,
@@ -101,7 +102,29 @@ export class HotelComponent implements OnInit {
     }
 
     findHotel(id: string) {
-
+        let idAsNumber: number = Number(id);
+        this.hotelService.findById(idAsNumber).subscribe(
+            (resp) => {
+                this.hotel = resp.body!
+                this.enderecoForm.setGridData(this.hotel.endereco);
+                this.arquivoDigitalService.findById(this.hotel.logoMarcaId).subscribe(
+                    (resp) => {
+                        if (resp.ok) {
+                            this.arquivoDigital = resp.body!;
+                            this.hotel.logoAsDataSource = `data:${this.arquivoDigital.tipo};base64,${this.arquivoDigital.dados}`;
+                            this.file = new File([this.arquivoDigital.dados], this.arquivoDigital.nome,
+                                {type: this.arquivoDigital.tipo});
+                        }
+                    },
+                    (error) => {
+                        notify('Erro ao carregar logomarca!', 'error', 3600);
+                    }
+                );
+            },
+            (error) => {
+                notify('Erro ao carregar Hotel!', 'error', 3600);
+            }
+        )
     }
 
     carregarArquivo(event: any): void {

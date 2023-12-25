@@ -35,12 +35,21 @@ public class ArquivoDigitalController {
     }
 
     @GetMapping("/{id}")
+    public ResponseEntity<ArquivoDigitalModel> downloadArquivo(@PathVariable Long id) {
+        ArquivoDigitalModel arquivo = arquivoDigitalService.getById(id);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + arquivo.getNome() + "\"")
+                .body(arquivo);
+    }
+/*
+    @GetMapping("/{id}")
     public ResponseEntity<byte[]> downloadArquivo(@PathVariable Long id) {
         ArquivoDigitalModel arquivo = arquivoDigitalService.getById(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + arquivo.getNome() + "\"")
                 .body(arquivo.getDados());
     }
+*/
 
     @PutMapping("/{id}")
     public ResponseEntity<ArquivoDigitalModel> atualizarArquivo(@PathVariable Long id, @RequestParam("arquivo") MultipartFile arquivo) {
