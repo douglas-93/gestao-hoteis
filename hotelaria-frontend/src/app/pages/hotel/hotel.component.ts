@@ -7,7 +7,9 @@ import {HotelModel} from "../../shared/models/hotel.model";
 import {HotelService} from "../../shared/services/hotel.service";
 import notify from "devextreme/ui/notify";
 import {Utils} from "../../shared/Utils";
-import {ImagemQuartoModel} from "../../shared/models/imagemQuarto.model";
+import {ArquivoDIgitalModel} from "../../shared/models/ArquivoDIgitalModel";
+import _ from "lodash";
+import {ArquivoDigitalService} from "../../shared/services/arquivoDigitalService";
 
 @Component({
     selector: 'app-hotel', templateUrl: './hotel.component.html', styleUrls: ['./hotel.component.scss']
@@ -22,10 +24,13 @@ export class HotelComponent implements OnInit {
 
     hotel: HotelModel;
     gridResult: HotelModel[] = [];
-    protected readonly Utils = Utils;
     imgData: any[] = [];
+    file: File | undefined;
+    protected readonly Utils = Utils;
 
-    constructor(private router: Router, private hotelService: HotelService) {
+    constructor(private router: Router,
+                private hotelService: HotelService,
+                private arquivoDigitalService: ArquivoDigitalService) {
     }
 
     ngOnInit() {
@@ -35,7 +40,7 @@ export class HotelComponent implements OnInit {
         this.hotel = new HotelModel();
 
         if (edit) {
-            this._findHotel(this.router.url.split('/').pop()!)
+            this.findHotel(this.router.url.split('/').pop()!)
         }
     }
 
@@ -56,15 +61,24 @@ export class HotelComponent implements OnInit {
         let hotelValido = this.hotelForm.instance.validate().isValid;
         if (enderecoValido && hotelValido) {
             this.hotel.endereco = this.enderecoForm.getGridData();
-            this.hotelService.save(this.hotel).subscribe(resp => {
-                if (resp.ok) {
-                    notify('Dados salvos com sucesso', 'success', 3600);
-                    window.history.back();
-                    return;
-                }
-            }, error => {
-                notify(error.error.message, 'error', 3600);
-            })
+
+            if (!_.isUndefined(this.file)) {
+                this.arquivoDigitalService.saveFile(this.file).subscribe(
+                    (resp) => {
+                        if (resp.ok && resp.status === 201) {
+                            this.hotel.logoMarcaId = resp.body?.id!
+                            this.salvarHotel(this.hotel);
+                        }
+                    },
+                    (error) => {
+                        notify('Não foi possível salvar a logo marca', 'error', 3600);
+                        return;
+                    }
+                )
+            } else {
+                this.salvarHotel(this.hotel);
+            }
+
         } else {
 
             notify('Preencha todos os campos', 'error', 3600);
@@ -73,7 +87,20 @@ export class HotelComponent implements OnInit {
 
     }
 
-    private _findHotel(id: string) {
+    salvarHotel(entity: HotelModel) {
+        this.hotelService.save(entity).subscribe(resp => {
+            if (resp.ok) {
+                notify('Dados salvos com sucesso', 'success', 3600);
+                window.history.back();
+                return;
+            }
+        }, error => {
+            notify(error.error.message, 'error', 3600);
+            return;
+        })
+    }
+
+    findHotel(id: string) {
 
     }
 
@@ -82,15 +109,17 @@ export class HotelComponent implements OnInit {
 
         if (files && files.length > 0) {
             const file = files[0];
+            this.file = file;
+            const arquivoDigital: ArquivoDIgitalModel = new ArquivoDIgitalModel();
+            arquivoDigital.dados = file;
+            arquivoDigital.tipo = file.type;
 
             const reader = new FileReader();
             reader.onload = (e: any) => {
-                const base64Image = e.target.result;
-                this.hotel.logoAsDataSource = base64Image; // Armazenar a URL da imagem
-                this.hotel.logoMarca = file; // Armazenar o arquivo
+                this.hotel.logoAsDataSource = e.target.result; // Armazenar a URL da imagem
             };
 
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(<File>arquivoDigital.dados);
         }
 
         this.fileUploader.instance.reset();
@@ -99,7 +128,7 @@ export class HotelComponent implements OnInit {
     baixar() {
         const link = document.createElement('a');
         link.href = this.hotel.logoAsDataSource!;
-        link.download = this.hotel.logoMarca?.name!;
+        link.download = this.file!.name;
         link.target = '_blank'; // Opcional: abre o link em uma nova guia
         document.body.appendChild(link);
         link.click();
@@ -108,6 +137,6 @@ export class HotelComponent implements OnInit {
 
     limparImagem() {
         this.hotel.logoAsDataSource = undefined;
-        this.hotel.logoMarca = undefined;
+        this.file = undefined;
     }
 }

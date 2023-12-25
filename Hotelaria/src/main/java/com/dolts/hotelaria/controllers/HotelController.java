@@ -20,4 +20,5 @@ public class HotelController extends AbstractCRUDController<HotelModel, Long> {
     protected BaseCRUDService<HotelModel, Long> getService() {
         return hotelService;
     }
+
 }

@@ -8,7 +8,7 @@ export class HotelModel {
     responsavel: string;
     cpfResponsavel: string;
     endereco: EnderecoModel[];
-    logoMarca: ArquivoDIgitalModel;
+    logoMarcaId: number;
     logoAsDataSource: string | null | undefined;
     versao: number;
 }

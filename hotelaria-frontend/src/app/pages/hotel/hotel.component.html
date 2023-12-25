@@ -119,9 +119,9 @@
                                               width="500px">
                             </dx-file-uploader>
                             <ul style="justify-content: flex-start">
-                                <li><strong>Nome:</strong> {{ hotel.logoMarca?.name }}</li>
-                                <li><strong>Tamanho:</strong> {{ Utils.formatFileSize(hotel.logoMarca?.size) }}</li>
-                                <li><strong>Tipo:</strong> {{ hotel.logoMarca?.type }}</li>
+                                <li><strong>Nome:</strong> {{ file?.name }}</li>
+                                <li><strong>Tamanho:</strong> {{ Utils.formatFileSize(file?.size) }}</li>
+                                <li><strong>Tipo:</strong> {{ file?.type }}</li>
                             </ul>
                             <div>
                                 <dx-button icon="fa fa-download" (onClick)="baixar()"></dx-button>
