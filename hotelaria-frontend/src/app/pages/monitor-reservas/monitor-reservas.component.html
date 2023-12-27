@@ -1,21 +1,25 @@
 <h2 class="content-block">Monitor Reservas</h2>
 <div class="content-block">
     <div class="dx-card responsive-paddings">
-        <dx-button text="Anterior"
-                   (onClick)="periodoAnterior()">
+        <dx-button (onClick)="periodoAnterior()"
+                   text="Anterior">
         </dx-button>
-        <dx-button text="Atual"
-                   (onClick)="semanaAtual()">
+        <dx-button (onClick)="semanaAtual()"
+                   text="Atual">
         </dx-button>
-        <dx-button text="Próximo"
-                   (onClick)="proximoPeriodo()">
+        <dx-button (onClick)="proximoPeriodo()"
+                   text="Próximo">
         </dx-button>
-        <dx-data-grid [dataSource]="reservas" [showBorders]="true">
+        <dx-data-grid #monitor
+                      [dataSource]="quartos"
+                      [showBorders]="true"
+                      keyExpr="nome">
+
+            <dxi-column caption="Quarto" dataField="nome"></dxi-column>
 
             <dxi-column *ngFor="let date of diasDaSemana"
                         caption="{{ Utils.formatarDataParaString(date)}}">
             </dxi-column>
-
 
         </dx-data-grid>
     </div>
