@@ -96,7 +96,7 @@ export class Utils {
         const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam do zero, por isso somamos 1
         const ano = data.getFullYear();
         const diaDaSemana = diasSemana[data.getDay()]; // Obtém o nome do dia da semana
-        console.log(`${dia}/${mes}/${ano}-${diaDaSemana}`)
+
         return `${dia}/${mes}/${ano}-${diaDaSemana}`;
     }
 }

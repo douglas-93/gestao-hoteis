@@ -19,6 +19,12 @@
 
             <dxi-column *ngFor="let date of diasDaSemana"
                         caption="{{ Utils.formatarDataParaString(date)}}">
+                <div *dxTemplate="let data of 'cellTemplate'">
+                    <div class="reserva-na-semana">
+                        <!-- Outro conteúdo da célula aqui -->
+                        <p>Reservado</p>
+                    </div>
+                </div>
             </dxi-column>
 
         </dx-data-grid>
