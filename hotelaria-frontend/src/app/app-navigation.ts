@@ -78,5 +78,10 @@ export const navigation = [
     text: 'Consumo',
     path: '/pages/consumo',
     icon: 'fa-solid fa-cart-shopping'
+  },
+  {
+    text: 'Monitor Reservas',
+    path: '/pages/monitor-reservas',
+    icon: 'folder'
   }
 ];

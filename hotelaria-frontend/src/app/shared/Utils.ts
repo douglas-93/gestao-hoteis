@@ -74,4 +74,29 @@ export class Utils {
 
         return '';
     }
+
+    static gerarDatasSemana(deslocamento: number): Date[] {
+        const datasSemana: Date[] = [];
+        const hoje = new Date();
+        const primeiroDiaSemana = new Date(hoje.setDate(hoje.getDate() - hoje.getDay())); // Define o primeiro dia da semana
+
+        for (let i = 0; i < 7; i++) {
+            const data = new Date(primeiroDiaSemana);
+            data.setDate(data.getDate() + i + (deslocamento * 7)); // Adiciona o deslocamento em semanas
+            datasSemana.push(data);
+        }
+
+        return datasSemana;
+    }
+
+    static formatarDataParaString(data: Date): string {
+        const diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam do zero, por isso somamos 1
+        const ano = data.getFullYear();
+        const diaDaSemana = diasSemana[data.getDay()]; // Obtém o nome do dia da semana
+        console.log(`${dia}/${mes}/${ano}-${diaDaSemana}`)
+        return `${dia}/${mes}/${ano}-${diaDaSemana}`;
+    }
 }

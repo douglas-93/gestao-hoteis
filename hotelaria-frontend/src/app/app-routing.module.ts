@@ -7,17 +7,17 @@ import {TasksComponent} from './pages/tasks/tasks.component';
 import {
     DxAutocompleteModule,
     DxButtonModule, DxCalendarModule
-    , DxCheckBoxModule
-    , DxDataGridModule, DxDateBoxModule
-    , DxFileUploaderModule
-    , DxFormModule
-    , DxGalleryModule
-    , DxListModule, DxLoadIndicatorModule
-    , DxNumberBoxModule, DxPopupModule
-    , DxSelectBoxModule
-    , DxSwitchModule
-    , DxTabPanelModule, DxTextAreaModule
-    , DxTextBoxModule
+  , DxCheckBoxModule
+  , DxDataGridModule, DxDateBoxModule
+  , DxFileUploaderModule
+  , DxFormModule
+  , DxGalleryModule
+  , DxListModule, DxLoadIndicatorModule
+  , DxNumberBoxModule, DxPopupModule, DxSchedulerModule
+  , DxSelectBoxModule
+  , DxSwitchModule
+  , DxTabPanelModule, DxTextAreaModule
+  , DxTextBoxModule
 } from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
@@ -36,8 +36,14 @@ import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.comp
 import { CheckInComponent } from './pages/check-in/check-in.component';
 import { CheckOutComponent } from './pages/check-out/check-out.component';
 import { ConsumoComponent } from './pages/consumo/consumo.component';
+import { MonitorReservasComponent } from './pages/monitor-reservas/monitor-reservas.component';
 
 const routes: Routes = [
+  {
+    path: 'pages/monitor-reservas',
+    component: MonitorReservasComponent,
+    canActivate: [ AuthGuardService ]
+  },
   {
     path: 'pages/consumo',
     component: ConsumoComponent,
@@ -175,8 +181,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule]
-    ,
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule, DxSchedulerModule]
+  ,
     providers: [AuthGuardService]
   ,
     exports: [RouterModule]
@@ -198,7 +204,8 @@ const routes: Routes = [
         ConfiguracoesComponent,
         CheckInComponent,
         CheckOutComponent,
-        ConsumoComponent
+        ConsumoComponent,
+        MonitorReservasComponent
     ]
 })
 export class AppRoutingModule {
