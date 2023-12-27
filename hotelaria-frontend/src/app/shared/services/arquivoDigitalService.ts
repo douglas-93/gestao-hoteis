@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {ArquivoDIgitalModel} from "../models/ArquivoDIgitalModel";
 import {HotelModel} from "../models/hotel.model";
 import _ from "lodash";
+import FormData from "form-data";
 
 @Injectable({
     providedIn: 'root'
