@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {ReservaService} from "../../shared/services/reserva.service";
 import {ReservaModel} from "../../shared/models/reserva.model";
 import notify from "devextreme/ui/notify";
@@ -25,7 +25,8 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     protected readonly Utils = Utils;
 
     constructor(private reservaService: ReservaService,
-                private quartoService: QuartoService) {
+                private quartoService: QuartoService,
+                private zone: NgZone) {
     }
 
     ngOnInit() {
@@ -88,34 +89,40 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }
 
     colocaReservaNoGrid() {
-        this.monitor.instance.beginUpdate();
+        this.zone.run(() => {
+            this.monitor.instance.beginUpdate();
 
-        this.reservas.forEach(reserva => {
-            const dataReserva = new Date(reserva.dataEntrada);
-            // const colunaCorrespondente = this.diasDaSemana.findIndex(data => data.getTime() === dataReserva.getTime());
-            const colunaCorrespondente = this.diasDaSemana.findIndex(data => Utils.formatarDataParaString(data) === Utils.formatarDataParaString(dataReserva));
+            this.reservas.forEach(reserva => {
+                const dataReserva = new Date(reserva.dataEntrada);
+                // const colunaCorrespondente = this.diasDaSemana.findIndex(data => data.getTime() === dataReserva.getTime());
+                const colunaCorrespondente = this.diasDaSemana.findIndex(data => Utils.formatarDataParaString(data) === Utils.formatarDataParaString(dataReserva));
+                console.log('ColunaCorrespondente: ' + colunaCorrespondente);
 
-            if (colunaCorrespondente !== -1) {
-                const quartoCorrespondente = this.quartos.find(quarto => quarto.id === reserva.quartos[0].id);
+                if (colunaCorrespondente !== -1) {
+                    const quartoCorrespondente = this.quartos.find(quarto => quarto.id === reserva.quartos[0].id);
+                    console.log('QuartoCorrespondente' + quartoCorrespondente);
 
-                if (quartoCorrespondente) {
-                    const linhaCorrespondente = this.monitor.instance.getRowIndexByKey(quartoCorrespondente.nome);
+                    if (quartoCorrespondente) {
+                        const linhaCorrespondente = this.monitor.instance.getRowIndexByKey(quartoCorrespondente.nome);
+                        console.log('LinhaCorrespondente: ' + linhaCorrespondente);
 
-                    // Obter a célula correspondente
-                    const cellElement = this.monitor.instance.getCellElement(linhaCorrespondente, colunaCorrespondente);
+                        // Obter a célula correspondente
+                        const cellElement = this.monitor.instance.getCellElement(linhaCorrespondente, colunaCorrespondente);
+                        console.log('CellElement: ' + cellElement)
 
-                    // Defina o valor da célula com o nome do hóspede
-                    if (cellElement) {
-                        cellElement.innerText = reserva.hospedes[0].nome;
-                        console.log(cellElement)
+                        // Defina o valor da célula com o nome do hóspede
+                        if (cellElement) {
+                            cellElement.innerText = reserva.hospedes[0].nome;
+
+                            console.log(cellElement)
+
+                            this.monitor.instance.repaint();
+                        }
                     }
                 }
-            }
+            });
+
+            this.monitor.instance.endUpdate();
         });
-
-        this.monitor.instance.endUpdate();
-
-        // Forçar uma atualização completa do dxDataGrid
-        this.monitor.instance.updateDimensions();
     }
 }
