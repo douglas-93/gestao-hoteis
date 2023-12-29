@@ -1,43 +1,49 @@
 <base-crud #crud
+           (deleteFunction)="exclui()"
            (filterFunction)="buscar()"
            (novoCadastroFunction)="novo()"
            (saveFunction)="salvar()"
-           (deleteFunction)="exclui()"
            [editTitle]="'Cadastro de Reserva'"
            [listTitle]="'Listagem de Reservas'"
            [mode]="mode">
 
     <div list-filter-fields></div>
     <div list-result>
-        <dx-data-grid [dataSource]="reservas"
+        <dx-data-grid (onRowDblClick)="editar()"
                       (onSelectionChanged)="selecionaReserva($event)"
-                      (onRowDblClick)="editar()">
+                      [dataSource]="reservas">
 
             <dxo-selection mode="single"></dxo-selection>
 
-            <dxi-column cellTemplate="hospedesTemplate"
+            <dxi-column alignment="center"
+                        cellTemplate="hospedesTemplate"
                         dataField="hospedes">
             </dxi-column>
-            <dxi-column cellTemplate="quartosTemplate"
-                        dataField="quartos">
+            <dxi-column alignment="center" dataField="quarto.nome" width="auto">
             </dxi-column>
-            <dxi-column dataField="dataEntrada"
+            <dxi-column alignment="center"
+                        dataField="dataEntrada"
                         dataType="date"
-                        format="dd-MM-yyyy">
+                        format="dd-MM-yyyy" width="auto">
             </dxi-column>
-            <dxi-column dataField="dataPrevistaSaida"
+            <dxi-column alignment="center"
+                        dataField="dataPrevistaSaida"
                         dataType="date"
-                        format="dd-MM-yyyy">
+                        format="dd-MM-yyyy" width="auto">
             </dxi-column>
-            <dxi-column dataField="dataSaida"
+            <dxi-column alignment="center"
+                        dataField="dataSaida"
                         dataType="date"
-                        format="dd-MM-yyyy">
+                        format="dd-MM-yyyy" width="auto">
             </dxi-column>
-            <dxi-column dataField="checkedIn">
+            <dxi-column alignment="center"
+                        dataField="checkedIn" width="auto">
             </dxi-column>
-            <dxi-column dataField="checkedOut">
+            <dxi-column alignment="center"
+                        dataField="checkedOut" width="auto">
             </dxi-column>
-            <dxi-column dataField="cancelada">
+            <dxi-column alignment="center"
+                        dataField="cancelada" width="auto">
             </dxi-column>
 
             <!--            TEMPLATE        -->
@@ -45,12 +51,6 @@
             <div *dxTemplate="let data of 'hospedesTemplate'">
                 <div *ngFor="let h of data.data.hospedes">
                     {{ h.nome + ' - ' + h.cpf }}
-                </div>
-            </div>
-
-            <div *dxTemplate="let data of 'quartosTemplate'">
-                <div *ngFor="let q of data.data.quartos">
-                    {{ q.nome }}
                 </div>
             </div>
 
@@ -259,15 +259,15 @@
                                 </span>
                             </div>
                         </div>
-                        <dx-select-box *ngIf="reserva.isEmpresa"
-                                       #empresaSelect
-                                       [dataSource]="empresas"
+                        <dx-select-box #empresaSelect
                                        (onValueChanged)="defineEmpresa()"
+                                       *ngIf="reserva.isEmpresa"
+                                       [dataSource]="empresas"
                                        [searchEnabled]="true"
                                        [value]="reserva.empresa"
-                                       searchMode="contains"
-                                       searchExpr="razaoSocial"
                                        displayExpr="razaoSocial"
+                                       searchExpr="razaoSocial"
+                                       searchMode="contains"
                                        style="margin-top: 15px">
                         </dx-select-box>
                     </div>
@@ -275,7 +275,7 @@
             </dxi-item>
             <dxi-item title="Resumo da Reserva">
                 <dx-form>
-                    <dxi-item itemType="group" *ngIf="reserva.empresa != null">
+                    <dxi-item *ngIf="reserva.empresa != null" itemType="group">
                         <dxi-item [label]="{text: 'Empresa responsável'}"
                                   template="resumoEmpresaTemplate">
                         </dxi-item>
@@ -345,30 +345,30 @@
 
                     <dx-data-grid [dataSource]="reservasJaRealizadas">
 
-                        <dxi-column dataField="id"
-                                    caption="Reserva">
+                        <dxi-column caption="Reserva"
+                                    dataField="id">
 
                         </dxi-column>
-                        <dxi-column dataField="dataEntrada"
-                                    caption="Data da Entrada"
+                        <dxi-column caption="Data da Entrada"
+                                    dataField="dataEntrada"
                                     dataType="date"
                                     format="dd-MM-yyyy">
 
                         </dxi-column>
-                        <dxi-column dataField="dataPrevistaSaida"
-                                    caption="Data da Saída"
+                        <dxi-column caption="Data da Saída"
+                                    dataField="dataPrevistaSaida"
                                     dataType="date"
                                     format="dd-MM-yyyy">
 
                         </dxi-column>
-                        <dxi-column dataField="quartos"
+                        <dxi-column caption="Quarto(s)"
                                     cellTemplate="quartosTemplate"
-                                    caption="Quarto(s)">
+                                    dataField="quartos">
 
                         </dxi-column>
-                        <dxi-column dataField="hospedes"
+                        <dxi-column caption="Hospede(s)"
                                     cellTemplate="hospedesTemplate"
-                                    caption="Hospede(s)">
+                                    dataField="hospedes">
 
                         </dxi-column>
 

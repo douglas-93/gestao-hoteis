@@ -41,10 +41,6 @@ public class QuartoModel implements Serializable {
     @ElementCollection(fetch = FetchType.LAZY)
     private List<String> itens = new ArrayList<>();
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "quartos")
-    private List<ReservaModel> reservas = new ArrayList<>();
-
     @Version
     private Long versao;
 }

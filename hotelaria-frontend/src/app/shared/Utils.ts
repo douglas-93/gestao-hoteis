@@ -97,6 +97,24 @@ export class Utils {
         const ano = data.getFullYear();
         const diaDaSemana = diasSemana[data.getDay()]; // Obtém o nome do dia da semana
 
-        return `${dia}/${mes}/${ano}-${diaDaSemana}`;
+        return `${dia}/${mes}/${ano}#${diaDaSemana}`;
+    }
+
+    static gerarDateAPartirDaString(string: string) {
+        const parts: string[] = _.compact(string.split(" "));
+
+// Mapear o mês abreviado para o número do mês
+        const monthMap: { [key: string]: number } = {
+            "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5,
+            "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11
+        };
+
+// Obter partes específicas da string
+        const month: number = monthMap[parts[1]];
+        const day: number = Number(parts[2]);
+        const year: number = Number(parts[3]);
+
+        return new Date(year, month, day);
+
     }
 }

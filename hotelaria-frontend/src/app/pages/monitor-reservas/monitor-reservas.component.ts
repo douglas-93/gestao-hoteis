@@ -7,6 +7,7 @@ import {QuartoModel} from "../../shared/models/quarto.model";
 import {QuartoService} from "../../shared/services/quarto.service";
 import {forkJoin} from "rxjs";
 import {DxDataGridComponent} from "devextreme-angular";
+import _ from "lodash";
 
 
 @Component({
@@ -37,6 +38,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
                 if (respQuarto.ok && respReserva) {
                     this.quartos = respQuarto.body!;
                     this.reservas = respReserva.body!;
+                    this.filtraQuarto();
                 }
             },
             ([errQuarto, errReserva]) => {
@@ -53,21 +55,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        /*if (this.monitor) {
-            this.monitor.instance.beginUpdate();
 
-            // Iterar sobre colunas
-            this.monitor.instance.getVisibleColumns().forEach(column => {
-                console.log('Coluna:', column.caption);
-            });
-
-            // Iterar sobre linhas
-            this.monitor.instance.getVisibleRows().forEach(row => {
-                console.log('Linha:', row.data);
-            });
-
-            this.monitor.instance.endUpdate();
-        }*/
     }
 
     periodoAnterior() {
@@ -89,40 +77,65 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }
 
     colocaReservaNoGrid() {
-        this.zone.run(() => {
-            this.monitor.instance.beginUpdate();
 
-            this.reservas.forEach(reserva => {
-                const dataReserva = new Date(reserva.dataEntrada);
-                // const colunaCorrespondente = this.diasDaSemana.findIndex(data => data.getTime() === dataReserva.getTime());
-                const colunaCorrespondente = this.diasDaSemana.findIndex(data => Utils.formatarDataParaString(data) === Utils.formatarDataParaString(dataReserva));
-                console.log('ColunaCorrespondente: ' + colunaCorrespondente);
+    }
 
-                if (colunaCorrespondente !== -1) {
-                    const quartoCorrespondente = this.quartos.find(quarto => quarto.id === reserva.quartos[0].id);
-                    console.log('QuartoCorrespondente' + quartoCorrespondente);
-
-                    if (quartoCorrespondente) {
-                        const linhaCorrespondente = this.monitor.instance.getRowIndexByKey(quartoCorrespondente.nome);
-                        console.log('LinhaCorrespondente: ' + linhaCorrespondente);
-
-                        // Obter a célula correspondente
-                        const cellElement = this.monitor.instance.getCellElement(linhaCorrespondente, colunaCorrespondente);
-                        console.log('CellElement: ' + cellElement)
-
-                        // Defina o valor da célula com o nome do hóspede
-                        if (cellElement) {
-                            cellElement.innerText = reserva.hospedes[0].nome;
-
-                            console.log(cellElement)
-
-                            this.monitor.instance.repaint();
-                        }
+    filtraQuarto() {
+        this.quartos.forEach(quarto => {
+            quarto.reservas = _.compact(this.reservas.filter(r => {
+                if (!_.isNil(r.quarto)) {
+                    if (quarto.nome === r.quarto.nome){
+                        return r;
                     }
                 }
-            });
-
-            this.monitor.instance.endUpdate();
+                return null;
+            }))
         });
+    }
+    /*formataHospedeReserva(data) {
+        return (data.data.reservas.filter(r=>{
+            const [anoE, mesE, diaE] = r.dataEntrada.split("-");
+            const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
+            const [diaC, mesC, anoC] = data.column.caption.split('-')[0].split("/");
+
+            const dataEntradaObj: Date = new Date(Number(anoE), Number(mesE) - 1, Number(diaE));
+            const dataSaidaObj: Date = new Date(Number(anoS), Number(mesS) - 1, Number(diaS));
+            const dataCaptionObj: Date = new Date(Number(anoC), Number(mesC) - 1, Number(diaC));
+
+            if (((dataCaptionObj.getTime() >= dataEntradaObj.getTime() && dataCaptionObj.getTime() <= dataSaidaObj.getTime()) &&
+                (data.data.id == r.quarto.id))) {
+                return r;
+            }
+        }).map(r => r.hospedes[0].nome))
+    }*/
+
+    formataHospedeReserva(data) {
+        return data.data.reservas.filter(r=>{
+            const [anoE, mesE, diaE] = r.dataEntrada.split("-");
+            const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
+
+            const dataEntradaObj: Date = new Date(Number(anoE), Number(mesE) - 1, Number(diaE));
+            const dataSaidaObj: Date = new Date(Number(anoS), Number(mesS) - 1, Number(diaS));
+            const dataCaptionObj: Date = Utils.gerarDateAPartirDaString(data.column.caption);
+
+            if (((dataCaptionObj.getTime() >= dataEntradaObj.getTime() && dataCaptionObj.getTime() <= dataSaidaObj.getTime()) &&
+                (data.data.id == r.quarto.id))) {
+                return r;
+            }
+        })
+    }
+
+    logar(data) {
+        console.log(data)
+    }
+
+    formataCabecalho(dataAsString) {
+        const [data, diaSemana] = Utils.formatarDataParaString(new Date(dataAsString)).split('#')
+        return [data, diaSemana];
+    }
+
+    resumoReserva(data: any, event: any) {
+        console.log(data)
+        console.log(event)
     }
 }

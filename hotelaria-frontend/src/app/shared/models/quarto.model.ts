@@ -1,5 +1,6 @@
 import {CategoriaQuartoModel} from "./categoriaQuarto.model";
 import {TipoQuartoModel} from "./tipoQuarto.model";
+import {ReservaModel} from "./reserva.model";
 
 export class QuartoModel {
     id: number;
@@ -12,4 +13,5 @@ export class QuartoModel {
     categoriaQuarto: CategoriaQuartoModel;
     itens: string[];
     versao: number;
+    reservas: ReservaModel[];
 }

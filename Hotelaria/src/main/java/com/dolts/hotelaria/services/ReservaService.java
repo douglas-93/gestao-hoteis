@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +30,9 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
     private QuartoRepository quartoRepository;
 
     @Autowired
-    EmpresaRepository empresaRepository;
+    private EmpresaRepository empresaRepository;
+
+    List<ReservaModel> reservas = new ArrayList<>();
 
     @Override
     public AbstractCRUDRepository<ReservaModel, Long> getRepository() {
@@ -44,6 +47,8 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         entity.setDataCriacaoReserva(LocalDateTime.now());
         entity.setDataAlteracaoReserva(LocalDateTime.now());
 
+        entity.setEstadia(geraDatas(entity.getDataEntrada(), entity.getDataPrevistaSaida()));
+
         if (!entity.getHospedes().isEmpty()) {
             entity.setHospedes(
                     entity.getHospedes().stream()
@@ -53,14 +58,32 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         }
 
         if (!entity.getQuartos().isEmpty()) {
-            entity.setQuartos(
-                    entity.getQuartos().stream()
-                            .map(quarto -> quartoRepository.findById(quarto.getId()).orElse(null))
-                            .collect(Collectors.toList())
-            );
+            entity.getQuartos().forEach( q -> {
+                if (!Objects.equals(q, entity.getQuarto())) {
+                    ReservaModel reserv = new ReservaModel();
+                    reserv.atualizarReserva(entity);
+                    reserv.setQuarto(quartoRepository.findById(q.getId()).orElse(null));
+                    this.reservas.add(reserv);
+                }
+            });
         }
 
-        entity.setEstadia(geraDatas(entity.getDataEntrada(), entity.getDataPrevistaSaida()));
+        if (!this.reservas.isEmpty()) {
+            this.reservas.forEach( r -> {
+                r = reservaRepository.save(r);
+            });
+        }
+
+    }
+
+    @Override
+    protected void afterSave(ReservaModel entity) {
+        super.afterSave(entity);
+
+        this.reservas.forEach(r -> {
+            r.setIdReservaOriginal(entity.getId());
+            reservaRepository.save(r);
+        });
     }
 
     @Override

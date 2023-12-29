@@ -121,6 +121,11 @@ export class ReservaComponent implements OnInit, AfterViewInit {
 
                     if (resp.status === 204 && resp.body === null) {
                         notify('Data e quarto disponíveis', 'success', 3600);
+                        console.log(this.reserva)
+                        if (_.isNil(this.reserva.quarto)) {
+                            this.reserva.quarto = new QuartoModel();
+                        }
+                        this.reserva.quarto = this.reserva.quartos[0];
                         this.reservaService.save(this.reserva).subscribe(resp => {
                             if (resp.ok) {
                                 notify('Reserva realizada', 'success', 3600);

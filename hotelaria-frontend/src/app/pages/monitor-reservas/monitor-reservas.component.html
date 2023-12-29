@@ -10,23 +10,45 @@
         <dx-button (onClick)="proximoPeriodo()"
                    text="Próximo">
         </dx-button>
-        <dx-data-grid #monitor
-                      [dataSource]="quartos"
-                      [showBorders]="true"
-                      keyExpr="nome">
+        <dx-form>
+            <dxi-item [colCount]="4" itemType="group">
+                <dxi-item [colSpan]="3" template="gridTemplate"></dxi-item>
+                <dxi-item template="infoTemplate"></dxi-item>
+            </dxi-item>
 
-            <dxi-column caption="Quarto" dataField="nome"></dxi-column>
+            <!--            TEMPLATE        -->
+            <div *dxTemplate="let data of 'gridTemplate'">
+                <dx-data-grid #monitor
+                              [dataSource]="quartos"
+                              [showBorders]="true"
+                              keyExpr="nome">
+                    <dxi-column [visible]="false" caption="Quarto" dataField="nome"></dxi-column>
+                    <dxi-column *ngFor="let date of diasDaSemana"
+                                [dataField]="date.toString()"
+                                alignment="center"
+                                cellTemplate="hospedeReservaTemplate"
+                                headerCellTemplate="teste"
+                                width="auto">
+                        <!--                        dataField="reservas[0].hospedes[0].nome">-->
+                    </dxi-column>
 
-            <dxi-column *ngFor="let date of diasDaSemana"
-                        caption="{{ Utils.formatarDataParaString(date)}}">
-                <div *dxTemplate="let data of 'cellTemplate'">
-                    <div class="reserva-na-semana">
-                        <!-- Outro conteúdo da célula aqui -->
-                        <p>Reservado</p>
+                    <div *dxTemplate="let data of 'teste'">
+                        <span>{{ formataCabecalho(data.column.name)[0] }}</span>
+                        <br>
+                        <span>{{ formataCabecalho(data.column.name)[1] }}</span>
                     </div>
-                </div>
-            </dxi-column>
 
-        </dx-data-grid>
+                    <div *dxTemplate="let data of 'hospedeReservaTemplate'" (click)="resumoReserva(data, $event)">
+                        <span>{{ data.data.nome }}</span>
+                        <br>
+                        <span>{{ formataHospedeReserva(data).length != 0 ? 'Ocupado' : 'Vazio' }}</span>
+                        <br>
+                        <span>{{ data.data.tipoQuarto.nome }}</span>
+                    </div>
+                </dx-data-grid>
+
+            </div>
+
+        </dx-form>
     </div>
 </div>

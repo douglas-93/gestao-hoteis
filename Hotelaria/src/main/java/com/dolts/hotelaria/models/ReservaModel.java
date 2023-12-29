@@ -38,18 +38,51 @@ public class ReservaModel implements Serializable {
     private BigDecimal valorDiaria;
     private BigDecimal valorTotalEstadia;
     private Boolean isEmpresa = false;
+    private Long idReservaOriginal;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "reserva_quarto",
-            joinColumns = @JoinColumn(name = "reserva_id"),
-            inverseJoinColumns = @JoinColumn(name = "quarto_id"))
-    private List<QuartoModel> quartos = new ArrayList<>();
+    @OneToOne
+    private QuartoModel quarto;
+
+    @OneToOne
+    private EmpresaModel empresa;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "reserva_hospede",
             joinColumns = @JoinColumn(name = "reserva_id"),
             inverseJoinColumns = @JoinColumn(name = "hospede_id"))
     private List<HospedeModel> hospedes = new ArrayList<>();
-    @OneToOne
-    private EmpresaModel empresa;
+
+    @Transient
+    private List<QuartoModel> quartos = new ArrayList<>();
+
+    public void atualizarReserva(ReservaModel reservaAtualizada) {
+
+        this.setDataCriacaoReserva(reservaAtualizada.getDataCriacaoReserva());
+        this.setDataAlteracaoReserva(reservaAtualizada.getDataAlteracaoReserva());
+        this.setDataCancelamento(reservaAtualizada.getDataCancelamento());
+        this.setDataEntrada(reservaAtualizada.getDataEntrada());
+        this.setDataPrevistaSaida(reservaAtualizada.getDataPrevistaSaida());
+        this.setEstadia(reservaAtualizada.getEstadia());
+        this.setDataSaida(reservaAtualizada.getDataSaida());
+        this.setCheckedIn(reservaAtualizada.getCheckedIn());
+        this.setCheckedOut(reservaAtualizada.getCheckedOut());
+        this.setCancelada(reservaAtualizada.getCancelada());
+        this.setMotivoCancelamento(reservaAtualizada.getMotivoCancelamento());
+        this.setDiasHospedado(reservaAtualizada.getDiasHospedado());
+        this.setValorDiaria(reservaAtualizada.getValorDiaria());
+        this.setValorTotalEstadia(reservaAtualizada.getValorTotalEstadia());
+        this.setIsEmpresa(reservaAtualizada.getIsEmpresa());
+
+        if (reservaAtualizada.getQuarto() != null) {
+            this.setQuarto(reservaAtualizada.getQuarto());
+        }
+
+        if (reservaAtualizada.getEmpresa() != null) {
+            this.setEmpresa(reservaAtualizada.getEmpresa());
+        }
+
+        if (reservaAtualizada.getHospedes() != null) {
+            this.setHospedes(new ArrayList<>(reservaAtualizada.getHospedes()));
+        }
+    }
 }
