@@ -39,17 +39,15 @@ public class ReservaModel implements Serializable {
     private BigDecimal valorTotalEstadia;
     private Boolean isEmpresa = false;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "reserva_quarto",
-            joinColumns = @JoinColumn(name = "reserva_id"),
-            inverseJoinColumns = @JoinColumn(name = "quarto_id"))
-    private List<QuartoModel> quartos = new ArrayList<>();
+    @ManyToOne
+    private QuartoModel quarto;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "reserva_hospede",
             joinColumns = @JoinColumn(name = "reserva_id"),
             inverseJoinColumns = @JoinColumn(name = "hospede_id"))
     private List<HospedeModel> hospedes = new ArrayList<>();
+
     @OneToOne
     private EmpresaModel empresa;
 }

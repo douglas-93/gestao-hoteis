@@ -57,6 +57,7 @@ export class ReservaComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.reserva = new ReservaModel();
+        this.reserva.quarto = new QuartoModel();
         this.buscaDadosIniciais();
 
         let edit: boolean = this.router.url.includes('edit');
@@ -80,16 +81,17 @@ export class ReservaComponent implements OnInit, AfterViewInit {
                 this.reserva = resp.body!;
                 this.reserva.dataEntrada = this.parseDataStringParaDate(this.reserva.dataEntrada.toString());
                 this.reserva.dataPrevistaSaida = this.parseDataStringParaDate(this.reserva.dataPrevistaSaida.toString());
-                const defineEmpresa = setTimeout(() => {
-                    const empresa = this.empresas.find(e => e.id === this.reserva.empresa.id);
-                    if (empresa) {
-                        this.empresaSelect.instance.option('value', empresa);
-                        this.empresaSelect?.instance.repaint();
-                        this.cdr.detectChanges();
-                        clearTimeout(defineEmpresa);
-
-                    }
-                }, 500);
+                if (this.reserva.isEmpresa) {
+                    const defineEmpresa = setTimeout(() => {
+                        const empresa = this.empresas.find(e => e.id === this.reserva.empresa.id);
+                        if (empresa) {
+                            this.empresaSelect.instance.option('value', empresa);
+                            this.empresaSelect?.instance.repaint();
+                            this.cdr.detectChanges();
+                            clearTimeout(defineEmpresa);
+                        }
+                    }, 500);
+                }
             }
         });
     }
@@ -150,7 +152,7 @@ export class ReservaComponent implements OnInit, AfterViewInit {
             notify('É necessário a inclusão de ao menos um hospede', 'error', 3600);
             return false;
         }
-        if (_.isNil(this.reserva.quartos) || _.isEmpty(this.reserva.quartos)) {
+        if (_.isNil(this.reserva.quarto) || _.isEmpty(this.reserva.quarto)) {
             notify('É necessário a inclusão de ao menos um quarto', 'error', 3600);
             return false;
         }
@@ -215,16 +217,17 @@ export class ReservaComponent implements OnInit, AfterViewInit {
         });
     }
 
-    adicionaQuartoGrid() {
+    /*adicionaQuartoGrid() {
+
         if (_.isNil(this.quartoSelectBox.selectedItem)) {
             notify('Selecione um quarto', 'warning', 3600);
             return;
         }
-        if (_.includes(this.reserva.quartos, this.quartoSelectBox.selectedItem)) {
-            notify('Quarto já está nesta reserva', 'error', 3600);
+        if (!_.isNil(this.reserva.quarto)) {
+            notify('Quarto da reserva já selecionado', 'error', 3600);
             return;
         }
-        this.reserva.quartos.push(this.quartoSelectBox.selectedItem)
+        this.reserva.quarto = this.quartoSelectBox.selectedItem;
         this.quartoSelectBox.instance.reset();
     }
 
@@ -239,12 +242,13 @@ export class ReservaComponent implements OnInit, AfterViewInit {
             this.reserva.quartos.splice(index, 1);
             this.quartoSelecinado = null;
         }
-    }
+    }*/
 
     selecionaQuarto(e) {
         e.component.byKey(e.currentSelectedRowKeys[0]).done(quarto => {
             if (quarto) {
-                this.quartoSelecinado = quarto;
+                // this.quartoSelecinado = quarto;
+                this.reserva.quarto = quarto;
             }
         });
     }

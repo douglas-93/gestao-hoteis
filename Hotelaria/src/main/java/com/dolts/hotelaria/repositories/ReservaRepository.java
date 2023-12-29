@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ReservaRepository extends AbstractCRUDRepository<ReservaModel, Long> {
-    @Query("SELECT r FROM ReservaModel r JOIN r.quartos q " +
+    @Query("SELECT r FROM ReservaModel r JOIN r.quarto q " +
             "WHERE q.id = :quartoId " +
             "AND ((r.dataEntrada BETWEEN :dataEntrada AND :dataSaida) OR " +
             "(COALESCE(r.dataPrevistaSaida, r.dataSaida) BETWEEN :dataEntrada AND :dataSaida) OR " +

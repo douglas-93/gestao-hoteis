@@ -97,6 +97,6 @@ export class Utils {
         const ano = data.getFullYear();
         const diaDaSemana = diasSemana[data.getDay()]; // Obtém o nome do dia da semana
 
-        return `${dia}/${mes}/${ano}-${diaDaSemana}`;
+        return `${dia}/${mes}/${ano}#${diaDaSemana}`;
     }
 }

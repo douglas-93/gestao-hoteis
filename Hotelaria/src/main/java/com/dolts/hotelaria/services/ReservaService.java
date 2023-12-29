@@ -8,7 +8,6 @@ import com.dolts.hotelaria.repositories.ReservaRepository;
 import com.dolts.hotelaria.utils.repository.AbstractCRUDRepository;
 import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,16 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
     @Autowired
+    EmpresaRepository empresaRepository;
+    @Autowired
     private ReservaRepository reservaRepository;
-
     @Autowired
     private HospedeRepository hospedeRepository;
-
     @Autowired
     private QuartoRepository quartoRepository;
-
-    @Autowired
-    EmpresaRepository empresaRepository;
 
     @Override
     public AbstractCRUDRepository<ReservaModel, Long> getRepository() {
@@ -52,12 +48,8 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
             );
         }
 
-        if (!entity.getQuartos().isEmpty()) {
-            entity.setQuartos(
-                    entity.getQuartos().stream()
-                            .map(quarto -> quartoRepository.findById(quarto.getId()).orElse(null))
-                            .collect(Collectors.toList())
-            );
+        if (entity.getQuarto() != null) {
+            entity.setQuarto(quartoRepository.findById(entity.getQuarto().getId()).orElse(null));
         }
 
         entity.setEstadia(geraDatas(entity.getDataEntrada(), entity.getDataPrevistaSaida()));
@@ -75,12 +67,8 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
             );
         }
 
-        if (!entity.getQuartos().isEmpty()) {
-            entity.setQuartos(
-                    entity.getQuartos().stream()
-                            .map(quarto -> quartoRepository.findById(quarto.getId()).orElse(null))
-                            .collect(Collectors.toList())
-            );
+        if (entity.getQuarto() != null) {
+            entity.setQuarto(quartoRepository.findById(entity.getQuarto().getId()).orElse(null));
         }
 
         if (entity.getEmpresa() != null) {
@@ -103,14 +91,12 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
 
         List<ReservaModel> reservasJaRealizadas = new ArrayList<>();
 
-        entity.getQuartos().forEach(q -> {
-            List<ReservaModel> reservas = reservaRepository.findReservasSobrepostas(q.getId(),
-                    entity.getDataEntrada(), entity.getDataPrevistaSaida());
+        List<ReservaModel> reservas = reservaRepository.findReservasSobrepostas(entity.getQuarto().getId(),
+                entity.getDataEntrada(), entity.getDataPrevistaSaida());
 
-            if (!reservas.isEmpty()) {
-                reservasJaRealizadas.addAll(reservas);
-            }
-        });
+        if (!reservas.isEmpty()) {
+            reservasJaRealizadas.addAll(reservas);
+        }
 
         return reservasJaRealizadas;
     }
