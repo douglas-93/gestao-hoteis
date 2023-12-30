@@ -117,4 +117,9 @@ export class Utils {
         return new Date(year, month, day);
 
     }
+
+    static dataPadraoBrasileiro(data) {
+        const [ano, mes, dia] = data.split('-');
+        return `${dia}-${mes}-${ano}`
+    }
 }

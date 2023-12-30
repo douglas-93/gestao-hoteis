@@ -23,6 +23,8 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     quartos: QuartoModel[] = [];
     diasDaSemana: Date[] = [];
     semanaGerada: number = 0;
+    reservaDoResumo: ReservaModel;
+    isLoading: boolean = false;
     protected readonly Utils = Utils;
 
     constructor(private reservaService: ReservaService,
@@ -31,6 +33,8 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+        this.isLoading = true;
+        // this.reservaDoResumo = new ReservaModel();
 
         let calls = forkJoin([this.reservaService.findAll(), this.quartoService.findAll()]);
 
@@ -110,7 +114,9 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }*/
 
     formataHospedeReserva(data) {
-        return data.data.reservas.filter(r=>{
+        this.isLoading = true;
+
+        const reserv = data.data.reservas.filter(r=>{
             const [anoE, mesE, diaE] = r.dataEntrada.split("-");
             const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
 
@@ -123,10 +129,14 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
                 return r;
             }
         })
+
+        this.isLoading = false;
+        return reserv;
     }
 
     logar(data) {
         console.log(data)
+        return ''
     }
 
     formataCabecalho(dataAsString) {
@@ -135,7 +145,43 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }
 
     resumoReserva(data: any, event: any) {
-        console.log(data)
-        console.log(event)
+        /*console.log(data.data)
+        console.log(data.row.key)
+        console.log(Utils.gerarDateAPartirDaString(data.column.caption))
+        console.log(data.data.reservas)*/
+
+        this.isLoading = true;
+
+        this.selecionarQuadrinho(event);
+
+
+        this.reservaDoResumo = data.data.reservas.filter(r=>{
+            const [anoE, mesE, diaE] = r.dataEntrada.split("-");
+            const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
+
+            const dataEntradaObj: Date = new Date(Number(anoE), Number(mesE) - 1, Number(diaE));
+            const dataSaidaObj: Date = new Date(Number(anoS), Number(mesS) - 1, Number(diaS));
+            const dataCaptionObj: Date = Utils.gerarDateAPartirDaString(data.column.caption);
+
+            if (((dataCaptionObj.getTime() >= dataEntradaObj.getTime() && dataCaptionObj.getTime() <= dataSaidaObj.getTime()) &&
+                (data.data.nome == r.quarto.nome))) {
+                return r;
+            }
+        })[0]
+        this.isLoading = false;
+    }
+
+    selecionarQuadrinho(event: any) {
+        // Remove a classe 'selecionado' de todos os quadrinhos
+        // @ts-ignore
+        document.querySelectorAll('.quadrinho').forEach((el: HTMLElement) => {
+            el.classList.remove('selecionado');
+        });
+
+        // Adiciona a classe 'selecionado' à div do quadrinho clicado
+        const quadrinhoDiv = event.currentTarget.closest('.quadrinho');
+        if (quadrinhoDiv) {
+            quadrinhoDiv.classList.add('selecionado');
+        }
     }
 }

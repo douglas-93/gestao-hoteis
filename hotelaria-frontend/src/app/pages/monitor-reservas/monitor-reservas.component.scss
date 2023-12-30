@@ -2,3 +2,36 @@
     background-color: #FFFF99; /* Cor de fundo para destacar as reservas na semana */
     /* Adicione outros estilos conforme necessário */
 }
+
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.27);
+    border-radius: 5px;
+    padding: 25px;
+    background-color: #fcfcfc;
+}
+
+.quadrinho {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    transition: box-shadow 0.3s ease;
+}
+
+.quadrinho.vazio {
+    background-color: rgba(128, 255, 128, 0.66);
+}
+
+.quadrinho.ocupado {
+    background-color: rgba(255, 212, 132, 0.6);
+}
+
+.quadrinho:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.selecionado {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}

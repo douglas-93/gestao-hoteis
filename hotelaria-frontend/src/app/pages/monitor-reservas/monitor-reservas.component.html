@@ -1,6 +1,10 @@
 <h2 class="content-block">Monitor Reservas</h2>
 <div class="content-block">
     <div class="dx-card responsive-paddings">
+
+        <dx-load-panel [(visible)]="isLoading">
+        </dx-load-panel>
+
         <dx-button (onClick)="periodoAnterior()"
                    text="Anterior">
         </dx-button>
@@ -38,15 +42,39 @@
                         <span>{{ formataCabecalho(data.column.name)[1] }}</span>
                     </div>
 
-                    <div *dxTemplate="let data of 'hospedeReservaTemplate'" (click)="resumoReserva(data, $event)">
-                        <span>{{ data.data.nome }}</span>
+                    <div *dxTemplate="let data of 'hospedeReservaTemplate'"
+                         (click)="resumoReserva(data, $event)"
+                         class="quadrinho"
+                         [class.vazio]="formataHospedeReserva(data).length === 0"
+                         [class.ocupado]="formataHospedeReserva(data).length > 0">
+                        <span style="font-weight: bolder">{{ data.data.nome }}</span>
                         <br>
-                        <span>{{ formataHospedeReserva(data).length != 0 ? 'Ocupado' : 'Vazio' }}</span>
+                        <span>{{ formataHospedeReserva(data).length != 0 ? 'Ocupado' : 'Vago' }}</span>
                         <br>
-                        <span>{{ data.data.tipoQuarto.nome }}</span>
+                        <span style="font-weight: bolder">{{ data.data.tipoQuarto.nome }}</span>
                     </div>
                 </dx-data-grid>
+            </div>
 
+            <div *dxTemplate="let data of 'infoTemplate'">
+                <div *ngIf="reservaDoResumo != undefined" class="card">
+                    <strong style="font-size: 24px; text-align: center">
+                        Informações da Reserva
+                    </strong><br><br>
+
+                    <div style="font-size: 18px">
+                        <strong>Hospedes:</strong><br>
+                        <span *ngFor="let h of reservaDoResumo.hospedes">
+                                              {{ h.nome }}
+                                        </span><br>
+                        <strong>Quarto:</strong><br>
+                        <span>{{ reservaDoResumo.quarto.nome }}</span><br>
+                        <strong>Data de Entrada:</strong><br>
+                        <span>{{ Utils.dataPadraoBrasileiro(reservaDoResumo.dataEntrada) }}</span><br>
+                        <strong>Data Prevista para Saída:</strong><br>
+                        <span>{{ Utils.dataPadraoBrasileiro(reservaDoResumo.dataPrevistaSaida) }}</span><br>
+                    </div>
+                </div>
             </div>
 
         </dx-form>
