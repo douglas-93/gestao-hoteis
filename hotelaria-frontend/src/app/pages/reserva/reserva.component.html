@@ -50,7 +50,7 @@
 
             <div *dxTemplate="let data of 'hospedesTemplate'">
                 <div *ngFor="let h of data.data.hospedes">
-                    {{ h.nome + ' - ' + h.cpf }}
+                    {{ h.nome + ' - ' + Utils.formatarCPF(h.cpf) }}
                 </div>
             </div>
 
@@ -136,23 +136,35 @@
             </dxi-item>
             <dxi-item title="Quarto">
                 <dx-form>
-                    <dxi-item [label]="{text: ''}"
+                    <dxi-item [label]="{text: 'Quarto'}"
                               template="quartoTemplate">
                     </dxi-item>
-                    <dxi-item [label]="{text: ''}"
+                    <dxi-item [label]="{text: 'Quartos na Reserva'}"
                               template="gridQuartoTemplate">
                     </dxi-item>
 
                     <!--                    TEMPLATE                -->
                     <div *dxTemplate="let data of 'quartoTemplate'">
                         <div class="exibe-linha">
-                            <p><strong>Quarto Selecionado: {{reserva.quarto.nome}}</strong></p>
+                            <dx-select-box #quartoSelectBox
+                                           (onEnterKey)="adicionaQuartoGrid()"
+                                           [dataSource]="quartos"
+                                           displayExpr="nome"
+                                           width="100%">
+                            </dx-select-box>
+                            <dx-button (onClick)="adicionaQuartoGrid()"
+                                       class="ml"
+                                       icon="fa fa-plus">
+                            </dx-button>
+                            <dx-button (onClick)="removeQuartoGrid()" class="ml"
+                                       icon="fa fa-minus">
+                            </dx-button>
                         </div>
                     </div>
                     <div *dxTemplate="let data of 'gridQuartoTemplate'">
                         <dx-data-grid #gridDeQuartosNaReserva
                                       (onSelectionChanged)="selecionaQuarto($event)"
-                                      [dataSource]="quartos">
+                                      [dataSource]="reserva.quartos">
 
                             <dxo-selection mode="single"></dxo-selection>
 
@@ -298,10 +310,12 @@
                         </div>
                     </div>
                     <div *dxTemplate="let data of 'resumoQuartoTemplate'">
-                        <dx-text-box [readOnly]="true"
-                                     [value]="reserva.quarto.nome"
-                                     class="mb">
-                        </dx-text-box>
+                        <div *ngFor="let q of reserva.quartos">
+                            <dx-text-box [readOnly]="true"
+                                         [value]="q.nome"
+                                         class="mb">
+                            </dx-text-box>
+                        </div>
                     </div>
                     <div *dxTemplate="let data of 'resumoDataEntradaTemplate'">
                         <dx-date-box [readOnly]="true"

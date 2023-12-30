@@ -157,7 +157,7 @@ export class ReservaComponent implements OnInit, AfterViewInit {
             notify('É necessário a inclusão de ao menos um hospede', 'error', 3600);
             return false;
         }
-        if (_.isNil(this.reserva.quarto) || _.isEmpty(this.reserva.quarto)) {
+        if (_.isNil(this.reserva.quartos) || _.isEmpty(this.reserva.quartos)) {
             notify('É necessário a inclusão de ao menos um quarto', 'error', 3600);
             return false;
         }
@@ -222,17 +222,17 @@ export class ReservaComponent implements OnInit, AfterViewInit {
         });
     }
 
-    /*adicionaQuartoGrid() {
+    adicionaQuartoGrid() {
 
         if (_.isNil(this.quartoSelectBox.selectedItem)) {
             notify('Selecione um quarto', 'warning', 3600);
             return;
         }
-        if (!_.isNil(this.reserva.quarto)) {
-            notify('Quarto da reserva já selecionado', 'error', 3600);
+        if (_.includes(this.reserva.quartos, this.quartoSelectBox.selectedItem)) {
+            notify('Quarto já está nesta reserva', 'error', 3600);
             return;
         }
-        this.reserva.quarto = this.quartoSelectBox.selectedItem;
+        this.reserva.quartos.push(this.quartoSelectBox.selectedItem);
         this.quartoSelectBox.instance.reset();
     }
 
@@ -247,13 +247,12 @@ export class ReservaComponent implements OnInit, AfterViewInit {
             this.reserva.quartos.splice(index, 1);
             this.quartoSelecinado = null;
         }
-    }*/
+    }
 
     selecionaQuarto(e) {
         e.component.byKey(e.currentSelectedRowKeys[0]).done(quarto => {
             if (quarto) {
-                // this.quartoSelecinado = quarto;
-                this.reserva.quarto = quarto;
+                this.quartoSelecinado = quarto;
             }
         });
     }
