@@ -88,7 +88,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
         this.quartos.forEach(quarto => {
             quarto.reservas = _.compact(this.reservas.filter(r => {
                 if (!_.isNil(r.quarto)) {
-                    if (quarto.nome === r.quarto.nome){
+                    if (quarto.nome === r.quarto.nome) {
                         return r;
                     }
                 }
@@ -96,6 +96,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
             }))
         });
     }
+
     /*formataHospedeReserva(data) {
         return (data.data.reservas.filter(r=>{
             const [anoE, mesE, diaE] = r.dataEntrada.split("-");
@@ -112,11 +113,13 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
             }
         }).map(r => r.hospedes[0].nome))
     }*/
+    checkInVisible: boolean = false;
+    cancelaVisible: boolean = false;
 
     formataHospedeReserva(data) {
         this.isLoading = true;
 
-        const reserv = data.data.reservas.filter(r=>{
+        const reserv = data.data.reservas.filter(r => {
             const [anoE, mesE, diaE] = r.dataEntrada.split("-");
             const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
 
@@ -155,7 +158,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
         this.selecionarQuadrinho(event);
 
 
-        this.reservaDoResumo = data.data.reservas.filter(r=>{
+        this.reservaDoResumo = data.data.reservas.filter(r => {
             const [anoE, mesE, diaE] = r.dataEntrada.split("-");
             const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
 

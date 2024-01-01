@@ -21,7 +21,7 @@
             </dxi-item>
 
             <!--            TEMPLATE        -->
-            <div *dxTemplate="let data of 'gridTemplate'">
+            <div *dxTemplate="let data of 'gridTemplate'" style="width: 100%">
                 <dx-data-grid #monitor
                               [dataSource]="quartos"
                               [showBorders]="true"
@@ -42,11 +42,11 @@
                         <span>{{ formataCabecalho(data.column.name)[1] }}</span>
                     </div>
 
-                    <div *dxTemplate="let data of 'hospedeReservaTemplate'"
-                         (click)="resumoReserva(data, $event)"
-                         class="quadrinho"
+                    <div (click)="resumoReserva(data, $event)"
+                         *dxTemplate="let data of 'hospedeReservaTemplate'"
+                         [class.ocupado]="formataHospedeReserva(data).length > 0"
                          [class.vazio]="formataHospedeReserva(data).length === 0"
-                         [class.ocupado]="formataHospedeReserva(data).length > 0">
+                         class="quadrinho">
                         <span style="font-weight: bolder">{{ data.data.nome }}</span>
                         <br>
                         <span>{{ formataHospedeReserva(data).length != 0 ? 'Ocupado' : 'Vago' }}</span>
@@ -75,8 +75,96 @@
                         <span>{{ Utils.dataPadraoBrasileiro(reservaDoResumo.dataPrevistaSaida) }}</span><br>
                     </div>
                 </div>
+                <div *ngIf="reservaDoResumo != undefined" class="card">
+                    <div style="display: flex; justify-content: space-between">
+                        <dx-button (onClick)="this.checkInVisible = true"
+                                   icon="fa fa-check"
+                                   text="Check-In">
+                        </dx-button>
+                        <dx-button icon="fa fa-check-double"
+                                   text="Check-Out">
+                        </dx-button>
+                    </div>
+                    <div style="display: flex; justify-content: center; margin-top: 10px">
+                        <dx-button (onClick)="this.cancelaVisible = true"
+                                   icon="fa fa-cancel"
+                                   text="Cancelar">
+                        </dx-button>
+                    </div>
+                </div>
             </div>
-
         </dx-form>
+
+        <dx-popup [(visible)]="checkInVisible"
+                  [dragEnabled]="true"
+                  [resizeEnabled]="false"
+                  [showTitle]="true"
+                  contentTemplate="popup-checkIn"
+                  height="75vh"
+                  position="center"
+                  title="Confirmação do Check-In"
+                  width="30vw">
+            <div *dxTemplate="let data of 'popup-checkIn'">
+                <span class="margin-y">Hospedes</span>
+                <dx-text-box *ngFor="let h of reservaDoResumo.hospedes"
+                             [readOnly]="true"
+                             [text]="h.nome + ' - ' + Utils.formatarCPF(h.cpf)">
+                </dx-text-box>
+                <span class="margin-y">Quarto</span>
+                <dx-text-box [readOnly]="true"
+                             [text]="reservaDoResumo.quarto.nome">
+                </dx-text-box>
+                <span class="margin-y">Data da Entrada</span>
+                <dx-date-box [readOnly]="true"
+                             [value]="reservaDoResumo.dataEntrada"
+                             displayFormat="dd/MM/yyyy">
+                </dx-date-box>
+                <span class="margin-y">Data Prevista da Saída</span>
+                <dx-date-box [readOnly]="true"
+                             [value]="reservaDoResumo.dataEntrada"
+                             displayFormat="dd/MM/yyyy">
+                </dx-date-box>
+
+                <div class="margin-y" style="display: flex; justify-content: flex-end">
+                    <dx-button icon="fa fa-check"
+                               style="margin-right: 15px"
+                               text="Confirmar">
+                    </dx-button>
+                    <dx-button (onClick)="this.checkInVisible = false"
+                               icon="fa fa-cancel"
+                               text="Cancelar">
+                    </dx-button>
+                </div>
+            </div>
+        </dx-popup>
+
+        <dx-popup [(visible)]="cancelaVisible"
+                  [dragEnabled]="true"
+                  [resizeEnabled]="false"
+                  [showTitle]="true"
+                  contentTemplate="popup-cancelar"
+                  height="45vh"
+                  position="center"
+                  title="Cancelamento de Reserva"
+                  width="30vw">
+            <div *dxTemplate="let data of 'popup-cancelar'">
+                <span style="font-size: 18px">Após confirmar a ação não poderá ser desfeita, realmente deseja cancelar?</span>
+                <br>
+                <span>Motivo</span>
+                <dx-text-area height="15vh">
+                </dx-text-area>
+                <div class="margin-y" style="display: flex; justify-content: flex-end">
+                    <dx-button icon="fa fa-check"
+                               style="margin-right: 15px"
+                               text="Confirmar">
+                    </dx-button>
+                    <dx-button (onClick)="this.cancelaVisible = false"
+                               icon="fa fa-cancel"
+                               text="Cancelar">
+                    </dx-button>
+                </div>
+            </div>
+        </dx-popup>
+
     </div>
 </div>
