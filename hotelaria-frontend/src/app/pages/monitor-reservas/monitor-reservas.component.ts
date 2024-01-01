@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ReservaService} from "../../shared/services/reserva.service";
 import {ReservaModel} from "../../shared/models/reserva.model";
 import notify from "devextreme/ui/notify";
@@ -25,11 +25,12 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     semanaGerada: number = 0;
     reservaDoResumo: ReservaModel;
     isLoading: boolean = false;
+    checkInVisible: boolean = false;
+    cancelaVisible: boolean = false;
     protected readonly Utils = Utils;
 
     constructor(private reservaService: ReservaService,
-                private quartoService: QuartoService,
-                private zone: NgZone) {
+                private quartoService: QuartoService) {
     }
 
     ngOnInit() {
@@ -96,25 +97,6 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
             }))
         });
     }
-
-    /*formataHospedeReserva(data) {
-        return (data.data.reservas.filter(r=>{
-            const [anoE, mesE, diaE] = r.dataEntrada.split("-");
-            const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
-            const [diaC, mesC, anoC] = data.column.caption.split('-')[0].split("/");
-
-            const dataEntradaObj: Date = new Date(Number(anoE), Number(mesE) - 1, Number(diaE));
-            const dataSaidaObj: Date = new Date(Number(anoS), Number(mesS) - 1, Number(diaS));
-            const dataCaptionObj: Date = new Date(Number(anoC), Number(mesC) - 1, Number(diaC));
-
-            if (((dataCaptionObj.getTime() >= dataEntradaObj.getTime() && dataCaptionObj.getTime() <= dataSaidaObj.getTime()) &&
-                (data.data.id == r.quarto.id))) {
-                return r;
-            }
-        }).map(r => r.hospedes[0].nome))
-    }*/
-    checkInVisible: boolean = false;
-    cancelaVisible: boolean = false;
 
     formataHospedeReserva(data) {
         this.isLoading = true;
