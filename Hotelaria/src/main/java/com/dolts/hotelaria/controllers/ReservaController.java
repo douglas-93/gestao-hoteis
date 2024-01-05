@@ -24,6 +24,34 @@ public class ReservaController {
         return ResponseEntity.ok(savedEntity);
     }
 
+    @PostMapping("/v")
+    public ResponseEntity<List<ReservaModel>> findReservasFeitas(@RequestBody ReservaModel entity) {
+        List<ReservaModel> reservasFeitas = reservaService.verificaDisponibilidade(entity);
+
+        if (!reservasFeitas.isEmpty()) {
+            return ResponseEntity.ok(reservasFeitas);
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/checkIn")
+    public ResponseEntity<ReservaModel> checkIn(@RequestBody ReservaModel entity) {
+        ReservaModel savedEntity = reservaService.getById(entity.getId());
+        savedEntity.setCheckedIn(true);
+        savedEntity = reservaService.save(savedEntity);
+        return ResponseEntity.ok(savedEntity);
+    }
+
+    @PostMapping("/cancelar")
+    public ResponseEntity<ReservaModel> cancelar(@RequestBody ReservaModel entity) {
+        ReservaModel savedEntity = reservaService.getById(entity.getId());
+        savedEntity.setCancelada(true);
+        savedEntity.setMotivoCancelamento(entity.getMotivoCancelamento());
+        savedEntity = reservaService.save(savedEntity);
+        return ResponseEntity.ok(savedEntity);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ReservaModel> update(@PathVariable Long id, @RequestBody ReservaModel entity) {
         ReservaModel updatedEntity = reservaService.update(entity);
@@ -44,17 +72,6 @@ public class ReservaController {
     public ResponseEntity<List<ReservaModel>> findAll() {
         List<ReservaModel> entities = reservaService.findAll();
         return ResponseEntity.ok(entities);
-    }
-
-    @PostMapping("/v")
-    public ResponseEntity<List<ReservaModel>> findReservasFeitas(@RequestBody ReservaModel entity) {
-        List<ReservaModel> reservasFeitas = reservaService.verificaDisponibilidade(entity);
-
-        if (!reservasFeitas.isEmpty()) {
-            return ResponseEntity.ok(reservasFeitas);
-        }
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")

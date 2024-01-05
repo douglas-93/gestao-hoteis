@@ -12,7 +12,15 @@ export class ReservaService extends BaseCRUDService<ReservaModel> {
         super('/reservas', http);
     }
 
+    checkIn(reserva: ReservaModel) {
+        return this.http.post<ReservaModel>(`${this.url}/checkIn`, reserva, {observe: 'response'});
+    }
+
+    cancelar(reserva: ReservaModel) {
+        return this.http.post<ReservaModel>(`${this.url}/cancelar`, reserva, {observe: 'response'});
+    }
+
     verificaDisponibilidade(reserva: ReservaModel) {
-        return this.http.post(`${this.url}/v`, reserva, {observe: 'response'});
+        return this.http.post<ReservaModel[]>(`${this.url}/v`, reserva, {observe: 'response'});
     }
 }

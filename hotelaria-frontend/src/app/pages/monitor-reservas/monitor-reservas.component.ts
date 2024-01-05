@@ -6,7 +6,7 @@ import {Utils} from "../../shared/Utils";
 import {QuartoModel} from "../../shared/models/quarto.model";
 import {QuartoService} from "../../shared/services/quarto.service";
 import {forkJoin} from "rxjs";
-import {DxDataGridComponent} from "devextreme-angular";
+import {DxDataGridComponent, DxTextAreaComponent} from "devextreme-angular";
 import _ from "lodash";
 
 
@@ -37,23 +37,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
         this.isLoading = true;
         // this.reservaDoResumo = new ReservaModel();
 
-        let calls = forkJoin([this.reservaService.findAll(), this.quartoService.findAll()]);
-
-        calls.subscribe(([respReserva, respQuarto]) => {
-                if (respQuarto.ok && respReserva) {
-                    this.quartos = respQuarto.body!;
-                    this.reservas = respReserva.body!;
-                    this.filtraQuarto();
-                }
-            },
-            ([errQuarto, errReserva]) => {
-                if (errQuarto) {
-                    notify('Não foi possível carregar os quartos', 'error', 3600);
-                }
-                if (errReserva) {
-                    notify('Não foi possível carregar as reservas', 'error', 3600);
-                }
-            });
+        this.carregaDados();
 
         this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
         // this.colocaReservaNoGrid();
@@ -168,5 +152,60 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
         if (quadrinhoDiv) {
             quadrinhoDiv.classList.add('selecionado');
         }
+    }
+
+    checkIn() {
+        this.reservaService.checkIn(this.reservaDoResumo).subscribe(
+            (resp) => {
+                if (resp.ok) {
+                    this.reservaDoResumo = resp.body!
+                    notify('Check-In realizado com sucesso!', 'success', 3600);
+                    this.checkInVisible = false;
+                    this.carregaDados();
+                }
+            },
+            (erro) => {
+                notify('Falha ao realizar Check-In: ' + erro.message, 'error', 3600);
+            })
+    }
+
+    cancelar() {
+        if (_.isNil(this.reservaDoResumo.motivoCancelamento) || _.isEmpty(this.reservaDoResumo.motivoCancelamento)) {
+            notify('Motivo do cancelamento é obrigatório', 'error', 3600);
+            return;
+        }
+
+        this.reservaService.cancelar(this.reservaDoResumo).subscribe(
+            (resp) => {
+                if (resp.ok) {
+                    this.reservaDoResumo = resp.body!
+                    notify('Reserva cancelada com sucesso!', 'success', 3600);
+                    this.cancelaVisible = false;
+                    this.carregaDados();
+                }
+            },
+            (erro) => {
+                notify('Falha ao realizar cancelamento: ' + erro.message, 'error', 3600);
+            })
+    }
+
+    carregaDados() {
+        let calls = forkJoin([this.reservaService.findAll(), this.quartoService.findAll()]);
+
+        calls.subscribe(([respReserva, respQuarto]) => {
+                if (respQuarto.ok && respReserva) {
+                    this.quartos = respQuarto.body!;
+                    this.reservas = respReserva.body!;
+                    this.filtraQuarto();
+                }
+            },
+            ([errQuarto, errReserva]) => {
+                if (errQuarto) {
+                    notify('Não foi possível carregar os quartos', 'error', 3600);
+                }
+                if (errReserva) {
+                    notify('Não foi possível carregar as reservas', 'error', 3600);
+                }
+            });
     }
 }
