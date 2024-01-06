@@ -43,7 +43,7 @@ public class ReservaModel implements Serializable {
     @OneToOne
     private QuartoModel quarto;
 
-    @OneToOne
+    @ManyToOne
     private EmpresaModel empresa;
 
     @ManyToMany(fetch = FetchType.LAZY)

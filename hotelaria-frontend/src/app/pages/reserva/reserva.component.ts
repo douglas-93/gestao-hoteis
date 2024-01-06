@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {forkJoin} from "rxjs";
@@ -39,12 +39,12 @@ export class ReservaComponent implements OnInit, AfterViewInit {
     quartoSelecinado: QuartoModel | null;
     reservaSelecionada: ReservaModel;
     hoje: Date = new Date();
-    protected readonly Utils = Utils;
     hospedes: HospedeModel[] = [];
     quartos: QuartoModel[] = [];
     empresas: EmpresaModel[] = [];
     reservas: ReservaModel[] = [];
     reservasJaRealizadas: ReservaModel[] = [];
+    protected readonly Utils = Utils;
 
     constructor(private router: Router,
                 private quartoService: QuartoService,
@@ -83,7 +83,7 @@ export class ReservaComponent implements OnInit, AfterViewInit {
                 this.reserva.dataPrevistaSaida = this.parseDataStringParaDate(this.reserva.dataPrevistaSaida.toString());
                 if (this.reserva.isEmpresa) {
                     const defineEmpresa = setTimeout(() => {
-                        const empresa = this.empresas.find(e => e.id === this.reserva.empresa.id);
+                        const empresa = this.empresas.find(e => e.id === this.reserva.empresa?.id);
                         if (empresa) {
                             this.empresaSelect.instance.option('value', empresa);
                             this.empresaSelect?.instance.repaint();
@@ -304,5 +304,11 @@ export class ReservaComponent implements OnInit, AfterViewInit {
 
         /*notify('Não foi possível encontrar a reserva, verifique ou entre em contato com seu suporte técnico.'
             , 'error', 3600);*/
+    }
+
+    limpaEmpresa() {
+        if (!this.reserva.isEmpresa) {
+            this.reserva.empresa = undefined;
+        }
     }
 }

@@ -22,6 +22,6 @@ export class ReservaModel {
     quarto: QuartoModel;
     hospedes: HospedeModel[] = [];
     quartos: QuartoModel[] = [];
-    empresa: EmpresaModel;
+    empresa: EmpresaModel | undefined;
     selecionado: boolean;
 }

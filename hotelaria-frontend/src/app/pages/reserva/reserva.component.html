@@ -120,15 +120,15 @@
                             <!--            TEMPLATE        -->
 
                             <div *dxTemplate="let data of 'cpfTemplate'">
-                                {{ Utils.formatarCPF(data.data.cpf) }}
+                                {{ Utils.formatarCPF(data.value) }}
                             </div>
 
                             <div *dxTemplate="let data of 'telefoneTemplate'">
-                                {{ Utils.formatarTelefone(data.data.telefone) }}
+                                {{ Utils.formatarTelefone(data.value) }}
                             </div>
 
                             <div *dxTemplate="let data of 'celularTemplate'">
-                                {{ Utils.formatarCelular(data.data.celular) }}
+                                {{ Utils.formatarCelular(data.value) }}
                             </div>
                         </dx-data-grid>
                     </div>
@@ -249,7 +249,8 @@
                             </span>
                             <br>
                             <div style="display: flex; align-items: flex-start; margin-top: 10px;">
-                                <dx-switch [(value)]="reserva.isEmpresa">
+                                <dx-switch (onValueChanged)="limpaEmpresa()"
+                                           [(value)]="reserva.isEmpresa">
                                 </dx-switch>
                                 <span style="margin-left: 10px">
                                     {{ reserva.isEmpresa ? 'Sim' : 'Não' }}
@@ -297,7 +298,7 @@
                     <!--                TEMPLATES           -->
                     <div *dxTemplate="let data of 'resumoEmpresaTemplate'">
                         <dx-text-box [readOnly]="true"
-                                     [value]="reserva.empresa.razaoSocial"
+                                     [value]="reserva.empresa?.razaoSocial || ''"
                                      class="mb">
                         </dx-text-box>
                     </div>
@@ -372,8 +373,8 @@
                         <!--                        TEMPLATE                    -->
 
                         <div *dxTemplate="let data of 'quartosTemplate'">
-                                <span *ngFor="let q of data.data.quartos">
-                                    {{ q.nome }}
+                                <span>
+                                    {{ data.data.quarto.nome }}
                                 </span>
                         </div>
 
