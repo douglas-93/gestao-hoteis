@@ -2,17 +2,17 @@ package com.dolts.hotelaria.controllers;
 
 import com.dolts.hotelaria.models.ReservaModel;
 import com.dolts.hotelaria.services.ReservaService;
-import com.dolts.hotelaria.utils.controller.AbstractCRUDController;
-import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
 @RequestMapping("/reservas")
-@CrossOrigin(origins = "*",maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ReservaController {
 
     @Autowired
@@ -52,6 +52,24 @@ public class ReservaController {
         return ResponseEntity.ok(savedEntity);
     }
 
+    @GetMapping("/reserva-ativa-periodo")
+    public ResponseEntity<List<ReservaModel>> buscarReservasPorPeriodo(
+            @RequestParam("dataEntrada1") String dataEntrada1,
+            @RequestParam("dataEntrada2") String dataEntrada2,
+            @RequestParam("dataPrevistaSaida1") String dataPrevistaSaida1,
+            @RequestParam("dataPrevistaSaida2") String dataPrevistaSaida2
+    ) {
+        LocalDate entrada1 = LocalDate.parse(dataEntrada1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate entrada2 = LocalDate.parse(dataEntrada2, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate saida1 = LocalDate.parse(dataPrevistaSaida1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate saida2 = LocalDate.parse(dataPrevistaSaida2, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        List<ReservaModel> reservas = reservaService.buscarReservasPorPeriodo(
+                entrada1, entrada2, saida1, saida2);
+
+        return ResponseEntity.ok(reservas);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ReservaModel> update(@PathVariable Long id, @RequestBody ReservaModel entity) {
         ReservaModel updatedEntity = reservaService.update(entity);
@@ -82,5 +100,5 @@ public class ReservaController {
         }
         return ResponseEntity.ok(entity);
     }
-
 }
+

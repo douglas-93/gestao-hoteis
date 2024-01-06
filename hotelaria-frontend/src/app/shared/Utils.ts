@@ -100,6 +100,15 @@ export class Utils {
         return `${dia}/${mes}/${ano}#${diaDaSemana}`;
     }
 
+    static formatarDataParaStringSemDiaSemana(data: Date): string {
+
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam do zero, por isso somamos 1
+        const ano = data.getFullYear();
+
+        return `${dia}-${mes}-${ano}`;
+    }
+
     static gerarDateAPartirDaString(string: string) {
         const parts: string[] = _.compact(string.split(" "));
 

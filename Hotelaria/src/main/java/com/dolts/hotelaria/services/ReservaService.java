@@ -8,7 +8,6 @@ import com.dolts.hotelaria.repositories.ReservaRepository;
 import com.dolts.hotelaria.utils.repository.AbstractCRUDRepository;
 import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -58,7 +57,7 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         }
 
         if (!entity.getQuartos().isEmpty()) {
-            entity.getQuartos().forEach( q -> {
+            entity.getQuartos().forEach(q -> {
                 if (!Objects.equals(q, entity.getQuarto())) {
                     ReservaModel reserv = new ReservaModel();
                     reserv.atualizarReserva(entity);
@@ -69,7 +68,7 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
         }
 
         if (!this.reservas.isEmpty()) {
-            this.reservas.forEach( r -> {
+            this.reservas.forEach(r -> {
                 r = reservaRepository.save(r);
             });
         }
@@ -143,5 +142,13 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
     protected void beforeUpdate(ReservaModel entity) {
         super.beforeUpdate(entity);
         entity.setDataAlteracaoReserva(LocalDateTime.now());
+    }
+
+    public List<ReservaModel> buscarReservasPorPeriodo(LocalDate dataEntrada1, LocalDate dataEntrada2, LocalDate dataPrevistaSaida1, LocalDate dataPrevistaSaida2) {
+        return reservaRepository.findReservasBetweenDatesAndNotCanceled(
+                dataEntrada1,
+                dataEntrada2,
+                dataPrevistaSaida1,
+                dataPrevistaSaida2);
     }
 }

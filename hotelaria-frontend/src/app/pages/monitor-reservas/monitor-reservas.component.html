@@ -2,7 +2,7 @@
 <div class="content-block">
     <div class="dx-card responsive-paddings">
 
-        <dx-load-panel [(visible)]="isLoading">
+        <dx-load-panel [visible]="isLoading">
         </dx-load-panel>
 
         <dx-button (onClick)="periodoAnterior()"
@@ -44,15 +44,26 @@
 
                     <div (click)="resumoReserva(data, $event)"
                          *dxTemplate="let data of 'hospedeReservaTemplate'"
-                         [class.ocupado]="formataHospedeReserva(data).length > 0"
-                         [class.vazio]="formataHospedeReserva(data).length === 0"
+                         [class.ocupado]="retornaTexto(formataHospedeReserva(data)) == 'Ocupado'"
+                         [class.vazio]="retornaTexto(formataHospedeReserva(data)) == 'Vago'"
+                         [class.reservado]="retornaTexto(formataHospedeReserva(data)) == 'Reservado'"
                          class="quadrinho">
                         <span style="font-weight: bolder">{{ data.data.nome }}</span>
                         <br>
-                        <span>{{ formataHospedeReserva(data).length != 0 ? 'Ocupado' : 'Vago' }}</span>
+                        <span>{{ retornaTexto(formataHospedeReserva(data)) }}</span>
                         <br>
                         <span style="font-weight: bolder">{{ data.data.tipoQuarto.nome }}</span>
                         <br>
+                        <span *ngIf="formataHospedeReserva(data).at(0)?.checkedIn" style="color: #08cb0b">
+                            <i class="fa fa-door-closed"></i>
+                        </span>
+                        <span *ngIf="retornaTexto(formataHospedeReserva(data)) == 'Reservado'" style="color: #cb9e08">
+                            <i class="fa fa-check"></i>
+                        </span>
+                        <span *ngIf="retornaTexto(formataHospedeReserva(data)) == 'Vago'">
+                            <i class="fa fa-door-open"></i>
+                        </span>
+
                     </div>
                 </dx-data-grid>
             </div>
@@ -79,28 +90,20 @@
                 <div *ngIf="reservaDoResumo != undefined" class="card">
                     <div style="display: flex; justify-content: space-between">
                         <dx-button (onClick)="this.checkInVisible = true"
-                                   [disabled]="reservaDoResumo.checkedIn || reservaDoResumo.cancelada"
+                                   [disabled]="reservaDoResumo.checkedIn"
                                    icon="fa fa-check"
                                    text="Check-In">
                         </dx-button>
                         <dx-button icon="fa fa-check-double"
-                                   [disabled]="reservaDoResumo.checkedIn || reservaDoResumo.cancelada"
                                    text="Check-Out">
                         </dx-button>
                     </div>
                     <div style="display: flex; justify-content: center; margin-top: 10px">
                         <dx-button (onClick)="this.cancelaVisible = true"
-                                   [disabled]="reservaDoResumo.checkedIn || reservaDoResumo.cancelada"
                                    icon="fa fa-cancel"
                                    text="Cancelar">
                         </dx-button>
                     </div>
-                </div>
-                <div *ngIf="reservaDoResumo.cancelada || false"
-                     class="mt">
-                    <dx-text-area [readOnly]="true"
-                                  [value]="reservaDoResumo.motivoCancelamento">
-                    </dx-text-area>
                 </div>
             </div>
         </dx-form>
@@ -118,10 +121,6 @@
                 <div *ngIf="reservaDoResumo.checkedIn"
                      class="alert alert-success">
                     <span>Check-In já realizado</span>
-                </div>
-                <div *ngIf="reservaDoResumo.cancelada"
-                     class="alert alert-info">
-                    <span>Reserva Cancelada</span>
                 </div>
                 <span class="margin-y">Hospedes</span>
                 <dx-text-box *ngFor="let h of reservaDoResumo.hospedes"
@@ -172,21 +171,15 @@
                      class="alert alert-info">
                     <span>Check-In já realizado</span>
                 </div>
-                <div *ngIf="reservaDoResumo.cancelada"
-                     class="alert alert-info">
-                    <span>Reserva Cancelada</span>
-                </div>
                 <span
                     style="font-size: 18px">Após confirmar a ação não poderá ser desfeita, realmente deseja cancelar?</span>
                 <br>
                 <span>Motivo</span>
                 <dx-text-area [(value)]="reservaDoResumo.motivoCancelamento"
-                              [readOnly]="reservaDoResumo.cancelada || reservaDoResumo.checkedIn"
                               height="15vh">
                 </dx-text-area>
                 <div class="margin-y" style="display: flex; justify-content: flex-end">
                     <dx-button (onClick)="cancelar()"
-                               [disabled]="reservaDoResumo.cancelada || reservaDoResumo.checkedIn"
                                icon="fa fa-check"
                                style="margin-right: 15px"
                                text="Confirmar">

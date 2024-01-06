@@ -6,7 +6,7 @@ import {Utils} from "../../shared/Utils";
 import {QuartoModel} from "../../shared/models/quarto.model";
 import {QuartoService} from "../../shared/services/quarto.service";
 import {forkJoin} from "rxjs";
-import {DxDataGridComponent, DxTextAreaComponent} from "devextreme-angular";
+import {DxDataGridComponent} from "devextreme-angular";
 import _ from "lodash";
 
 
@@ -31,16 +31,11 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
 
     constructor(private reservaService: ReservaService,
                 private quartoService: QuartoService) {
+        this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
     }
 
     ngOnInit() {
-        this.isLoading = true;
-        // this.reservaDoResumo = new ReservaModel();
-
         this.carregaDados();
-
-        this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
-        // this.colocaReservaNoGrid();
     }
 
     ngAfterViewInit() {
@@ -50,23 +45,19 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     periodoAnterior() {
         this.semanaGerada = this.semanaGerada - 1;
         this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
-        this.colocaReservaNoGrid();
+        this.carregaDados();
     }
 
     semanaAtual() {
         this.semanaGerada = 0;
         this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
-        this.colocaReservaNoGrid();
+        this.carregaDados();
     }
 
     proximoPeriodo() {
         this.semanaGerada = this.semanaGerada + 1;
         this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
-        this.colocaReservaNoGrid();
-    }
-
-    colocaReservaNoGrid() {
-
+        this.carregaDados();
     }
 
     filtraQuarto() {
@@ -80,6 +71,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
                 return null;
             }))
         });
+        this.isLoading = false;
     }
 
     formataHospedeReserva(data) {
@@ -103,28 +95,17 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
         return reserv;
     }
 
-    logar(data) {
-        console.log(data)
-        return ''
-    }
-
     formataCabecalho(dataAsString) {
         const [data, diaSemana] = Utils.formatarDataParaString(new Date(dataAsString)).split('#')
         return [data, diaSemana];
     }
 
     resumoReserva(data: any, event: any) {
-        /*console.log(data.data)
-        console.log(data.row.key)
-        console.log(Utils.gerarDateAPartirDaString(data.column.caption))
-        console.log(data.data.reservas)*/
-
         this.isLoading = true;
 
         this.selecionarQuadrinho(event);
 
-
-        this.reservaDoResumo = data.data.reservas.filter(r => {
+        this.reservaDoResumo = data.data.reservas.find(r => {
             const [anoE, mesE, diaE] = r.dataEntrada.split("-");
             const [anoS, mesS, diaS] = r.dataPrevistaSaida.split("-");
 
@@ -134,10 +115,10 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
 
             if (((dataCaptionObj.getTime() >= dataEntradaObj.getTime() && dataCaptionObj.getTime() <= dataSaidaObj.getTime()) &&
                 (data.data.nome == r.quarto.nome))) {
+                this.isLoading = false;
                 return r;
             }
-        })[0]
-        this.isLoading = false;
+        });
     }
 
     selecionarQuadrinho(event: any) {
@@ -190,7 +171,15 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }
 
     carregaDados() {
-        let calls = forkJoin([this.reservaService.findAll(), this.quartoService.findAll()]);
+        this.isLoading = true;
+        let calls = forkJoin([
+            this.reservaService.buscarReservasPorPeriodo(
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6]),
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6])),
+            this.quartoService.findAll()
+        ]);
 
         calls.subscribe(([respReserva, respQuarto]) => {
                 if (respQuarto.ok && respReserva) {
@@ -207,5 +196,32 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
                     notify('Não foi possível carregar as reservas', 'error', 3600);
                 }
             });
+    }
+
+    /*atualizaReservasPorData() {
+        this.isLoading = true;
+        this.reservaService.buscarReservasPorPeriodo(
+            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
+            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6]),
+            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
+            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6])).subscribe(
+            (resp) => {
+                if (resp.ok) {
+                    this.reservas = resp.body!
+                    this.filtraQuarto();
+                }
+                this.isLoading = false;
+            },
+            (err) => {
+                notify('Algo deu errado ao buscar as reservas', 'error', 3600);
+                console.error(err);
+                this.isLoading = false;
+            });
+    }*/
+    retornaTexto(r: any) {
+        if(r.length > 0) {
+            return r.at(0)?.checkedIn ? 'Ocupado' : 'Reservado';
+        }
+        return  'Vago';
     }
 }
