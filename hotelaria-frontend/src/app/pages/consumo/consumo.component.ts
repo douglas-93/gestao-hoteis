@@ -3,6 +3,9 @@ import {ModeEnum} from "../../shared/enums/mode.enum";
 import {ReservaModel} from "../../shared/models/reserva.model";
 import {ReservaService} from "../../shared/services/reserva.service";
 import {Utils} from "../../shared/Utils";
+import notify from "devextreme/ui/notify";
+import {Router} from "@angular/router";
+import {QuartoModel} from "../../shared/models/quarto.model";
 
 @Component({
     selector: 'app-consumo',
@@ -15,29 +18,65 @@ export class ConsumoComponent implements OnInit {
     reservasComCheckIn: ReservaModel[] = [];
     datasDaSemana: Date[] = [];
     isLoading: boolean = false;
+    reservaSelecionada: ReservaModel;
     protected readonly Utils = Utils;
 
-    constructor(private reservaService: ReservaService) {
+    constructor(private reservaService: ReservaService,
+                private router: Router) {
     }
 
     ngOnInit(): void {
-        this.isLoading = true;
-        this.datasDaSemana = Utils.gerarDatasSemana(0);
-        this.reservaService.buscaReservasSemCheckOut().subscribe(
-            (resp) => {
-                this.reservasComCheckIn = resp.body!
-                this.isLoading = false;
+        this.reservaSelecionada = new ReservaModel();
+        this.reservaSelecionada.quarto = new QuartoModel();
+
+        let edit: boolean = this.router.url.includes('edit');
+        let cad: boolean = this.router.url.includes('cad');
+        this.mode = (edit || cad) ? ModeEnum.EDIT : ModeEnum.LIST;
+
+        if (edit || cad) {
+            this.findReserva(this.router.url.split('/').pop()!)
+        } else {
+            this.isLoading = true;
+            this.reservaService.buscaReservasSemCheckOut().subscribe({
+                next: (resp) => {
+                    this.reservasComCheckIn = resp.body!
+                },
+                error: (err) => {
+                    notify('Falha ao buscar reservas', 'error', 3600);
+                    console.error(err);
+                },
+                complete: () => {
+                    this.isLoading = false;
+                }
+            })
+        }
+    }
+
+    novoConsumo() {
+        this.router.navigate(['consumo', 'cad', this.reservaSelecionada.id]);
+    }
+
+    selecionaReserva(event: any) {
+        event.component.byKey(event.currentSelectedRowKeys[0]).done(reserva => {
+            if (reserva) {
+                this.reservaSelecionada = reserva;
             }
-        )
-        /*this.reservaService.buscarReservasPorPeriodoComCheckIn(
-            Utils.formatarDataParaStringSemDiaSemana(this.datasDaSemana[0]),
-            Utils.formatarDataParaStringSemDiaSemana(this.datasDaSemana[6]),
-            Utils.formatarDataParaStringSemDiaSemana(this.datasDaSemana[0]),
-            Utils.formatarDataParaStringSemDiaSemana(this.datasDaSemana[6]),
-        ).subscribe(
-            (resp) => {
-                this.reservasComCheckIn = resp.body!;
+        });
+    }
+
+    findReserva(id: string) {
+        let idAsNumber = Number(id);
+
+        this.reservaService.findById(idAsNumber).subscribe({
+            next: (resp) => {
+                if (resp.ok) {
+                    this.reservaSelecionada = resp.body!;
+                }
+            },
+            error: (err) => {
+            },
+            complete: () => {
             }
-        )*/
+        })
     }
 }

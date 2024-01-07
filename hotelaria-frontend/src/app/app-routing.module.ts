@@ -43,31 +43,32 @@ import {CheckInComponent} from './pages/check-in/check-in.component';
 import {CheckOutComponent} from './pages/check-out/check-out.component';
 import {ConsumoComponent} from './pages/consumo/consumo.component';
 import {MonitorReservasComponent} from './pages/monitor-reservas/monitor-reservas.component';
+import { ProdutoComponent } from './pages/produto/produto.component';
 
 const routes: Routes = [
+  {
+    path: 'pages/produto',
+    component: ProdutoComponent,
+    canActivate: [ AuthGuardService ]
+  },
     {
-        path: 'pages/monitor-reservas',
+        path: 'monitor-reservas',
         component: MonitorReservasComponent,
         canActivate: [AuthGuardService]
     },
     {
-        path: 'pages/consumo',
+        path: 'configuracoes',
+        component: ConfiguracoesComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'consumo',
         component: ConsumoComponent,
         canActivate: [AuthGuardService]
     },
     {
-        path: 'pages/check-out',
-        component: CheckOutComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'pages/check-in',
-        component: CheckInComponent,
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'pages/configuracoes',
-        component: ConfiguracoesComponent,
+        path: 'consumo/cad/:id',
+        component: ConsumoComponent,
         canActivate: [AuthGuardService]
     },
     {
@@ -211,7 +212,8 @@ const routes: Routes = [
         CheckInComponent,
         CheckOutComponent,
         ConsumoComponent,
-        MonitorReservasComponent
+        MonitorReservasComponent,
+        ProdutoComponent
     ]
 })
 export class AppRoutingModule {

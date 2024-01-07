@@ -14,28 +14,35 @@
         </dx-load-panel>
 
         <ng-container *ngIf="!isLoading">
-            <dx-data-grid [dataSource]="reservasComCheckIn"
+            <dx-data-grid (onRowDblClick)="novoConsumo()"
+                          (onSelectionChanged)="selecionaReserva($event)"
+                          [dataSource]="reservasComCheckIn"
                           [rowAlternationEnabled]="true">
 
                 <dxo-selection mode="single"></dxo-selection>
 
-                <dxi-column caption="Reserva"
+                <dxi-column alignment="center"
+                            caption="Reserva"
                             dataField="id">
                 </dxi-column>
-                <dxi-column caption="Quarto"
+                <dxi-column alignment="center"
+                            caption="Quarto"
                             dataField="quarto.nome">
                 </dxi-column>
-                <dxi-column caption="Data de Entrada"
+                <dxi-column alignment="center"
+                            caption="Data de Entrada"
                             dataField="dataEntrada"
                             dataType="date"
                             format="dd/MM/yyyy">
                 </dxi-column>
-                <dxi-column caption="Data Prevista para Saída"
+                <dxi-column alignment="center"
+                            caption="Data Prevista para Saída"
                             dataField="dataPrevistaSaida"
                             dataType="date"
                             format="dd/MM/yyyy">
                 </dxi-column>
-                <dxi-column caption="Empresa"
+                <dxi-column alignment="center"
+                            caption="Empresa"
                             dataField="empresa.razaoSocial">
                 </dxi-column>
 
@@ -45,22 +52,28 @@
                     <dx-data-grid [dataSource]="data.data.hospedes"
                                   [rowAlternationEnabled]="true">
 
-                        <dxi-column dataField="nome">
+                        <dxi-column alignment="center"
+                                    dataField="nome">
                         </dxi-column>
-                        <dxi-column caption="CPF"
+                        <dxi-column alignment="center"
+                                    caption="CPF"
                                     cellTemplate="cpfTemplate"
                                     dataField="cpf">
                         </dxi-column>
-                        <dxi-column cellTemplate="telefoneTemplate"
+                        <dxi-column alignment="center"
+                                    cellTemplate="telefoneTemplate"
                                     dataField="telefone">
                         </dxi-column>
-                        <dxi-column cellTemplate="celularTemplate"
+                        <dxi-column alignment="center"
+                                    cellTemplate="celularTemplate"
                                     dataField="celular">
                         </dxi-column>
-                        <dxi-column caption="E-mail"
+                        <dxi-column alignment="center"
+                                    caption="E-mail"
                                     dataField="email">
                         </dxi-column>
-                        <dxi-column dataField="ativo">
+                        <dxi-column alignment="center"
+                                    dataField="ativo">
                         </dxi-column>
 
                         <!--            TEMPLATE        -->
@@ -81,11 +94,33 @@
             </dx-data-grid>
             <p>Somente são exibidas reservas que foram dadas Check-In e que não foram canceladas ou dado Check-Out.</p>
         </ng-container>
-
     </div>
 
     <div edit-template>
 
+        <dx-load-panel [visible]="isLoading">
+        </dx-load-panel>
+
+        <span>Consumo da Reserva: {{ reservaSelecionada.id }}</span>
+        <br>
+        <span *ngFor="let h of reservaSelecionada.hospedes">
+            <span>Hospede: {{ h.nome }}</span>
+        </span>
+        <br>
+        <span>Quarto: {{ reservaSelecionada.quarto.nome }}</span>
+
+        <div class="row">
+            <dx-autocomplete>
+            </dx-autocomplete>
+
+            <dx-button text="Adicionar">
+            </dx-button>
+            <dx-button text="Remover">
+            </dx-button>
+        </div>
+
+        <dx-data-grid>
+        </dx-data-grid>
     </div>
 </base-crud>
 
