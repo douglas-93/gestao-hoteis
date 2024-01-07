@@ -15,7 +15,6 @@ import {UnauthenticatedContentModule} from './unauthenticated-content';
 import {AppRoutingModule} from './app-routing.module';
 import {RouterModule} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
-import { EnderecoFormComponent } from './shared/components/endereco-form/endereco-form.component';
 import {DxButtonModule, DxDataGridModule, DxFormModule, DxTextBoxModule} from "devextreme-angular";
 
 @NgModule({

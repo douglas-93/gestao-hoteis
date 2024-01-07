@@ -19,7 +19,10 @@ export class ArquivoDigitalService extends BaseCRUDService<ArquivoDIgitalModel> 
         const headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
 
-        return this.http.post<HotelModel>(`${this.url}`, this.createForm(file), {headers: headers, observe: 'response'});
+        return this.http.post<HotelModel>(`${this.url}`, this.createForm(file), {
+            headers: headers
+          , observe: 'response'
+        });
     }
 
     createForm(file: File) {

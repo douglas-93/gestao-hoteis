@@ -1,8 +1,8 @@
 <base-crud #crud
+           (deleteFunction)="excluir()"
            (filterFunction)="buscar()"
            (novoCadastroFunction)="novo()"
            (saveFunction)="salvar()"
-           (deleteFunction)="excluir()"
            [editTitle]="'Cadastro de Quartos'"
            [listTitle]="'Listagem de Quartos'"
            [mode]="mode">
@@ -12,45 +12,46 @@
     </div>
 
     <div list-result>
-        <dx-data-grid [dataSource]="quartosCadastrados"
-                      (onRowDblClick)="editar()"
-                      (onSelectionChanged)="selecionaQuarto($event)">
+        <dx-data-grid (onRowDblClick)="editar()"
+                      (onSelectionChanged)="selecionaQuarto($event)"
+                      [dataSource]="quartosCadastrados"
+                      [rowAlternationEnabled]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 
-            <dxi-column dataField="nome"
-                        caption="Nome">
+            <dxi-column caption="Nome"
+                        dataField="nome">
             </dxi-column>
-            <dxi-column dataField="capacidadePessoas"
-                        caption="Capacidade de Pessoas">
+            <dxi-column caption="Capacidade de Pessoas"
+                        dataField="capacidadePessoas">
             </dxi-column>
-            <dxi-column dataField="valorDiaria"
-                        caption="Valor da Diaria"
-                        cellTemplate="valorDaDiariaTemplate">
+            <dxi-column caption="Valor da Diaria"
+                        cellTemplate="valorDaDiariaTemplate"
+                        dataField="valorDiaria">
             </dxi-column>
-            <dxi-column dataField="tipo"
-                        caption="Tipo"
-                        cellTemplate="tipoTemplate">
+            <dxi-column caption="Tipo"
+                        cellTemplate="tipoTemplate"
+                        dataField="tipo">
             </dxi-column>
-            <dxi-column dataField="categoria"
-                        caption="Categoria"
-                        cellTemplate="categoriaTemplate">
+            <dxi-column caption="Categoria"
+                        cellTemplate="categoriaTemplate"
+                        dataField="categoria">
             </dxi-column>
-            <dxi-column dataField="ativo"
-                        caption="Ativo?">
+            <dxi-column caption="Ativo?"
+                        dataField="ativo">
             </dxi-column>
 
             <!--            TEMPLATE        -->
             <div *dxTemplate="let data of 'tipoTemplate'">
-                {{data.data.tipoQuarto.nome}}
+                {{ data.data.tipoQuarto.nome }}
             </div>
 
             <div *dxTemplate="let data of 'categoriaTemplate'">
-                {{data.data.categoriaQuarto.nome}}
+                {{ data.data.categoriaQuarto.nome }}
             </div>
 
             <div *dxTemplate="let data of 'valorDaDiariaTemplate'">
-                {{Utils.formatarComoMoeda(data.data.valorDiaria)}}
+                {{ Utils.formatarComoMoeda(data.data.valorDiaria) }}
             </div>
         </dx-data-grid>
     </div>
@@ -64,9 +65,9 @@
 
                     <dxi-item [colCount]="2"
                               itemType="group">
-                        <dxi-item dataField="nome"
-                                  template="nomeTemplate"
-                                  [isRequired]='true'>
+                        <dxi-item [isRequired]='true'
+                                  dataField="nome"
+                                  template="nomeTemplate">
                         </dxi-item>
                         <dxi-item dataField="ativo"
                                   template="ativoTemplate">
@@ -74,24 +75,24 @@
                     </dxi-item>
                     <dxi-item [colCount]="2"
                               itemType="group">
-                        <dxi-item dataField="capacidadePessoas"
-                                  template="capacidadePessoasTemplate"
-                                  [isRequired]='true'>
+                        <dxi-item [isRequired]='true'
+                                  dataField="capacidadePessoas"
+                                  template="capacidadePessoasTemplate">
                         </dxi-item>
-                        <dxi-item dataField="valorDiara"
-                                  template="valorDiaraTemplate"
-                                  [isRequired]='true'>
+                        <dxi-item [isRequired]='true'
+                                  dataField="valorDiara"
+                                  template="valorDiaraTemplate">
                         </dxi-item>
                     </dxi-item>
                     <dxi-item [colCount]="2"
                               itemType="group">
-                        <dxi-item dataField="tipoQuarto"
-                                  template="tipoQuartoTemplate"
-                                  [isRequired]='true'>
+                        <dxi-item [isRequired]='true'
+                                  dataField="tipoQuarto"
+                                  template="tipoQuartoTemplate">
                         </dxi-item>
-                        <dxi-item dataField="categoriaQuarto"
-                                  template="categoriaQuartoTemplate"
-                                  [isRequired]='true'>
+                        <dxi-item [isRequired]='true'
+                                  dataField="categoriaQuarto"
+                                  template="categoriaQuartoTemplate">
                         </dxi-item>
                     </dxi-item>
 
@@ -198,13 +199,13 @@
                                           [uploadMode]="'useForm'"
                                           width="500px">
                         </dx-file-uploader>
-                        <dx-button text="Baixar Todas"
+                        <dx-button (onClick)="baixarTodas()"
                                    icon="fa fa-download"
-                                   (onClick)="baixarTodas()">
+                                   text="Baixar Todas">
                         </dx-button>
-                        <dx-button text="Limpar"
+                        <dx-button (onClick)="limparImagensRenderizadas()"
                                    icon="fa fa-trash"
-                                   (onClick)="limparImagensRenderizadas()">
+                                   text="Limpar">
                         </dx-button>
                     </div>
 
@@ -220,20 +221,20 @@
 
                 <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
                     <div *ngFor="let imagem of quartoImagens; let i = index">
-                        <div class="containerDaImagem" (click)="abrirImagemPopUp(i)">
+                        <div (click)="abrirImagemPopUp(i)" class="containerDaImagem">
                             <dx-button (onClick)="removerImagem(i)" class="iconeRemover" icon="fa fa-trash"></dx-button>
                             <img [src]="imagem?.imagem" alt="Imagem {{ i }}" class="imagem">
                         </div>
                         <ul>
-                            <li><strong>Nome:</strong> {{imagem?.nome}}</li>
-                            <li><strong>Tamanho:</strong> {{Utils.formatFileSize(imagem?.tamanho)}}</li>
-                            <li><strong>Tipo:</strong> {{imagem?.formato}}</li>
+                            <li><strong>Nome:</strong> {{ imagem?.nome }}</li>
+                            <li><strong>Tamanho:</strong> {{ Utils.formatFileSize(imagem?.tamanho) }}</li>
+                            <li><strong>Tipo:</strong> {{ imagem?.formato }}</li>
                             <dx-button (onClick)="downloadImagem(imagem)"
-                                       icon="download"
-                                       text="Download"
-                                       style="font-size: 8px"
-                                       type="default"
                                        height="22px"
+                                       icon="download"
+                                       style="font-size: 8px"
+                                       text="Download"
+                                       type="default"
                                        width="100%">
                             </dx-button>
                         </ul>
@@ -241,11 +242,11 @@
                 </div>
 
                 <dx-popup [(visible)]="popUpVisible"
-                          [showTitle]="true"
-                          [title]="'Imagem do Quarto'"
                           [dragEnabled]="false"
                           [hideOnOutsideClick]="true"
-                          [showCloseButton]="true">
+                          [showCloseButton]="true"
+                          [showTitle]="true"
+                          [title]="'Imagem do Quarto'">
                     <img [src]="imagemDoPopUp" style="max-width: 100%; max-height: 100%; display: block; margin: auto;">
                 </dx-popup>
 

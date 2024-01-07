@@ -1,7 +1,6 @@
-import {EnderecoModel} from "./endereco.model";
 import {ClienteModel} from "./cliente.model";
 
-export class HospedeModel extends ClienteModel{
+export class HospedeModel extends ClienteModel {
     nome: string;
     cpf: string;
     rg: string;

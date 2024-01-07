@@ -11,7 +11,8 @@
     <div list-result>
         <dx-data-grid (onRowDblClick)="editar()"
                       (onSelectionChanged)="selecionaReserva($event)"
-                      [dataSource]="reservas">
+                      [dataSource]="reservas"
+                      [rowAlternationEnabled]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 
@@ -95,7 +96,8 @@
                     <div *dxTemplate="let data of 'gridHospedeTemplate'">
                         <dx-data-grid #gridDeHospedesNaReserva
                                       (onSelectionChanged)="selecionaHospede($event)"
-                                      [dataSource]="reserva.hospedes">
+                                      [dataSource]="reserva.hospedes"
+                                      [rowAlternationEnabled]="true">
 
                             <dxo-selection mode="single"></dxo-selection>
 
@@ -164,7 +166,8 @@
                     <div *dxTemplate="let data of 'gridQuartoTemplate'">
                         <dx-data-grid #gridDeQuartosNaReserva
                                       (onSelectionChanged)="selecionaQuarto($event)"
-                                      [dataSource]="reserva.quartos">
+                                      [dataSource]="reserva.quartos"
+                                      [rowAlternationEnabled]="true">
 
                             <dxo-selection mode="single"></dxo-selection>
 
@@ -341,7 +344,8 @@
                     </div>
 
 
-                    <dx-data-grid [dataSource]="reservasJaRealizadas">
+                    <dx-data-grid [dataSource]="reservasJaRealizadas"
+                                  [rowAlternationEnabled]="true">
 
                         <dxi-column caption="Reserva"
                                     dataField="id">

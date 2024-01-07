@@ -20,6 +20,7 @@ export class EmpresaComponent implements OnInit {
     empresa: EmpresaModel;
     gridResult: EmpresaModel[] = [];
     empresaSelecinado: EmpresaModel;
+    protected readonly Utils = Utils;
 
     constructor(private router: Router,
                 private empresaService: EmpresaService) {
@@ -67,8 +68,6 @@ export class EmpresaComponent implements OnInit {
             }
         })
     }
-
-    protected readonly Utils = Utils;
 
     selecionaEmpresa(e: any) {
         e.component.byKey(e.currentSelectedRowKeys[0]).done(empresa => {

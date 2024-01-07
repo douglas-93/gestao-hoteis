@@ -1,5 +1,4 @@
 import {EnderecoModel} from "./endereco.model";
-import {ArquivoDIgitalModel} from "./ArquivoDIgitalModel";
 
 export class HotelModel {
     id: number;

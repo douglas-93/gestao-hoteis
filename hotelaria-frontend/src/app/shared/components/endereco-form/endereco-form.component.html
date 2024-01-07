@@ -2,16 +2,16 @@
          [formData]='endereco'>
 
     <dxi-item [colCount]="2" itemType="group">
-        <dxi-item dataField='cep'
-                  [label]="{text: 'CEP'}"
+        <dxi-item [label]="{text: 'CEP'}"
+                  dataField='cep'
                   template='cepTemplate'>
         </dxi-item>
     </dxi-item>
 
     <dxi-item [colCount]='4' itemType='group'>
         <dxi-item [isRequired]='true'
-                  dataField='rua'
                   [label]="{text: 'Logradouro'}"
+                  dataField='rua'
                   template='ruaTemplate'>
         </dxi-item>
 
@@ -21,8 +21,8 @@
         </dxi-item>
 
         <dxi-item [isRequired]='true'
-                  dataField='numero'
                   [label]="{text: 'Número'}"
+                  dataField='numero'
                   template='numeroTemplate'>
         </dxi-item>
 
@@ -42,8 +42,8 @@
                   template='estadoTemplate'>
         </dxi-item>
         <dxi-item [isRequired]='true'
-                  dataField='pais'
                   [label]="{text: 'País'}"
+                  dataField='pais'
                   template='paisTemplate'>
         </dxi-item>
     </dxi-item>
@@ -82,8 +82,8 @@
     </div>
     <div *dxTemplate="let data of 'numeroTemplate'">
         <dx-text-box #numero
-                     [(value)]='endereco.numero'
-                     (onEnterKey)="addAddress()">
+                     (onEnterKey)="addAddress()"
+                     [(value)]='endereco.numero'>
         </dx-text-box>
     </div>
 </dx-form>
@@ -91,7 +91,8 @@
 <dx-data-grid #grid
               (onSelectionChanged)="selectAddress($event)"
               (onToolbarPreparing)="onToolbarPreparing($event)"
-              [dataSource]="gridData">
+              [dataSource]="gridData"
+              [rowAlternationEnabled]="true">
 
     <dxo-selection mode="single"></dxo-selection>
 

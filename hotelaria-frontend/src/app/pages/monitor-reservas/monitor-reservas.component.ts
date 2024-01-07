@@ -219,9 +219,9 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
             });
     }*/
     retornaTexto(r: any) {
-        if(r.length > 0) {
+        if (r.length > 0) {
             return r.at(0)?.checkedIn ? 'Ocupado' : 'Reservado';
         }
-        return  'Vago';
+        return 'Vago';
     }
 }

@@ -1,7 +1,6 @@
-import {EnderecoModel} from "./endereco.model";
 import {ClienteModel} from "./cliente.model";
 
-export class EmpresaModel extends ClienteModel{
+export class EmpresaModel extends ClienteModel {
     razaoSocial: string;
     nomeFantasia: string;
     cnpj: string;

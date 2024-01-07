@@ -81,6 +81,7 @@ export class ReservaComponent implements OnInit, AfterViewInit {
                 this.reserva = resp.body!;
                 this.reserva.dataEntrada = this.parseDataStringParaDate(this.reserva.dataEntrada.toString());
                 this.reserva.dataPrevistaSaida = this.parseDataStringParaDate(this.reserva.dataPrevistaSaida.toString());
+                this.reserva.quartos.push(this.reserva.quarto);
                 if (this.reserva.isEmpresa) {
                     const defineEmpresa = setTimeout(() => {
                         const empresa = this.empresas.find(e => e.id === this.reserva.empresa?.id);

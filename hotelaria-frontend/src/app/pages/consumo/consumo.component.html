@@ -1,4 +1,91 @@
-<h2 class="content-block">Consumo</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
-</div>
+<base-crud #crud
+           [editTitle]="'Consumo'"
+           [listTitle]="'Consumo'"
+           [mode]="mode"
+           [visible]="false">
+
+    <div list-filter-fields>
+
+    </div>
+
+    <div list-result>
+
+        <dx-load-panel [visible]="isLoading">
+        </dx-load-panel>
+
+        <ng-container *ngIf="!isLoading">
+            <dx-data-grid [dataSource]="reservasComCheckIn"
+                          [rowAlternationEnabled]="true">
+
+                <dxo-selection mode="single"></dxo-selection>
+
+                <dxi-column caption="Reserva"
+                            dataField="id">
+                </dxi-column>
+                <dxi-column caption="Quarto"
+                            dataField="quarto.nome">
+                </dxi-column>
+                <dxi-column caption="Data de Entrada"
+                            dataField="dataEntrada"
+                            dataType="date"
+                            format="dd/MM/yyyy">
+                </dxi-column>
+                <dxi-column caption="Data Prevista para Saída"
+                            dataField="dataPrevistaSaida"
+                            dataType="date"
+                            format="dd/MM/yyyy">
+                </dxi-column>
+                <dxi-column caption="Empresa"
+                            dataField="empresa.razaoSocial">
+                </dxi-column>
+
+                <dxo-master-detail [enabled]="true" template="hospedeDetail"></dxo-master-detail>
+
+                <div *dxTemplate="let data of 'hospedeDetail'">
+                    <dx-data-grid [dataSource]="data.data.hospedes"
+                                  [rowAlternationEnabled]="true">
+
+                        <dxi-column dataField="nome">
+                        </dxi-column>
+                        <dxi-column caption="CPF"
+                                    cellTemplate="cpfTemplate"
+                                    dataField="cpf">
+                        </dxi-column>
+                        <dxi-column cellTemplate="telefoneTemplate"
+                                    dataField="telefone">
+                        </dxi-column>
+                        <dxi-column cellTemplate="celularTemplate"
+                                    dataField="celular">
+                        </dxi-column>
+                        <dxi-column caption="E-mail"
+                                    dataField="email">
+                        </dxi-column>
+                        <dxi-column dataField="ativo">
+                        </dxi-column>
+
+                        <!--            TEMPLATE        -->
+
+                        <div *dxTemplate="let data of 'cpfTemplate'">
+                            {{ Utils.formatarCPF(data.value) }}
+                        </div>
+
+                        <div *dxTemplate="let data of 'telefoneTemplate'">
+                            {{ Utils.formatarTelefone(data.value) }}
+                        </div>
+
+                        <div *dxTemplate="let data of 'celularTemplate'">
+                            {{ Utils.formatarCelular(data.value) }}
+                        </div>
+                    </dx-data-grid>
+                </div>
+            </dx-data-grid>
+            <p>Somente são exibidas reservas que foram dadas Check-In e que não foram canceladas ou dado Check-Out.</p>
+        </ng-container>
+
+    </div>
+
+    <div edit-template>
+
+    </div>
+</base-crud>
+

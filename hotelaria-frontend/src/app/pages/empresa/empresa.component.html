@@ -10,9 +10,10 @@
     </div>
 
     <div list-result>
-        <dx-data-grid [dataSource]="gridResult"
+        <dx-data-grid (onRowDblClick)="editar()"
                       (onSelectionChanged)="selecionaEmpresa($event)"
-                      (onRowDblClick)="editar()">
+                      [dataSource]="gridResult"
+                      [rowAlternationEnabled]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 
@@ -39,13 +40,13 @@
             <!--            TEMPLATE        -->
 
             <div *dxTemplate="let data of 'cnpjTemplate'">
-                {{Utils.formatarCNPJ(data.data.cnpj)}}
+                {{ Utils.formatarCNPJ(data.data.cnpj) }}
             </div>
             <div *dxTemplate="let data of 'telefoneTemplate'">
-                {{Utils.formatarTelefone(data.data.telefone)}}
+                {{ Utils.formatarTelefone(data.data.telefone) }}
             </div>
             <div *dxTemplate="let data of 'celularTemplate'">
-                {{Utils.formatarCelular(data.data.celular)}}
+                {{ Utils.formatarCelular(data.data.celular) }}
             </div>
         </dx-data-grid>
     </div>

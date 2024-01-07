@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CepResponse} from "../models/cepResponse.model";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CepService {
     url: string = 'http://viacep.com.br/ws/#/json/';

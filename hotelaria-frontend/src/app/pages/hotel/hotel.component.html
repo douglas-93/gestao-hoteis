@@ -11,25 +11,26 @@
     </div>
 
     <div list-result>
-        <dx-data-grid [dataSource]="gridResult"
-                      (onRowDblClick)="editar()"
-                      (onSelectionChanged)="selecionaHotel($event)">
+        <dx-data-grid (onRowDblClick)="editar()"
+                      (onSelectionChanged)="selecionaHotel($event)"
+                      [dataSource]="gridResult"
+                      [rowAlternationEnabled]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 
-            <dxi-column dataField="nome"
-                        caption="Nome do Hotel">
+            <dxi-column caption="Nome do Hotel"
+                        dataField="nome">
             </dxi-column>
-            <dxi-column dataField="cnpj"
-                        caption="CNPJ"
-                        cellTemplate="cnpjTemplate">
+            <dxi-column caption="CNPJ"
+                        cellTemplate="cnpjTemplate"
+                        dataField="cnpj">
             </dxi-column>
-            <dxi-column dataField="responsavel"
-                        caption="Responsável">
+            <dxi-column caption="Responsável"
+                        dataField="responsavel">
             </dxi-column>
-            <dxi-column dataField="cpfResponsavel"
-                        caption="CPF"
-                        cellTemplate="cpfTemplate">
+            <dxi-column caption="CPF"
+                        cellTemplate="cpfTemplate"
+                        dataField="cpfResponsavel">
             </dxi-column>
 
             <div *dxTemplate="let data of 'cnpjTemplate'">
@@ -49,15 +50,15 @@
             <dxi-item title='Dados'>
                 <dx-form #hotelForm>
                     <dxi-item [colCount]="2" itemType="group">
-                        <dxi-item [label]="{text: 'Nome do Hotel'}"
+                        <dxi-item [isRequired]="true"
+                                  [label]="{text: 'Nome do Hotel'}"
                                   dataField="nome"
-                                  template="nomeTemplate"
-                                  [isRequired]="true">
+                                  template="nomeTemplate">
                         </dxi-item>
-                        <dxi-item [label]="{text: 'CNPJ'}"
+                        <dxi-item [isRequired]="true"
+                                  [label]="{text: 'CNPJ'}"
                                   dataField="cnpj"
-                                  template="cnpjTemplate"
-                                  [isRequired]="true">
+                                  template="cnpjTemplate">
                         </dxi-item>
                     </dxi-item>
 
@@ -110,7 +111,8 @@
                         <div class="container">
                             <div>
                                 <!-- Verifica se logoAsDataSource está definido antes de tentar exibir a imagem -->
-                                <img *ngIf="hotel.logoAsDataSource" [src]="hotel.logoAsDataSource" class="imagem img-border">
+                                <img *ngIf="hotel.logoAsDataSource" [src]="hotel.logoAsDataSource"
+                                     class="imagem img-border">
                                 <!-- Se logoAsDataSource não estiver definido, exibe apenas o quadro em branco -->
                                 <div *ngIf="!hotel.logoAsDataSource" class="imagem img-border"></div>
                             </div>
@@ -129,8 +131,8 @@
                                 <li><strong>Tipo:</strong> {{ file?.type }}</li>
                             </ul>
                             <div>
-                                <dx-button icon="fa fa-download" (onClick)="baixar()"></dx-button>
-                                <dx-button icon="fa fa-trash" (onClick)="limparImagem()"></dx-button>
+                                <dx-button (onClick)="baixar()" icon="fa fa-download"></dx-button>
+                                <dx-button (onClick)="limparImagem()" icon="fa fa-trash"></dx-button>
                             </div>
                         </div>
                     </div>

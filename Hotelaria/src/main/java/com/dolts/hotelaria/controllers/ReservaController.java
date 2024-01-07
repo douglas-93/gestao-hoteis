@@ -70,6 +70,30 @@ public class ReservaController {
         return ResponseEntity.ok(reservas);
     }
 
+    @GetMapping("/reserva-ativa-periodo-checkIn")
+    public ResponseEntity<List<ReservaModel>> buscarReservasPorPeriodoComCheckIn(
+            @RequestParam("dataEntrada1") String dataEntrada1,
+            @RequestParam("dataEntrada2") String dataEntrada2,
+            @RequestParam("dataPrevistaSaida1") String dataPrevistaSaida1,
+            @RequestParam("dataPrevistaSaida2") String dataPrevistaSaida2
+    ) {
+        LocalDate entrada1 = LocalDate.parse(dataEntrada1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate entrada2 = LocalDate.parse(dataEntrada2, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate saida1 = LocalDate.parse(dataPrevistaSaida1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate saida2 = LocalDate.parse(dataPrevistaSaida2, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        List<ReservaModel> reservas = reservaService.buscarReservasPorPeriodoComCheckIn(
+                entrada1, entrada2, saida1, saida2);
+
+        return ResponseEntity.ok(reservas);
+    }
+
+    @GetMapping("/reservas-sem-checkOut")
+    public ResponseEntity<List<ReservaModel>> buscarReservasSemCheckOut() {
+        List<ReservaModel> reservas = reservaService.buscaReservasSemCheckOut();
+        return ResponseEntity.ok(reservas);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ReservaModel> update(@PathVariable Long id, @RequestBody ReservaModel entity) {
         ReservaModel updatedEntity = reservaService.update(entity);

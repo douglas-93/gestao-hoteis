@@ -18,7 +18,8 @@
     <div class="mt" list-result>
         <dx-data-grid (onRowDblClick)="edit()"
                       (onSelectionChanged)="selecionTipo($event)"
-                      [dataSource]="tipos">
+                      [dataSource]="tipos"
+                      [rowAlternationEnabled]="true">
             <dxo-selection mode="single"></dxo-selection>
         </dx-data-grid>
     </div>

@@ -17,6 +17,8 @@ export class BaseCrudComponent {
     @Input() editTitle: string;
     @Input() mode: ModeEnum = ModeEnum.LIST;
 
+    @Input() visible: boolean = true;
+
     @Output() filterFunction: EventEmitter<any> = new EventEmitter<any>();
     @Output() novoCadastroFunction: EventEmitter<any> = new EventEmitter<any>();
     @Output() saveFunction: EventEmitter<any> = new EventEmitter<any>();

@@ -10,26 +10,27 @@
     </div>
 
     <div list-result>
-        <dx-data-grid [dataSource]="gridResult"
+        <dx-data-grid (onRowDblClick)="editar()"
                       (onSelectionChanged)="selecionaHospede($event)"
-                      (onRowDblClick)="editar()">
+                      [dataSource]="gridResult"
+                      [rowAlternationEnabled]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 
             <dxi-column dataField="nome">
             </dxi-column>
-            <dxi-column dataField="cpf"
-                        caption="CPF"
-                        cellTemplate="cpfTemplate">
+            <dxi-column caption="CPF"
+                        cellTemplate="cpfTemplate"
+                        dataField="cpf">
             </dxi-column>
-            <dxi-column dataField="telefone"
-                        cellTemplate="telefoneTemplate">
+            <dxi-column cellTemplate="telefoneTemplate"
+                        dataField="telefone">
             </dxi-column>
-            <dxi-column dataField="celular"
-                        cellTemplate="celularTemplate">
+            <dxi-column cellTemplate="celularTemplate"
+                        dataField="celular">
             </dxi-column>
-            <dxi-column dataField="email"
-                        caption="E-mail">
+            <dxi-column caption="E-mail"
+                        dataField="email">
             </dxi-column>
             <dxi-column dataField="ativo">
             </dxi-column>
@@ -37,15 +38,15 @@
             <!--            TEMPLATE        -->
 
             <div *dxTemplate="let data of 'cpfTemplate'">
-                {{Utils.formatarCPF(data.data.cpf)}}
+                {{ Utils.formatarCPF(data.data.cpf) }}
             </div>
 
             <div *dxTemplate="let data of 'telefoneTemplate'">
-                {{Utils.formatarTelefone(data.data.telefone)}}
+                {{ Utils.formatarTelefone(data.data.telefone) }}
             </div>
 
             <div *dxTemplate="let data of 'celularTemplate'">
-                {{Utils.formatarCelular(data.data.celular)}}
+                {{ Utils.formatarCelular(data.data.celular) }}
             </div>
         </dx-data-grid>
     </div>
@@ -54,13 +55,13 @@
         <dx-tab-panel>
             <dxi-item title='Dados Pessoais'>
                 <dx-form #hospedeForm>
-                    <dxi-item itemType="group" colCount="5">
-                        <dxi-item dataField="nome"
-                                  [colSpan]="2"
+                    <dxi-item colCount="5" itemType="group">
+                        <dxi-item [colSpan]="2"
+                                  dataField="nome"
                                   template="nomeTemplate">
                         </dxi-item>
-                        <dxi-item dataField="dataNascimento"
-                                  [label]="{text: 'Data de Nascimento'}"
+                        <dxi-item [label]="{text: 'Data de Nascimento'}"
+                                  dataField="dataNascimento"
                                   template="dataNascimentoTemplate">
                         </dxi-item>
 
@@ -69,13 +70,13 @@
                         </dxi-item>
                     </dxi-item>
 
-                    <dxi-item itemType="group" colCount="5">
-                        <dxi-item dataField="cpf"
-                                  [label]="{text: 'CPF'}"
+                    <dxi-item colCount="5" itemType="group">
+                        <dxi-item [label]="{text: 'CPF'}"
+                                  dataField="cpf"
                                   template="cpfTemplate">
                         </dxi-item>
-                        <dxi-item dataField="rg"
-                                  [label]="{text: 'RG'}"
+                        <dxi-item [label]="{text: 'RG'}"
+                                  dataField="rg"
                                   template="rgTemplate">
                         </dxi-item>
                         <dxi-item dataField="telefone"
@@ -84,16 +85,16 @@
                         <dxi-item dataField="celular"
                                   template="celularTemplate">
                         </dxi-item>
-                        <dxi-item dataField="email"
-                                  [label]="{text: 'E-mail'}"
+                        <dxi-item [label]="{text: 'E-mail'}"
+                                  dataField="email"
                                   template="emailTemplate">
                         </dxi-item>
                     </dxi-item>
 
-                    <dxi-item itemType="group" colCount="2">
-                        <dxi-item dataField="observacao"
+                    <dxi-item colCount="2" itemType="group">
+                        <dxi-item [colSpan]="2"
                                   [label]="{text: 'Observações'}"
-                                  [colSpan]="2"
+                                  dataField="observacao"
                                   template="observacaoTemplate">
                         </dxi-item>
                     </dxi-item>
@@ -106,10 +107,10 @@
                     </div>
 
                     <div *dxTemplate="let data of 'dataNascimentoTemplate'">
-                        <dx-date-box [useMaskBehavior]="true"
+                        <dx-date-box [(value)]="hospede.dataNascimento"
                                      [max]="hoje"
-                                     displayFormat="dd/MM/yyyy"
-                                     [(value)]="hospede.dataNascimento">
+                                     [useMaskBehavior]="true"
+                                     displayFormat="dd/MM/yyyy">
                         </dx-date-box>
                     </div>
 

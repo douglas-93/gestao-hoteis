@@ -1,6 +1,6 @@
 <!--  FILTRO  -->
 
-<div *ngIf="!cadastro" class="container">
+<div *ngIf="!cadastro && visible" class="container">
     <dx-button
         (onClick)="filtrarEnv($event)"
         icon="fa-solid fa-filter"
@@ -21,7 +21,7 @@
 
 <!--  CADASTRO  -->
 
-<div *ngIf="cadastro" class="container">
+<div *ngIf="cadastro && visible" class="container">
     <dx-button
         (onClick)="salvaEnv($event)"
         icon="fa-solid fa-floppy-disk"

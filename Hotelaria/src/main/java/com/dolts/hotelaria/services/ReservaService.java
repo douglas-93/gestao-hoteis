@@ -151,4 +151,16 @@ public class ReservaService extends BaseCRUDService<ReservaModel, Long> {
                 dataPrevistaSaida1,
                 dataPrevistaSaida2);
     }
+
+    public List<ReservaModel> buscarReservasPorPeriodoComCheckIn(LocalDate entrada1, LocalDate entrada2, LocalDate saida1, LocalDate saida2) {
+        return reservaRepository.findReservasBetweenDatesAndNotCanceledAndCheckedIn(
+                entrada1,
+                entrada2,
+                saida1,
+                saida2);
+    }
+
+    public List<ReservaModel> buscaReservasSemCheckOut() {
+        return reservaRepository.findByCanceladaIsNullAndCheckedOutIsNullAndCheckedInIsTrue();
+    }
 }

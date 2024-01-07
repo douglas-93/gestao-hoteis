@@ -18,6 +18,8 @@ export class ToolbarComponent {
     @Input() mode: ModeEnum;
     @Input() desativarBotaoFechar: boolean;
 
+    @Input() visible: boolean = true;
+
     edit: boolean;
 
     constructor(private router: Router) {

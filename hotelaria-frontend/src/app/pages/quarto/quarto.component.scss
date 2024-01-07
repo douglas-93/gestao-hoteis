@@ -30,8 +30,7 @@
 
 .containerDaImagem:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    transform: translateY(1px)
-    /*box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); !* Sombra projetada para baixo *!
+    transform: translateY(1px) /*box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); !* Sombra projetada para baixo *!
     transform: perspective(1000px) rotateX(10deg); !* Efeito de rotação 3D para "elevar" o item *!
     transition: transform 0.3s; !* Adiciona uma transição suave *!*/
 }
@@ -59,6 +58,7 @@ li {
 .dx-fileuploader-wrapper {
     max-width: 30rem;
 }
+
 /*
 
 .containerDaImagem {

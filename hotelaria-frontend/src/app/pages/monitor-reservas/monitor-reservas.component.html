@@ -24,6 +24,7 @@
             <div *dxTemplate="let data of 'gridTemplate'" style="width: 100%">
                 <dx-data-grid #monitor
                               [dataSource]="quartos"
+                              [rowAlternationEnabled]="true"
                               [showBorders]="true"
                               keyExpr="nome">
                     <dxi-column [visible]="false" caption="Quarto" dataField="nome"></dxi-column>
@@ -45,8 +46,8 @@
                     <div (click)="resumoReserva(data, $event)"
                          *dxTemplate="let data of 'hospedeReservaTemplate'"
                          [class.ocupado]="retornaTexto(formataHospedeReserva(data)) == 'Ocupado'"
-                         [class.vazio]="retornaTexto(formataHospedeReserva(data)) == 'Vago'"
                          [class.reservado]="retornaTexto(formataHospedeReserva(data)) == 'Reservado'"
+                         [class.vazio]="retornaTexto(formataHospedeReserva(data)) == 'Vago'"
                          class="quadrinho">
                         <span style="font-weight: bolder">{{ data.data.nome }}</span>
                         <br>

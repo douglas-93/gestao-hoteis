@@ -5,20 +5,26 @@ import {HomeComponent} from './pages/home/home.component';
 import {ProfileComponent} from './pages/profile/profile.component';
 import {TasksComponent} from './pages/tasks/tasks.component';
 import {
-    DevExtremeModule,
-    DxAutocompleteModule,
-    DxButtonModule, DxCalendarModule
-    , DxCheckBoxModule
-    , DxDataGridModule, DxDateBoxModule
-    , DxFileUploaderModule
-    , DxFormModule
-    , DxGalleryModule
-    , DxListModule, DxLoadIndicatorModule
-    , DxNumberBoxModule, DxPopupModule, DxSchedulerModule
-    , DxSelectBoxModule
-    , DxSwitchModule
-    , DxTabPanelModule, DxTextAreaModule
-    , DxTextBoxModule
+    DevExtremeModule
+  , DxAutocompleteModule
+  , DxButtonModule
+  , DxCalendarModule
+  , DxCheckBoxModule
+  , DxDataGridModule
+  , DxDateBoxModule
+  , DxFileUploaderModule
+  , DxFormModule
+  , DxGalleryModule
+  , DxListModule
+  , DxLoadIndicatorModule
+  , DxNumberBoxModule
+  , DxPopupModule
+  , DxSchedulerModule
+  , DxSelectBoxModule
+  , DxSwitchModule
+  , DxTabPanelModule
+  , DxTextAreaModule
+  , DxTextBoxModule
 } from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
@@ -31,40 +37,39 @@ import {HospedeComponent} from './pages/hospede/hospede.component';
 import {EmpresaComponent} from './pages/empresa/empresa.component';
 import {ReservaComponent} from './pages/reserva/reserva.component';
 import {FormsModule} from "@angular/forms";
-import {AppModule} from "./app.module";
 import {EnderecoFormComponent} from "./shared/components/endereco-form/endereco-form.component";
-import { ConfiguracoesComponent } from './pages/configuracoes/configuracoes.component';
-import { CheckInComponent } from './pages/check-in/check-in.component';
-import { CheckOutComponent } from './pages/check-out/check-out.component';
-import { ConsumoComponent } from './pages/consumo/consumo.component';
-import { MonitorReservasComponent } from './pages/monitor-reservas/monitor-reservas.component';
+import {ConfiguracoesComponent} from './pages/configuracoes/configuracoes.component';
+import {CheckInComponent} from './pages/check-in/check-in.component';
+import {CheckOutComponent} from './pages/check-out/check-out.component';
+import {ConsumoComponent} from './pages/consumo/consumo.component';
+import {MonitorReservasComponent} from './pages/monitor-reservas/monitor-reservas.component';
 
 const routes: Routes = [
-  {
-    path: 'pages/monitor-reservas',
-    component: MonitorReservasComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'pages/consumo',
-    component: ConsumoComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'pages/check-out',
-    component: CheckOutComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'pages/check-in',
-    component: CheckInComponent,
-    canActivate: [ AuthGuardService ]
-  },
-  {
-    path: 'pages/configuracoes',
-    component: ConfiguracoesComponent,
-    canActivate: [ AuthGuardService ]
-  },
+    {
+        path: 'pages/monitor-reservas',
+        component: MonitorReservasComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pages/consumo',
+        component: ConsumoComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pages/check-out',
+        component: CheckOutComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pages/check-in',
+        component: CheckInComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pages/configuracoes',
+        component: ConfiguracoesComponent,
+        canActivate: [AuthGuardService]
+    },
     {
         path: 'reservas',
         component: ReservaComponent,
@@ -183,7 +188,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule, DxSchedulerModule, DevExtremeModule]
-    ,
+  ,
     providers: [AuthGuardService]
   ,
     exports: [RouterModule]

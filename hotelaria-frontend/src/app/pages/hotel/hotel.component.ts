@@ -27,8 +27,8 @@ export class HotelComponent implements OnInit {
     imgData: any[] = [];
     file: File | undefined;
     arquivoDigital: ArquivoDIgitalModel;
-    protected readonly Utils = Utils;
     hotelSelecionado: HotelModel;
+    protected readonly Utils = Utils;
 
     constructor(private router: Router,
                 private hotelService: HotelService,

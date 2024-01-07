@@ -22,8 +22,8 @@ export class HospedeComponent implements OnInit {
     hoje: Date = new Date(Date.now());
     hospede: HospedeModel;
     gridResult: HospedeModel[] = [];
-    protected readonly Utils = Utils;
     hospedeSelecinado: HospedeModel;
+    protected readonly Utils = Utils;
 
     constructor(private router: Router,
                 private hospedeServide: HospedeService) {
