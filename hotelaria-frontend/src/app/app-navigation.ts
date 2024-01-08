@@ -4,11 +4,20 @@ export const navigation = [
         path: '/home',
         icon: 'home'
     },
-    {
-        text: 'Monitor Reservas',
-        path: '/monitor-reservas',
-        icon: 'folder'
-    },
+    // {
+    //   text: 'Examples',
+    //   icon: 'folder',
+    //   items: [
+    //     {
+    //       text: 'Profile',
+    //       path: '/profile'
+    //     },
+    //     {
+    //       text: 'Tasks',
+    //       path: '/tasks'
+    //     }
+    //   ]
+    // },
     {
         text: 'Hotel',
         path: '/hotel',
@@ -52,17 +61,32 @@ export const navigation = [
     },
     {
         text: 'Configurações',
-        path: '/configuracoes',
+        path: '/pages/configuracoes',
         icon: 'fa fa-gear'
     },
     {
-        text: 'Produto',
-        path: '/pages/produto',
-        icon: 'fa-solid fa-cart-shopping'
+        text: 'Check In',
+        path: '/pages/check-in',
+        icon: 'fa-solid fa-money-check'
+    },
+    {
+        text: 'Check Out',
+        path: '/pages/check-out',
+        icon: 'fa-solid fa-check-double'
     },
     {
         text: 'Consumo',
-        path: '/consumo',
-        icon: 'fa-solid fa-cart-plus'
-    }
+        path: '/pages/consumo',
+        icon: 'fa-solid fa-cart-shopping'
+    },
+    {
+        text: 'Monitor Reservas',
+        path: '/pages/monitor-reservas',
+        icon: 'folder'
+    },
+  {
+    text: 'Produto',
+    path: '/pages/produto',
+    icon: 'folder'
+  }
 ];
