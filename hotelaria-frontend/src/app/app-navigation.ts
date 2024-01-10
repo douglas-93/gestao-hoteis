@@ -61,32 +61,32 @@ export const navigation = [
     },
     {
         text: 'Configurações',
-        path: '/pages/configuracoes',
+        path: '/configuracoes',
         icon: 'fa fa-gear'
     },
     {
         text: 'Check In',
-        path: '/pages/check-in',
+        path: '/check-in',
         icon: 'fa-solid fa-money-check'
     },
     {
         text: 'Check Out',
-        path: '/pages/check-out',
+        path: '/check-out',
         icon: 'fa-solid fa-check-double'
     },
     {
         text: 'Consumo',
-        path: '/pages/consumo',
+        path: '/consumo',
         icon: 'fa-solid fa-cart-shopping'
     },
     {
         text: 'Monitor Reservas',
-        path: '/pages/monitor-reservas',
+        path: '/monitor-reservas',
         icon: 'folder'
     },
   {
     text: 'Produto',
-    path: '/pages/produto',
+    path: '/produto',
     icon: 'folder'
   }
 ];

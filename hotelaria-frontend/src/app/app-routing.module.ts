@@ -47,7 +47,7 @@ import { ProdutoComponent } from './pages/produto/produto.component';
 
 const routes: Routes = [
   {
-    path: 'pages/produto',
+    path: 'produto',
     component: ProdutoComponent,
     canActivate: [ AuthGuardService ]
   },
