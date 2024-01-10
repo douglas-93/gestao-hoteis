@@ -1,9 +1,12 @@
-<base-crud [mode]="ModeEnum.EDIT"
-           (saveFunction)="salvar()">
+<base-crud [mode]="ModeEnum.LIST"
+           (saveFunction)="salvar()"
+(filterFunction)="buscaProdutos()">
     <div list-filter-fields>
     </div>
 
     <div list-result>
+        <dx-data-grid [dataSource]="produtos">
+        </dx-data-grid>
     </div>
 
     <div edit-template>

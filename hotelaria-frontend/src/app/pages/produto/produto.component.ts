@@ -1,10 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ProdutoModel} from "../../shared/models/ProdutoModel";
 import {TiposProdutoEnum} from "../../shared/enums/TiposProdutoEnum";
-import {DxSelectBoxComponent, DxTextBoxComponent} from "devextreme-angular";
+import {DxSelectBoxComponent} from "devextreme-angular";
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import _ from "lodash";
 import notify from "devextreme/ui/notify";
+import {ProdutoService} from "../../shared/services/produto.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-produto',
@@ -18,9 +20,11 @@ export class ProdutoComponent implements OnInit {
     produto: ProdutoModel;
     tiposProdutoEnumSelectBox;
     mode: ModeEnum;
+    produtos: ProdutoModel[] = [];
+    protected readonly ModeEnum = ModeEnum;
 
-
-    constructor() {
+    constructor(private produtoService: ProdutoService,
+                private router: Router) {
     }
 
     ngOnInit(): void {
@@ -49,12 +53,20 @@ export class ProdutoComponent implements OnInit {
         return true;
     }
 
-    protected readonly ModeEnum = ModeEnum;
-
     salvar() {
         if (this.validaCampos()) {
-            console.log(this.produto)
-            notify('Vamo salvar', 'success', 3600);
+            this.produtoService.save(this.produto).subscribe({
+                next: (resp) => {
+                    if (resp.ok) {
+                        notify('Produto Salvo com sucesso', 'success', 3600);
+                        window.history.back();
+                    }
+                },
+                error: (err) => {
+                    notify('Ocorreu um erro ao tentar salvar o produto', 'error', 3600);
+                    console.error(err);
+                }
+            })
         }
     }
 
@@ -64,5 +76,19 @@ export class ProdutoComponent implements OnInit {
 
     defineTipo(e) {
         this.produto.tipo = e.value
+    }
+
+    buscaProdutos() {
+        this.produtoService.findAll().subscribe({
+            next: resp => {
+                if (resp.ok) {
+                    this.produtos = resp.body!
+                }
+            },
+            error: err => {
+                notify('Ocorreu um erro ao tentar buscar os produtos', 'error', 3600);
+                console.error(err);
+            }
+        })
     }
 }
