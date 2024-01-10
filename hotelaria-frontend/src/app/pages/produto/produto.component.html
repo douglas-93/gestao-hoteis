@@ -1,32 +1,40 @@
-<h2 class="content-block">Produto</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">
+<base-crud [mode]="ModeEnum.EDIT"
+           (saveFunction)="salvar()">
+    <div list-filter-fields>
+    </div>
+
+    <div list-result>
+    </div>
+
+    <div edit-template>
         <dx-form>
             <dxi-item [colCount]="3"
                       itemType="group">
-                <dxi-item template="nomeTemplate"></dxi-item>
-                <dxi-item template="valorTemplate"></dxi-item>
-                <dxi-item template="tiposTemplate"></dxi-item>
-
-                <div *dxTemplate="let data of 'nomeTemplate'">
-                    <dx-text-box [(value)]="produto.nome">
-                    </dx-text-box>
-                </div>
-
-                <div *dxTemplate="let data of 'valorTemplate'">
-                    <dx-number-box [value]="produto.valor">
-                    </dx-number-box>
-                </div>
-
-                <div *dxTemplate="let data of 'tiposTemplate'">
-                    <dx-select-box #tipos
-                                   [dataSource]="tiposProdutoEnumSelectBox"
-                                   valueExpr="value"
-                                   displayExpr="displayText">
-                    </dx-select-box>
-                </div>
-
+                <dxi-item template="nomeTemplate" [label]="{text: 'Nome'}"></dxi-item>
+                <dxi-item template="valorTemplate" [label]="{text: 'Valor R$'}"></dxi-item>
+                <dxi-item template="tiposTemplate" [label]="{text: 'Tipo do Produto'}"></dxi-item>
             </dxi-item>
+
+            <div *dxTemplate="let data of 'nomeTemplate'">
+                <dx-text-box [(value)]="produto.nome">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'valorTemplate'">
+                <dx-number-box (onValueChanged)="defineValor($event)"
+                               format="R$ #,##0.##">
+                </dx-number-box>
+            </div>
+
+            <div *dxTemplate="let data of 'tiposTemplate'">
+                <dx-select-box #tipos
+                               (onValueChanged)="defineTipo($event)"
+                               [dataSource]="tiposProdutoEnumSelectBox"
+                               valueExpr="value"
+                               displayExpr="displayText">
+                </dx-select-box>
+            </div>
         </dx-form>
     </div>
-</div>
+
+</base-crud>
