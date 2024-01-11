@@ -31,7 +31,8 @@ export class EstoqueComponent implements OnInit {
         this.produtoService.findAll().subscribe({
             next: resp => {
                 if (resp.ok) {
-                    this.produtos = resp.body!
+                    // @ts-ignore
+                    this.produtos = resp.body!.filter(p => TiposProdutoEnum[p.tipo] != TiposProdutoEnum.SERVICO_ADICIONAL);
                 }
             }
         })
