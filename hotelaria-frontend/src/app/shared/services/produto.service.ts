@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {BaseCRUDService} from "./base-crud.service";
 import {HttpClient} from "@angular/common/http";
-import {ProdutoModel} from "../models/ProdutoModel";
+import {ProdutoModel} from "../models/produtoModel";
 
 @Injectable({
     providedIn: 'root'

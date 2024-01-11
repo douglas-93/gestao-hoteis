@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ProdutoModel} from "../../shared/models/ProdutoModel";
+import {ProdutoModel} from "../../shared/models/produtoModel";
 import {TiposProdutoEnum} from "../../shared/enums/TiposProdutoEnum";
 import {DxNumberBoxComponent, DxSelectBoxComponent} from "devextreme-angular";
 import {ModeEnum} from "../../shared/enums/mode.enum";
