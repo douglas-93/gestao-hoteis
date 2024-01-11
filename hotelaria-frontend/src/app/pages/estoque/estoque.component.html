@@ -9,6 +9,7 @@
     </div>
 
     <div edit-template>
+
         <dx-data-grid #gridMovimento
                       [dataSource]="produtosNaGrid"
                       [showBorders]="true"
@@ -33,10 +34,12 @@
                         alignment="center"
                         caption="Quantidade">
             </dxi-column>
-
-            <!--            <div *dxTemplate="let data of 'estoqueTemplate'">
-                            {{ (data.data.estoque != null && data.data.estoque != undefined) ? data.data.estoque : 0 }}
-                        </div>-->
+            <dxi-column dataField="value"
+                        alignment="center"
+                        caption="Tipo do Movimento">
+                <dxo-lookup [dataSource]="tiposMovimento" displayExpr="displayText" valueExpr="value">
+                </dxo-lookup>
+            </dxi-column>
 
         </dx-data-grid>
     </div>
