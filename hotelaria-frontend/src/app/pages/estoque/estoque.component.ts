@@ -1,9 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ModeEnum} from "../../shared/enums/mode.enum";
 import {ProdutoModel} from "../../shared/models/produtoModel";
 import {ProdutoService} from "../../shared/services/produto.service";
 import {TiposProdutoEnum} from "../../shared/enums/TiposProdutoEnum";
-import {Utils} from "../../shared/Utils";
 import {DxDataGridComponent} from "devextreme-angular";
 import {TipoTransacaoEnum} from "../../shared/enums/TipoTransacaoEnum";
 import {TransacaoModel} from "../../shared/models/transacaoModel";
@@ -20,9 +18,6 @@ export class EstoqueComponent implements OnInit {
     produtos: ProdutoModel[] = [];
     tiposMovimento;
     produtosNaGrid: any = [];
-    protected readonly ModeEnum = ModeEnum;
-    protected readonly TiposProdutoEnum = TiposProdutoEnum;
-    protected readonly Utils = Utils;
 
     constructor(private produtoService: ProdutoService) {
     }
