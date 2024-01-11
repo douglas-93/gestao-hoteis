@@ -43,14 +43,24 @@ import {CheckInComponent} from './pages/check-in/check-in.component';
 import {CheckOutComponent} from './pages/check-out/check-out.component';
 import {ConsumoComponent} from './pages/consumo/consumo.component';
 import {MonitorReservasComponent} from './pages/monitor-reservas/monitor-reservas.component';
-import { ProdutoComponent } from './pages/produto/produto.component';
+import {ProdutoComponent} from './pages/produto/produto.component';
 
 const routes: Routes = [
-  {
-    path: 'produto',
-    component: ProdutoComponent,
-    canActivate: [ AuthGuardService ]
-  },
+    {
+        path: 'produto',
+        component: ProdutoComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'produto/cad',
+        component: ProdutoComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'produto/edit/:id',
+        component: ProdutoComponent,
+        canActivate: [AuthGuardService]
+    },
     {
         path: 'monitor-reservas',
         component: MonitorReservasComponent,

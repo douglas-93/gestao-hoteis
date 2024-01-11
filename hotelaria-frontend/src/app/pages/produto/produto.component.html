@@ -1,11 +1,48 @@
-<base-crud [mode]="ModeEnum.LIST"
+<base-crud [mode]="mode"
            (saveFunction)="salvar()"
-(filterFunction)="buscaProdutos()">
+           (filterFunction)="buscaProdutos()"
+           (novoCadastroFunction)="novo()"
+           (deleteFunction)="excluirProduto()"
+           [editTitle]="'Cadastro de Produto'"
+           [listTitle]="'Listagem de Produtos'">
     <div list-filter-fields>
     </div>
 
     <div list-result>
-        <dx-data-grid [dataSource]="produtos">
+        <dx-data-grid [dataSource]="produtos"
+                      [rowAlternationEnabled]="true"
+                      (onSelectionChanged)="selecionaProduto($event)"
+        (onRowDblClick)="editarProduto()">
+
+            <dxo-selection mode="single"></dxo-selection>
+
+            <dxi-column dataField="nome"
+                        alignment="center">
+            </dxi-column>
+            <dxi-column dataField="valor"
+                        alignment="center"
+                        cellTemplate="valorTemplate">
+            </dxi-column>
+            <dxi-column dataField="estoque"
+                        alignment="center"
+                        cellTemplate="estoqueTemplate">
+            </dxi-column>
+            <dxi-column dataField="tipo"
+                        alignment="center"
+                        cellTemplate="tipoTemplate">
+            </dxi-column>
+
+            <div *dxTemplate="let data of 'valorTemplate'">
+                {{ Utils.formatarComoMoeda(data.data.valor) }}
+            </div>
+
+            <div *dxTemplate="let data of 'estoqueTemplate'">
+                {{ (data.data.estoque != null && data.data.estoque != undefined) ? data.data.estoque : 0 }}
+            </div>
+
+            <div *dxTemplate="let data of 'tipoTemplate'">
+                {{ TiposProdutoEnum[data.data.tipo].getDescricao() }}
+            </div>
         </dx-data-grid>
     </div>
 
@@ -24,8 +61,9 @@
             </div>
 
             <div *dxTemplate="let data of 'valorTemplate'">
-                <dx-number-box (onValueChanged)="defineValor($event)"
-                               format="R$ #,##0.##">
+                <dx-number-box #valor
+                               (onValueChanged)="defineValor($event)"
+                               format="R$ #,##0.00">
                 </dx-number-box>
             </div>
 
