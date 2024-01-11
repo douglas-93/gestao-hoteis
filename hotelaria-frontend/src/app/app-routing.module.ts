@@ -44,8 +44,24 @@ import {CheckOutComponent} from './pages/check-out/check-out.component';
 import {ConsumoComponent} from './pages/consumo/consumo.component';
 import {MonitorReservasComponent} from './pages/monitor-reservas/monitor-reservas.component';
 import {ProdutoComponent} from './pages/produto/produto.component';
+import {EstoqueComponent} from './pages/estoque/estoque.component';
 
 const routes: Routes = [
+    {
+        path: 'estoque',
+        component: EstoqueComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'estoque/cad',
+        component: EstoqueComponent,
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'estoque/edit/:id',
+        component: EstoqueComponent,
+        canActivate: [AuthGuardService]
+    },
     {
         path: 'produto',
         component: ProdutoComponent,
@@ -223,7 +239,8 @@ const routes: Routes = [
         CheckOutComponent,
         ConsumoComponent,
         MonitorReservasComponent,
-        ProdutoComponent
+        ProdutoComponent,
+        EstoqueComponent
     ]
 })
 export class AppRoutingModule {

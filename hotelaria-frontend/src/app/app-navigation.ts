@@ -84,9 +84,14 @@ export const navigation = [
         path: '/monitor-reservas',
         icon: 'folder'
     },
-  {
-    text: 'Produto',
-    path: '/produto',
-    icon: 'folder'
-  }
+    {
+        text: 'Produto',
+        path: '/produto',
+        icon: 'folder'
+    },
+    {
+        text: 'Estoque',
+        path: '/estoque',
+        icon: 'folder'
+    }
 ];
