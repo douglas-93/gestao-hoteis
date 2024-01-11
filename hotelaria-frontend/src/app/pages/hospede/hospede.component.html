@@ -13,7 +13,8 @@
         <dx-data-grid (onRowDblClick)="editar()"
                       (onSelectionChanged)="selecionaHospede($event)"
                       [dataSource]="gridResult"
-                      [rowAlternationEnabled]="true">
+                      [rowAlternationEnabled]="true"
+                      [showBorders]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 

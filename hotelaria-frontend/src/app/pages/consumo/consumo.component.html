@@ -17,7 +17,8 @@
             <dx-data-grid (onRowDblClick)="novoConsumo()"
                           (onSelectionChanged)="selecionaReserva($event)"
                           [dataSource]="reservasComCheckIn"
-                          [rowAlternationEnabled]="true">
+                          [rowAlternationEnabled]="true"
+                          [showBorders]="true">
 
                 <dxo-selection mode="single"></dxo-selection>
 
@@ -50,7 +51,8 @@
 
                 <div *dxTemplate="let data of 'hospedeDetail'">
                     <dx-data-grid [dataSource]="data.data.hospedes"
-                                  [rowAlternationEnabled]="true">
+                                  [rowAlternationEnabled]="true"
+                                  [showBorders]="true">
 
                         <dxi-column alignment="center"
                                     dataField="nome">

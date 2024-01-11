@@ -14,7 +14,8 @@
         <dx-data-grid (onRowDblClick)="editar()"
                       (onSelectionChanged)="selecionaHotel($event)"
                       [dataSource]="gridResult"
-                      [rowAlternationEnabled]="true">
+                      [rowAlternationEnabled]="true"
+                      [showBorders]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 

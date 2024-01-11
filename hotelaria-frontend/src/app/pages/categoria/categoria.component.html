@@ -19,7 +19,8 @@
         <dx-data-grid (onRowDblClick)="edit()"
                       (onSelectionChanged)="selecionaCategoria($event)"
                       [dataSource]="categorias"
-                      [rowAlternationEnabled]="true">
+                      [rowAlternationEnabled]="true"
+                      [showBorders]="true">
             <dxo-selection mode="single"></dxo-selection>
         </dx-data-grid>
     </div>

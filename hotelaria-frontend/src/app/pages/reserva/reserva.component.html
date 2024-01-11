@@ -97,7 +97,8 @@
                         <dx-data-grid #gridDeHospedesNaReserva
                                       (onSelectionChanged)="selecionaHospede($event)"
                                       [dataSource]="reserva.hospedes"
-                                      [rowAlternationEnabled]="true">
+                                      [rowAlternationEnabled]="true"
+                                      [showBorders]="true">
 
                             <dxo-selection mode="single"></dxo-selection>
 
@@ -167,7 +168,8 @@
                         <dx-data-grid #gridDeQuartosNaReserva
                                       (onSelectionChanged)="selecionaQuarto($event)"
                                       [dataSource]="reserva.quartos"
-                                      [rowAlternationEnabled]="true">
+                                      [rowAlternationEnabled]="true"
+                                      [showBorders]="true">
 
                             <dxo-selection mode="single"></dxo-selection>
 
@@ -345,7 +347,8 @@
 
 
                     <dx-data-grid [dataSource]="reservasJaRealizadas"
-                                  [rowAlternationEnabled]="true">
+                                  [rowAlternationEnabled]="true"
+                                  [showBorders]="true">
 
                         <dxi-column caption="Reserva"
                                     dataField="id">

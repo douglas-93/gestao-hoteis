@@ -12,7 +12,8 @@
         <dx-data-grid [dataSource]="produtos"
                       [rowAlternationEnabled]="true"
                       (onSelectionChanged)="selecionaProduto($event)"
-        (onRowDblClick)="editarProduto()">
+                      (onRowDblClick)="editarProduto()"
+                      [showBorders]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 
