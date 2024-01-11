@@ -1,0 +1,44 @@
+<base-crud [mode]="ModeEnum.EDIT"
+           (saveFunction)="salvar()">
+    <div list-filter-fields>
+
+    </div>
+
+    <div list-result>
+
+    </div>
+
+    <div edit-template>
+        <dx-data-grid #gridMovimento
+                      [dataSource]="produtosNaGrid"
+                      [showBorders]="true"
+                      [rowAlternationEnabled]="true">
+
+            <dxo-editing
+                mode="batch"
+                [allowUpdating]="true"
+                [allowAdding]="true"
+                [allowDeleting]="true"
+                [selectTextOnEditStart]="true"
+                [startEditAction]="'dblClick'">
+            </dxo-editing>
+
+            <dxi-column dataField="id"
+                        alignment="center"
+                        caption="Produto">
+                <dxo-lookup [dataSource]="produtos" displayExpr="nome" valueExpr="id">
+                </dxo-lookup>
+            </dxi-column>
+            <dxi-column dataField="estoque"
+                        alignment="center"
+                        caption="Quantidade">
+            </dxi-column>
+
+            <!--            <div *dxTemplate="let data of 'estoqueTemplate'">
+                            {{ (data.data.estoque != null && data.data.estoque != undefined) ? data.data.estoque : 0 }}
+                        </div>-->
+
+        </dx-data-grid>
+    </div>
+
+</base-crud>
