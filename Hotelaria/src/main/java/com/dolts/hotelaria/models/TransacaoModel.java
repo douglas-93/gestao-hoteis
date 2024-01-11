@@ -24,6 +24,7 @@ public class TransacaoModel implements Serializable {
     private BigDecimal valorProduto;
     private BigDecimal quantidade;
     private BigDecimal valorTotal;
+    private LocalDate dataMovimento;
     private LocalDateTime dataHora;
     private String justificativa;
     private String nota;

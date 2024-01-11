@@ -11,6 +11,7 @@ import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,6 +38,12 @@ public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
 
     public List<TransacaoModel> transacaoPorProduto(ProdutoModel produto) {
         return transacaoRepository.findTransacaoModelByProdutoModel(produto);
+    }
+
+    @Override
+    protected void beforeSave(TransacaoModel entity) {
+        super.beforeSave(entity);
+        entity.setDataHora(LocalDateTime.now());
     }
 
     @Override
