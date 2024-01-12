@@ -5,6 +5,7 @@ import {TiposProdutoEnum} from "../../shared/enums/TiposProdutoEnum";
 import {DxDataGridComponent} from "devextreme-angular";
 import {TipoTransacaoEnum} from "../../shared/enums/TipoTransacaoEnum";
 import {TransacaoModel} from "../../shared/models/transacaoModel";
+import {ModeEnum} from "../../shared/enums/mode.enum";
 
 @Component({
     selector: 'app-estoque',
@@ -79,4 +80,6 @@ export class EstoqueComponent implements OnInit {
 
         return [entrada, saida, baixa, estorno];
     }
+
+    protected readonly ModeEnum = ModeEnum;
 }
