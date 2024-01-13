@@ -31,6 +31,7 @@ public class TransacaoModel implements Serializable {
     private String Fornecedor;
     private LocalDate dataCompra;
     private boolean pago = false;
+    private Long numeroTransacao;
 
     @Enumerated(EnumType.STRING)
     private TipoTransacaoEnum tipoTransacao;
@@ -43,5 +44,4 @@ public class TransacaoModel implements Serializable {
 
     @ManyToOne
     private HospedeModel hospede;
-
 }

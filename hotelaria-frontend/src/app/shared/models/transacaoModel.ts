@@ -19,4 +19,5 @@ export class TransacaoModel {
     produtoModel: ProdutoModel;
     reserva: ReservaModel;
     hospede: HospedeModel;
+    numeroTransacao: number;
 }
