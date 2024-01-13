@@ -6,6 +6,10 @@ import {DxDataGridComponent} from "devextreme-angular";
 import {TipoTransacaoEnum} from "../../shared/enums/TipoTransacaoEnum";
 import {TransacaoModel} from "../../shared/models/transacaoModel";
 import {ModeEnum} from "../../shared/enums/mode.enum";
+import {SequenciadorService} from "../../shared/services/sequenciador.service";
+import notify from "devextreme/ui/notify";
+import {firstValueFrom} from "rxjs";
+import _ from "lodash";
 
 @Component({
     selector: 'app-estoque',
@@ -16,11 +20,14 @@ export class EstoqueComponent implements OnInit {
 
     @ViewChild('gridMovimento', {static: false}) gridMovimento: DxDataGridComponent;
 
+    private readonly atributo = 'transacao';
+    private numeroTransacao;
     produtos: ProdutoModel[] = [];
     tiposMovimento;
     produtosNaGrid: any = [];
 
-    constructor(private produtoService: ProdutoService) {
+    constructor(private produtoService: ProdutoService,
+                private sequenciador: SequenciadorService) {
     }
 
     ngOnInit(): void {
@@ -40,10 +47,22 @@ export class EstoqueComponent implements OnInit {
     }
 
     salvar() {
-        this.separaMovimento();
+        console.log(this.separaMovimento());
     }
 
-    separaMovimento() {
+    async separaMovimento() {
+
+        if (_.isNil(this.numeroTransacao)) {
+            try {
+                // const response = await firstValueFrom(this.sequenciador.proximoNumero(this.atributo));
+                const response = await firstValueFrom(this.sequenciador.proximoNumero('teste'));
+                this.numeroTransacao = response.ok ? response.body! : -1;
+            } catch (err) {
+                notify('Falha ao buscar número da transação', 'error', 3600);
+                console.error(err);
+            }
+        }
+
         const entrada: TransacaoModel[] = [];
         const saida: TransacaoModel[] = [];
         const estorno: TransacaoModel[] = [];
@@ -54,6 +73,7 @@ export class EstoqueComponent implements OnInit {
             t.produtoModel = this.produtos.find(p => p.id == i.id)!;
             t.quantidade = i.estoque;
             t.tipoTransacao = TipoTransacaoEnum[i.value];
+            t.numeroTransacao = this.numeroTransacao;
             return t;
         });
 
