@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {BaseCRUDService} from "./base-crud.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import notify from "devextreme/ui/notify";
 
 @Injectable({
     providedIn: 'root'

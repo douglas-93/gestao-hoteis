@@ -54,8 +54,7 @@ export class EstoqueComponent implements OnInit {
 
         if (_.isNil(this.numeroTransacao)) {
             try {
-                // const response = await firstValueFrom(this.sequenciador.proximoNumero(this.atributo));
-                const response = await firstValueFrom(this.sequenciador.proximoNumero('teste'));
+                const response = await firstValueFrom(this.sequenciador.proximoNumero(this.atributo));
                 this.numeroTransacao = response.ok ? response.body! : -1;
             } catch (err) {
                 notify('Falha ao buscar número da transação', 'error', 3600);

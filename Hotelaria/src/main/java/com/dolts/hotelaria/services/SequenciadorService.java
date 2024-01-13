@@ -19,7 +19,7 @@ public class SequenciadorService extends BaseCRUDService<SequenciadorModel, Long
         SequenciadorModel sequenciaAtributo = sequenciaAtributoRepository.findByAtributo(atributo)
                 .orElse(new SequenciadorModel());
 
-        Long valorAtual = sequenciaAtributo.getValor() != null ? sequenciaAtributo.getValor() : 0;
+        long valorAtual = sequenciaAtributo.getValor() != null ? sequenciaAtributo.getValor() : 0;
 
         Long proximoNumero = valorAtual + 1;
         sequenciaAtributo.setAtributo(atributo);
