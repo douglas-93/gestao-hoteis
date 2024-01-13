@@ -20,6 +20,9 @@ public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
     @Autowired
     private TransacaoRepository transacaoRepository;
 
+    @Autowired
+    private ProdutoService produtoService;
+
     public List<TransacaoModel> transacaoPorIdReserva(Long reservaId) {
         return transacaoRepository.findByReservas(reservaId);
     }
@@ -44,6 +47,23 @@ public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
     protected void beforeSave(TransacaoModel entity) {
         super.beforeSave(entity);
         entity.setDataHora(LocalDateTime.now());
+        switch (entity.getTipoTransacao()) {
+            case BAIXA, SAIDA -> {
+                entity.setQuantidade(entity.getQuantidade().negate());
+            }
+        }
+    }
+
+    @Override
+    protected void afterSave(TransacaoModel entity) {
+        super.afterSave(entity);
+        ProdutoModel prod = produtoService.getById(entity.getProdutoModel().getId());
+        if (prod.getEstoque() != null) {
+            prod.setEstoque(prod.getEstoque().add(entity.getQuantidade()));
+        } else {
+            prod.setEstoque(entity.getQuantidade());
+        }
+        produtoService.save(prod);
     }
 
     @Override

@@ -8,8 +8,9 @@ import {TransacaoModel} from "../../shared/models/transacaoModel";
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {SequenciadorService} from "../../shared/services/sequenciador.service";
 import notify from "devextreme/ui/notify";
-import {firstValueFrom} from "rxjs";
+import {firstValueFrom, forkJoin} from "rxjs";
 import _ from "lodash";
+import {TransacaoService} from "../../shared/services/transacao.service";
 
 @Component({
     selector: 'app-estoque',
@@ -19,15 +20,16 @@ import _ from "lodash";
 export class EstoqueComponent implements OnInit {
 
     @ViewChild('gridMovimento', {static: false}) gridMovimento: DxDataGridComponent;
-
-    private readonly atributo = 'transacao';
-    private numeroTransacao;
     produtos: ProdutoModel[] = [];
     tiposMovimento;
     produtosNaGrid: any = [];
+    protected readonly ModeEnum = ModeEnum;
+    private readonly atributo = 'transacao';
+    private numeroTransacao;
 
     constructor(private produtoService: ProdutoService,
-                private sequenciador: SequenciadorService) {
+                private sequenciador: SequenciadorService,
+                private transacaoService: TransacaoService) {
     }
 
     ngOnInit(): void {
@@ -42,15 +44,16 @@ export class EstoqueComponent implements OnInit {
 
         this.tiposMovimento = Object.keys(TipoTransacaoEnum).map(key => ({
             value: key
-          , displayText: TipoTransacaoEnum[key].getDescricao()
+          , displayText: TipoTransacaoEnum[key]
         }));
+
     }
 
     salvar() {
-        console.log(this.separaMovimento());
+        this.criaTransacao();
     }
 
-    async separaMovimento() {
+    /*async separaMovimento() {
 
         if (_.isNil(this.numeroTransacao)) {
             try {
@@ -98,7 +101,46 @@ export class EstoqueComponent implements OnInit {
         });
 
         return [entrada, saida, baixa, estorno];
+    }*/
+
+    async criaTransacao() {
+        if (_.isNil(this.numeroTransacao)) {
+            try {
+                const response = await firstValueFrom(this.sequenciador.proximoNumero(this.atributo));
+                this.numeroTransacao = response.ok ? response.body! : -1;
+            } catch (err) {
+                notify('Falha ao buscar número da transação', 'error', 3600);
+                console.error(err);
+                return;
+            }
+        }
+
+        forkJoin(this.produtosNaGrid
+            .map(i => {
+                const t: TransacaoModel = new TransacaoModel();
+                t.produtoModel = this.produtos.find(p => p.id == i.id)!;
+                t.quantidade = i.estoque;
+                t.tipoTransacao = i.value as TipoTransacaoEnum;
+                t.numeroTransacao = this.numeroTransacao;
+                return t;
+            })
+            .map(t => this.transacaoService.save(t)))
+            .subscribe({
+                next: value => {
+                    // @ts-ignore
+                    let ok = value.every(r => r.ok);
+                    if (ok) {
+                        notify('Transação salva com sucesso', 'success', 3600);
+                        window.history.back();
+                    }
+                },
+                error: err => {
+                    notify('Falha ao salvar transação', 'error', 3600);
+                    console.error(err);
+                }
+            })
+
     }
 
-    protected readonly ModeEnum = ModeEnum;
+    protected readonly TipoTransacaoEnum = TipoTransacaoEnum;
 }
