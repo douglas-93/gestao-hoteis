@@ -1,7 +1,7 @@
-<base-crud [mode]="mode"
+<base-crud (filterFunction)="buscaTransacoes()"
+           (novoCadastroFunction)="novo()"
            (saveFunction)="salvar()"
-           (filterFunction)="buscaTransacoes()"
-           (novoCadastroFunction)="novo()">
+           [mode]="mode">
     <div list-filter-fields>
 
     </div>
@@ -10,12 +10,14 @@
         <dx-data-grid [dataSource]="transacoes">
             <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
 
-            <dxi-column alignment="center"
-                        dataField="numeroTransacao"
-                        [groupIndex]="0">
+            <dxi-column [groupIndex]="0"
+                        alignment="center"
+                        caption="Movimento"
+                        dataField="numeroTransacao">
 
             </dxi-column>
             <dxi-column alignment="center"
+                        caption="Produto"
                         dataField="produtoModel.nome">
             </dxi-column>
             <dxi-column alignment="center"
@@ -33,31 +35,31 @@
 
         <dx-data-grid #gridMovimento
                       [dataSource]="produtosNaGrid"
-                      [showBorders]="true"
-                      [rowAlternationEnabled]="true">
+                      [rowAlternationEnabled]="true"
+                      [showBorders]="true">
 
             <dxo-editing
-                mode="batch"
-                [allowUpdating]="true"
                 [allowAdding]="true"
                 [allowDeleting]="true"
+                [allowUpdating]="true"
                 [selectTextOnEditStart]="true"
-                [startEditAction]="'dblClick'">
+                [startEditAction]="'dblClick'"
+                mode="batch">
             </dxo-editing>
 
-            <dxi-column dataField="id"
-                        alignment="center"
-                        caption="Produto">
+            <dxi-column alignment="center"
+                        caption="Produto"
+                        dataField="id">
                 <dxo-lookup [dataSource]="produtos" displayExpr="nome" valueExpr="id">
                 </dxo-lookup>
             </dxi-column>
-            <dxi-column dataField="estoque"
-                        alignment="center"
-                        caption="Quantidade">
+            <dxi-column alignment="center"
+                        caption="Quantidade"
+                        dataField="estoque">
             </dxi-column>
-            <dxi-column dataField="value"
-                        alignment="center"
-                        caption="Tipo do Movimento">
+            <dxi-column alignment="center"
+                        caption="Tipo do Movimento"
+                        dataField="value">
                 <dxo-lookup [dataSource]="tiposMovimento" displayExpr="displayText" valueExpr="value">
                 </dxo-lookup>
             </dxi-column>

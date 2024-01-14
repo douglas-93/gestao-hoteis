@@ -16,7 +16,7 @@ import java.util.List;
 public interface TransacaoRepository extends AbstractCRUDRepository<TransacaoModel, Long> {
 
     @Query("SELECT t FROM TransacaoModel t " +
-            "WHERE t.reserva.id = :reservaId")
+            "WHERE t.reserva.id = :reservaId AND t.numeroTransacao IS NOT null")
     List<TransacaoModel> findByReservas(@Param("reserva") Long reservaId);
 
     List<TransacaoModel> findTransacaoModelByTipoTransacao(TipoTransacaoEnum tipoTransacao);

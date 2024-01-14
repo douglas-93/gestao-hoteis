@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
@@ -22,6 +23,12 @@ public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
 
     @Autowired
     private ProdutoService produtoService;
+
+    @Autowired
+    private HospedeService hospedeService;
+
+    @Autowired
+    private ReservaService reservaService;
 
     public List<TransacaoModel> transacaoPorIdReserva(Long reservaId) {
         return transacaoRepository.findByReservas(reservaId);
@@ -51,6 +58,18 @@ public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
             case BAIXA, SAIDA -> {
                 entity.setQuantidade(entity.getQuantidade().negate());
             }
+        }
+
+        if (entity.getHospede() != null) {
+            entity.setHospede(hospedeService.getById(entity.getHospede().getId()));
+        }
+
+        if (entity.getReserva() != null) {
+            entity.setReserva(reservaService.getById(entity.getReserva().getId()));
+        }
+
+        if (entity.getProdutoModel() != null) {
+            entity.setProdutoModel(produtoService.getById(entity.getProdutoModel().getId()));
         }
     }
 

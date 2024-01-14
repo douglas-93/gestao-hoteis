@@ -6,6 +6,13 @@ import {Utils} from "../../shared/Utils";
 import notify from "devextreme/ui/notify";
 import {Router} from "@angular/router";
 import {QuartoModel} from "../../shared/models/quarto.model";
+import {ProdutoService} from "../../shared/services/produto.service";
+import {ProdutoModel} from "../../shared/models/produtoModel";
+import {TransacaoModel} from "../../shared/models/transacaoModel";
+import {TransacaoService} from "../../shared/services/transacao.service";
+import {firstValueFrom, forkJoin, lastValueFrom} from "rxjs";
+import {TipoTransacaoEnum} from "../../shared/enums/TipoTransacaoEnum";
+import _ from "lodash";
 
 @Component({
     selector: 'app-consumo',
@@ -19,9 +26,15 @@ export class ConsumoComponent implements OnInit {
     datasDaSemana: Date[] = [];
     isLoading: boolean = false;
     reservaSelecionada: ReservaModel;
+    produtosNaGrid: any[] = [];
+    produtos: ProdutoModel[];
+    produtosConsumidos: TransacaoModel[] = [];
     protected readonly Utils = Utils;
+    protected readonly Math = Math;
 
     constructor(private reservaService: ReservaService,
+                private produtoService: ProdutoService,
+                private transacaoService: TransacaoService,
                 private router: Router) {
     }
 
@@ -34,7 +47,11 @@ export class ConsumoComponent implements OnInit {
         this.mode = (edit || cad) ? ModeEnum.EDIT : ModeEnum.LIST;
 
         if (edit || cad) {
-            this.findReserva(this.router.url.split('/').pop()!)
+            this.findReserva(this.router.url.split('/').pop()!).then(res => {
+                this.carregaDadosIniciais().then(res => {
+                    this.adicionaConsumoAGrid();
+                });
+            });
         } else {
             this.isLoading = true;
             this.reservaService.buscaReservasSemCheckOut().subscribe({
@@ -64,19 +81,70 @@ export class ConsumoComponent implements OnInit {
         });
     }
 
-    findReserva(id: string) {
+    async findReserva(id: string) {
         let idAsNumber = Number(id);
 
-        this.reservaService.findById(idAsNumber).subscribe({
-            next: (resp) => {
-                if (resp.ok) {
-                    this.reservaSelecionada = resp.body!;
+        let resp = await firstValueFrom(this.reservaService.findById(idAsNumber))
+        this.reservaSelecionada = resp.body!
+    }
+
+    async carregaDadosIniciais() {
+        let resp = await lastValueFrom(this.produtoService.findAll());
+        this.produtos = resp.body!;
+    }
+
+    voltar() {
+        window.history.back();
+    }
+
+    salvar() {
+        forkJoin(this.produtosNaGrid
+            .filter(p => {
+                if (_.isNil(p.idConsumo)) {
+                    return p;
                 }
-            },
-            error: (err) => {
-            },
-            complete: () => {
+            })
+            .map(p => {
+                const t: TransacaoModel = new TransacaoModel();
+                t.produtoModel = this.produtos.find(prod => prod.id === p.id)!;
+                t.quantidade = Math.abs(p.quantidade);
+                t.pago = p.pago
+                t.reserva = this.reservaSelecionada;
+                t.hospede = this.reservaSelecionada.hospedes.find(h => h.nome == p.nome)!;
+                t.tipoTransacao = 'SAIDA' as TipoTransacaoEnum;
+                return t;
+            })
+            .map(t => this.transacaoService.save(t)))
+            .subscribe({
+                next: value => {
+                    if (value.every(t => t.ok)) {
+                        notify('Registro salvo com sucesso', 'success', 3600);
+                        window.history.back();
+                        return;
+                    }
+                },
+                error: err => {
+                    notify('Algo deu errado, verifique e tente novamente', 'error', 3600);
+                    console.error(err);
+                }
+            });
+    }
+
+    async adicionaConsumoAGrid() {
+        if (this.reservaSelecionada) {
+            let resp = await lastValueFrom(this.transacaoService.findByReserva(this.reservaSelecionada))
+            if (resp.ok) {
+                this.produtosConsumidos = resp.body!;
+                this.produtosNaGrid = resp.body!.map(t => {
+                    return {
+                        id: t.produtoModel.id,
+                        quantidade: Math.abs(t.quantidade),
+                        nome: t.hospede.nome,
+                        pago: t.pago,
+                        idConsumo: t.id
+                    };
+                });
             }
-        })
+        }
     }
 }

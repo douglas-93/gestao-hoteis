@@ -112,7 +112,7 @@ export class EstoqueComponent implements OnInit {
         this.transacaoService.findAll().subscribe({
             next: resp => {
                 if (resp.ok) {
-                    this.transacoes = resp.body!;
+                    this.transacoes = resp.body!.filter(t => !_.isNil(t.numeroTransacao));
                 }
             }
         })
