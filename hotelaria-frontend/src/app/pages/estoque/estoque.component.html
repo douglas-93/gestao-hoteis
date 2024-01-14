@@ -1,11 +1,32 @@
-<base-crud [mode]="ModeEnum.EDIT"
-           (saveFunction)="salvar()">
+<base-crud [mode]="mode"
+           (saveFunction)="salvar()"
+           (filterFunction)="buscaTransacoes()"
+           (novoCadastroFunction)="novo()">
     <div list-filter-fields>
 
     </div>
 
     <div list-result>
+        <dx-data-grid [dataSource]="transacoes">
+            <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
 
+            <dxi-column alignment="center"
+                        dataField="numeroTransacao"
+                        [groupIndex]="0">
+
+            </dxi-column>
+            <dxi-column alignment="center"
+                        dataField="produtoModel.nome">
+            </dxi-column>
+            <dxi-column alignment="center"
+                        dataField="quantidade">
+            </dxi-column>
+            <dxi-column alignment="center"
+                        dataField="dataHora"
+                        dataType="date"
+                        format="dd-MM-yyyy HH:mm:ss">
+            </dxi-column>
+        </dx-data-grid>
     </div>
 
     <div edit-template>
@@ -40,7 +61,6 @@
                 <dxo-lookup [dataSource]="tiposMovimento" displayExpr="displayText" valueExpr="value">
                 </dxo-lookup>
             </dxi-column>
-
         </dx-data-grid>
     </div>
 

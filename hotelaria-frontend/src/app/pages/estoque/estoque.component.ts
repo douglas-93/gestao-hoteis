@@ -11,6 +11,7 @@ import notify from "devextreme/ui/notify";
 import {firstValueFrom, forkJoin} from "rxjs";
 import _ from "lodash";
 import {TransacaoService} from "../../shared/services/transacao.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-estoque',
@@ -20,19 +21,35 @@ import {TransacaoService} from "../../shared/services/transacao.service";
 export class EstoqueComponent implements OnInit {
 
     @ViewChild('gridMovimento', {static: false}) gridMovimento: DxDataGridComponent;
+
     produtos: ProdutoModel[] = [];
     tiposMovimento;
     produtosNaGrid: any = [];
+    mode: ModeEnum = ModeEnum.LIST;
+    transacoes: TransacaoModel[];
+    isLoading: boolean = false;
     protected readonly ModeEnum = ModeEnum;
     private readonly atributo = 'transacao';
     private numeroTransacao;
 
     constructor(private produtoService: ProdutoService,
                 private sequenciador: SequenciadorService,
-                private transacaoService: TransacaoService) {
+                private transacaoService: TransacaoService,
+                private router: Router) {
     }
 
     ngOnInit(): void {
+        this.carregaDadosIniciais();
+        let edit: boolean = this.router.url.includes('edit');
+        this.mode = (this.router.url.includes('cad') ||
+            this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
+
+        if (edit) {
+            this.findtransacao(this.router.url.split('/').pop()!)
+        }
+    }
+
+    carregaDadosIniciais() {
         this.produtoService.findAll().subscribe({
             next: resp => {
                 if (resp.ok) {
@@ -46,62 +63,12 @@ export class EstoqueComponent implements OnInit {
             value: key
           , displayText: TipoTransacaoEnum[key]
         }));
-
     }
 
     salvar() {
-        this.criaTransacao();
+        this.isLoading = true;
+        this.criaTransacao().then(res => this.isLoading = false);
     }
-
-    /*async separaMovimento() {
-
-        if (_.isNil(this.numeroTransacao)) {
-            try {
-                const response = await firstValueFrom(this.sequenciador.proximoNumero(this.atributo));
-                this.numeroTransacao = response.ok ? response.body! : -1;
-            } catch (err) {
-                notify('Falha ao buscar número da transação', 'error', 3600);
-                console.error(err);
-            }
-        }
-
-        const entrada: TransacaoModel[] = [];
-        const saida: TransacaoModel[] = [];
-        const estorno: TransacaoModel[] = [];
-        const baixa: TransacaoModel[] = [];
-
-        const transacoes: TransacaoModel[] = this.produtosNaGrid.map(i => {
-            const t: TransacaoModel = new TransacaoModel();
-            t.produtoModel = this.produtos.find(p => p.id == i.id)!;
-            t.quantidade = i.estoque;
-            t.tipoTransacao = TipoTransacaoEnum[i.value];
-            t.numeroTransacao = this.numeroTransacao;
-            return t;
-        });
-
-        transacoes.forEach(t => {
-            switch (t.tipoTransacao) {
-                case TipoTransacaoEnum.ENTRADA: {
-                    entrada.push(t);
-                    break;
-                }
-                case TipoTransacaoEnum.SAIDA: {
-                    saida.push(t);
-                    break;
-                }
-                case TipoTransacaoEnum.BAIXA: {
-                    baixa.push(t);
-                    break;
-                }
-                case TipoTransacaoEnum.ESTORNO: {
-                    estorno.push(t);
-                    break;
-                }
-            }
-        });
-
-        return [entrada, saida, baixa, estorno];
-    }*/
 
     async criaTransacao() {
         if (_.isNil(this.numeroTransacao)) {
@@ -139,8 +106,23 @@ export class EstoqueComponent implements OnInit {
                     console.error(err);
                 }
             })
-
     }
 
-    protected readonly TipoTransacaoEnum = TipoTransacaoEnum;
+    buscaTransacoes() {
+        this.transacaoService.findAll().subscribe({
+            next: resp => {
+                if (resp.ok) {
+                    this.transacoes = resp.body!;
+                }
+            }
+        })
+    }
+
+    novo() {
+        this.router.navigate(['estoque', 'cad'])
+    }
+
+    findtransacao(id: string) {
+
+    }
 }
