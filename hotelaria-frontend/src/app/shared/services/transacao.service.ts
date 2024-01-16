@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {BaseCRUDService} from "./base-crud.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {TransacaoModel} from "../models/transacaoModel";
 import {ReservaModel} from "../models/reserva.model";
 

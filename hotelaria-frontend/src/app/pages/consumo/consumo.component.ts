@@ -108,6 +108,8 @@ export class ConsumoComponent implements OnInit {
                 const t: TransacaoModel = new TransacaoModel();
                 t.produtoModel = this.produtos.find(prod => prod.id === p.id)!;
                 t.quantidade = Math.abs(p.quantidade);
+                t.valorProduto = t.produtoModel.valor;
+                t.valorTotal = t.valorProduto * t.quantidade;
                 t.pago = p.pago
                 t.reserva = this.reservaSelecionada;
                 t.hospede = this.reservaSelecionada.hospedes.find(h => h.nome == p.nome)!;

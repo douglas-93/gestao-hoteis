@@ -95,7 +95,9 @@
                                    icon="fa fa-check"
                                    text="Check-In">
                         </dx-button>
-                        <dx-button icon="fa fa-check-double"
+                        <dx-button (onClick)="apuraCheckOut()"
+                                   [disabled]="!reservaDoResumo.checkedIn"
+                                   icon="fa fa-check-double"
                                    text="Check-Out">
                         </dx-button>
                     </div>
@@ -193,5 +195,159 @@
             </div>
         </dx-popup>
 
+        <dx-popup [(visible)]="isCheckOutVisible"
+                  [dragEnabled]="true"
+                  [resizeEnabled]="false"
+                  [showCloseButton]="true"
+                  [showTitle]="true"
+                  title="Check-Out">
+
+            <div *ngIf="isCheckOutVisible"
+                 style="display: flex; flex-direction: column; align-content: center; justify-content: center; align-items: center">
+
+                <strong class="mb mt" style="font-size: 26px">Produtos Consumidos</strong>
+                <dx-data-grid [dataSource]="consumo"
+                              [rowAlternationEnabled]="true"
+                              [showBorders]="true">
+                    <dxi-column caption="Hospede"
+                                dataField="hospede.nome">
+                    </dxi-column>
+                    <dxi-column caption="Produto"
+                                dataField="produtoModel.nome">
+                    </dxi-column>
+                    <dxi-column alignment="center"
+                                caption="Valor Unitário"
+                                cellTemplate="valorTemplate"
+                                dataField="valorProduto">
+                    </dxi-column>
+                    <dxi-column alignment="center"
+                                dataField="quantidade">
+                    </dxi-column>
+                    <dxi-column alignment="center"
+                                cellTemplate="valorTemplate"
+                                dataField="valorTotal">
+                    </dxi-column>
+                    <dxi-column alignment="center"
+                                caption="Data"
+                                dataField="dataHora"
+                                dataType="date"
+                                format="dd-MM-yyyy">
+                    </dxi-column>
+                    <dxi-column alignment="center"
+                                caption="Pago?"
+                                dataField="pago">
+                    </dxi-column>
+
+                    <!--          Templates          -->
+                    <div *dxTemplate="let data of 'valorTemplate'">
+                        {{ Utils.formatarComoMoeda(data.value) }}
+                    </div>
+                </dx-data-grid>
+
+
+                <div class="row"
+                     style="width: 100%; justify-content: space-between; align-items: flex-start; margin-top: 30px">
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-left: 3rem">
+                        <strong class="mb" style="font-size: 26px">Estadia</strong>
+                        <dx-data-grid [dataSource]="estadia"
+                                      [rowAlternationEnabled]="true"
+                                      [showBorders]="true"
+                                      width="30vw">
+                            <dxi-column alignment="center"
+                                        dataField="dia"
+                                        dataType="date"
+                                        format="dd-MM-yyyy">
+                            </dxi-column>
+                            <dxi-column alignment="center"
+                                        cellTemplate="valorTemplate"
+                                        dataField="valor">
+                            </dxi-column>
+
+                            <!--          Templates          -->
+
+                            <div *dxTemplate="let data of 'valorTemplate'">
+                                {{ Utils.formatarComoMoeda(data.value) }}
+                            </div>
+                        </dx-data-grid>
+                    </div>
+
+                    <div class="checkOut" style="margin-right: 3rem">
+                        <div
+                            style="width: 100%; border-bottom: 1px solid #a7a300; text-align: center; margin-bottom: 20px">
+                            <strong class="mb mt" style="font-size: 26px">Resumo</strong>
+                        </div>
+                        <div class="row" style="justify-content: space-between; width: 100%">
+                            <span class="mb mt" style="font-size: 20px">Total Estadia:</span>
+                            <span class="mb mt"
+                                  style="font-size: 20px">{{ Utils.formatarComoMoeda(totalEstadia) }}</span>
+                        </div>
+
+                        <div class="row" style="justify-content: space-between; width: 100%">
+                            <span class="mb mt" style="font-size: 20px">Total Consumo:</span>
+                            <span class="mb mt"
+                                  style="font-size: 20px">{{ Utils.formatarComoMoeda(totalConsumo) }}</span>
+                        </div>
+
+                        <div class="row" style="justify-content: space-between; width: 100%">
+                            <strong class="mb mt" style="font-size: 20px">Subtotal:</strong>
+                            <strong class="mb mt"
+                                    style="font-size: 20px">{{ Utils.formatarComoMoeda(totalCheckOut) }}</strong>
+                        </div>
+
+                        <div class="row" style="align-items: center; justify-content: space-between; width: 100%">
+                            <span class="mr mb mt" style="font-size: 20px">Desconto:</span>
+                            <dx-number-box (onValueChanged)="aplicaDesconto($event)"
+                                           [max]="totalCheckOut"
+                                           [min]="0"
+                                           format="R$ #,##0.00">
+                            </dx-number-box>
+                        </div>
+
+                        <div class="row" style="justify-content: space-between; width: 100%">
+                            <strong class="mb mt" style="font-size: 26px">Total:</strong>
+                            <strong class="mb mt"
+                                    style="font-size: 26px">{{ Utils.formatarComoMoeda(totalGeral) }}</strong>
+                        </div>
+
+                        <div class="row mb mt" style="align-items: flex-end; justify-content: flex-end">
+                            <dx-button (onClick)="formaPagamentoVisible = true"
+                                       class="mr"
+                                       icon="fa fa-floppy-disk"
+                                       text="Confirmar">
+                            </dx-button>
+                            <dx-button (onClick)="isCheckOutVisible = false"
+                                       icon="fa fa-arrow-rotate-left"
+                                       text="Voltar">
+                            </dx-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </dx-popup>
+        <dx-popup [(visible)]="formaPagamentoVisible"
+                  [dragEnabled]="true"
+                  [resizeEnabled]="false"
+                  [showCloseButton]="true"
+                  [showTitle]="true"
+                  title="Forma de Pagamento">
+            <div *ngIf="formaPagamentoVisible">
+                <strong>Forma de Pagamento:</strong>
+                <dx-select-box #formaPagamento
+                               [dataSource]="formasDePagamento"
+                               displayExpr="value"
+                               valueExpr="value">
+                </dx-select-box>
+                <dx-radio-group [dataSource]="formaPagamento">
+                </dx-radio-group>
+                <div *ngIf="formaPagamentoSelectBox.selectedItem === 'Dinheiro'">
+                    <span>Dinheiro Entregue: </span>
+                    <dx-number-box [(value)]="dinheiroEntregue"
+                                   [min]="0"
+                                   format="R$ #,##0.00">
+                    </dx-number-box>
+                    <span>Troco: {{ Utils.formatarComoMoeda(dinheiroEntregue - totalGeral) }}</span>
+                </div>
+            </div>
+        </dx-popup>
     </div>
 </div>

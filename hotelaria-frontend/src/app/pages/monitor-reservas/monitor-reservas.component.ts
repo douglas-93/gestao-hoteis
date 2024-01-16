@@ -5,9 +5,11 @@ import notify from "devextreme/ui/notify";
 import {Utils} from "../../shared/Utils";
 import {QuartoModel} from "../../shared/models/quarto.model";
 import {QuartoService} from "../../shared/services/quarto.service";
-import {forkJoin} from "rxjs";
-import {DxDataGridComponent} from "devextreme-angular";
+import {forkJoin, lastValueFrom} from "rxjs";
+import {DxDataGridComponent, DxSelectBoxComponent} from "devextreme-angular";
 import _ from "lodash";
+import {TransacaoService} from "../../shared/services/transacao.service";
+import {TransacaoModel} from "../../shared/models/transacaoModel";
 
 
 @Component({
@@ -18,6 +20,8 @@ import _ from "lodash";
 export class MonitorReservasComponent implements OnInit, AfterViewInit {
 
     @ViewChild('monitor', {static: false}) monitor: DxDataGridComponent;
+    @ViewChild('gridCheckOut', {static: false}) gridCheckOut: DxDataGridComponent;
+    @ViewChild('formaPagamento', {static: false}) formaPagamentoSelectBox: DxSelectBoxComponent;
 
     reservas: ReservaModel[] = [];
     quartos: QuartoModel[] = [];
@@ -27,10 +31,21 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     isLoading: boolean = false;
     checkInVisible: boolean = false;
     cancelaVisible: boolean = false;
+    isCheckOutVisible: boolean = false;
+    consumo: TransacaoModel[] = [];
+    estadia: { valor: number; dia: string | number | Date }[];
+    totalCheckOut: number;
+    totalGeral: number;
+    totalEstadia: number;
+    totalConsumo: number;
+    formaPagamentoVisible: boolean = false;
+    dinheiroEntregue: number = 0;
     protected readonly Utils = Utils;
+    formasDePagamento: { value: string }[] = [{value: 'Dinheiro'}, {value: 'Cartão'}, {value: 'Pix'}];
 
     constructor(private reservaService: ReservaService,
-                private quartoService: QuartoService) {
+                private quartoService: QuartoService,
+                private transacaoService: TransacaoService) {
         this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
     }
 
@@ -198,30 +213,51 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
             });
     }
 
-    /*atualizaReservasPorData() {
-        this.isLoading = true;
-        this.reservaService.buscarReservasPorPeriodo(
-            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
-            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6]),
-            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
-            Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6])).subscribe(
-            (resp) => {
-                if (resp.ok) {
-                    this.reservas = resp.body!
-                    this.filtraQuarto();
-                }
-                this.isLoading = false;
-            },
-            (err) => {
-                notify('Algo deu errado ao buscar as reservas', 'error', 3600);
-                console.error(err);
-                this.isLoading = false;
-            });
-    }*/
     retornaTexto(r: any) {
         if (r.length > 0) {
             return r.at(0)?.checkedIn ? 'Ocupado' : 'Reservado';
         }
         return 'Vago';
+    }
+
+    async apuraCheckOut() {
+        this.limpaCheckOut();
+
+        this.isCheckOutVisible = true;
+
+        this.estadia = this.reservaDoResumo.estadia.map(e => {
+            return {dia: e, valor: this.reservaDoResumo.quarto.valorDiaria}
+        })
+
+        let resp = await lastValueFrom(this.transacaoService.findByReserva(this.reservaDoResumo));
+        let consumo = resp.ok ? resp.body! : undefined;
+
+        if (!_.isNil(consumo) && consumo.length > 0) {
+            this.consumo = consumo.map(c => {
+                c.quantidade = Math.abs(c.quantidade)
+                return c;
+            });
+        }
+
+        this.totalEstadia = this.estadia.reduce((total, estadia) => total + estadia.valor, 0);
+        this.totalConsumo = this.consumo.filter(c => !c.pago)
+            .reduce((total, c) => total + c.valorTotal, this.totalCheckOut);
+
+        this.totalCheckOut = this.totalEstadia + this.totalConsumo;
+        this.totalGeral = this.totalCheckOut;
+    }
+
+    aplicaDesconto(event: any) {
+        let valor = event.value;
+        this.totalGeral = this.totalCheckOut - valor;
+    }
+
+    private limpaCheckOut() {
+        this.totalCheckOut = 0;
+        this.totalGeral = 0;
+        this.totalEstadia = 0;
+        this.totalConsumo = 0;
+        this.consumo = [];
+        this.estadia = [];
     }
 }

@@ -48,12 +48,6 @@ public class TransacaoController extends AbstractCRUDController<TransacaoModel, 
         return ResponseEntity.ok(transacoes);
     }
 
-    @GetMapping("/transacao-por-idReserva")
-    public ResponseEntity<List<TransacaoModel>> transacoesPorReserva(@RequestParam Long id) {
-        List<TransacaoModel> transacoes = transacaoService.transacaoPorIdReserva(id);
-        return ResponseEntity.ok(transacoes);
-    }
-
     @GetMapping("/transacao-por-tipo")
     public ResponseEntity<List<TransacaoModel>> transacoesPortipo(@RequestParam TipoTransacaoEnum tipo) {
         List<TransacaoModel> transacoes = transacaoService.transacaoPorTipo(tipo);
