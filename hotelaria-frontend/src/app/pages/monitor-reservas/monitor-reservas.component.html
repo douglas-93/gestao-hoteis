@@ -325,27 +325,49 @@
             </div>
         </dx-popup>
         <dx-popup [(visible)]="formaPagamentoVisible"
+                  [contentTemplate]="'pagamentoTemplate'"
                   [dragEnabled]="true"
                   [resizeEnabled]="false"
                   [showCloseButton]="true"
                   [showTitle]="true"
-                  title="Forma de Pagamento">
-            <div *ngIf="formaPagamentoVisible">
-                <strong>Forma de Pagamento:</strong>
-                <dx-select-box #formaPagamento
-                               [dataSource]="formasDePagamento"
-                               displayExpr="value"
-                               valueExpr="value">
-                </dx-select-box>
-                <dx-radio-group [dataSource]="formaPagamento">
-                </dx-radio-group>
-                <div *ngIf="formaPagamentoSelectBox.selectedItem === 'Dinheiro'">
-                    <span>Dinheiro Entregue: </span>
-                    <dx-number-box [(value)]="dinheiroEntregue"
-                                   [min]="0"
-                                   format="R$ #,##0.00">
-                    </dx-number-box>
-                    <span>Troco: {{ Utils.formatarComoMoeda(dinheiroEntregue - totalGeral) }}</span>
+                  title="Forma de Pagamento"
+                  width="40vw">
+            <div *dxTemplate="let data  of 'pagamentoTemplate'">
+                <div *ngIf="formaPagamentoVisible">
+                    <strong>Forma de Pagamento:</strong>
+                    <dx-radio-group #formaPagamento
+                                    (onValueChanged)="defineFormaPagamento($event)"
+                                    [items]="formasPag"
+                                    [value]="formasPag"
+                                    layout="horizontal">
+                    </dx-radio-group>
+                    <div *ngIf="formaPagDinheiro === 'Dinheiro'" class="mt">
+                        <span>Dinheiro Entregue: </span>
+                        <dx-number-box [(value)]="dinheiroEntregue"
+                                       [min]="0"
+                                       class="mb"
+                                       format="R$ #,##0.00">
+                        </dx-number-box>
+                    </div>
+                    <div style="display: flex; justify-content: space-between">
+                        <span class="mt" style="font-size: 26px; font-weight: bolder">
+                            Valor: {{ Utils.formatarComoMoeda(totalGeral) }}
+                        </span>
+                        <span *ngIf="formaPagDinheiro === 'Dinheiro'" class="mt"
+                              style="font-size: 26px; font-weight: bolder">
+                            Troco: {{ Utils.formatarComoMoeda(dinheiroEntregue - totalGeral) }}
+                        </span>
+                    </div>
+                    <div class="mt" style="display: flex; width: 100%; justify-content: flex-end">
+                        <dx-button class="mr"
+                                   icon="fa fa-floppy-disk"
+                                   text="Salvar">
+                        </dx-button>
+                        <dx-button (onClick)="formaPagamentoVisible = false"
+                                   icon="fa fa-arrow-rotate-left"
+                                   text="Voltar">
+                        </dx-button>
+                    </div>
                 </div>
             </div>
         </dx-popup>

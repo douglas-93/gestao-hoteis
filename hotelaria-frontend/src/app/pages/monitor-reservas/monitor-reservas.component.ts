@@ -6,7 +6,7 @@ import {Utils} from "../../shared/Utils";
 import {QuartoModel} from "../../shared/models/quarto.model";
 import {QuartoService} from "../../shared/services/quarto.service";
 import {forkJoin, lastValueFrom} from "rxjs";
-import {DxDataGridComponent, DxSelectBoxComponent} from "devextreme-angular";
+import {DxDataGridComponent, DxRadioGroupComponent, DxSelectBoxComponent} from "devextreme-angular";
 import _ from "lodash";
 import {TransacaoService} from "../../shared/services/transacao.service";
 import {TransacaoModel} from "../../shared/models/transacaoModel";
@@ -21,7 +21,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
 
     @ViewChild('monitor', {static: false}) monitor: DxDataGridComponent;
     @ViewChild('gridCheckOut', {static: false}) gridCheckOut: DxDataGridComponent;
-    @ViewChild('formaPagamento', {static: false}) formaPagamentoSelectBox: DxSelectBoxComponent;
+    @ViewChild('formaPagamento', {static: false}) formaPagamentoSelectBox: DxRadioGroupComponent;
 
     reservas: ReservaModel[] = [];
     quartos: QuartoModel[] = [];
@@ -40,8 +40,9 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     totalConsumo: number;
     formaPagamentoVisible: boolean = false;
     dinheiroEntregue: number = 0;
+    formasPag: string[] = ['Cartão Crédito', 'Cartão Débito', 'Pix', 'Dinheiro'];
     protected readonly Utils = Utils;
-    formasDePagamento: { value: string }[] = [{value: 'Dinheiro'}, {value: 'Cartão'}, {value: 'Pix'}];
+    formaPagDinheiro: string = '';
 
     constructor(private reservaService: ReservaService,
                 private quartoService: QuartoService,
@@ -259,5 +260,9 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
         this.totalConsumo = 0;
         this.consumo = [];
         this.estadia = [];
+    }
+
+    defineFormaPagamento(e: any) {
+        this.formaPagDinheiro = e.value;
     }
 }
