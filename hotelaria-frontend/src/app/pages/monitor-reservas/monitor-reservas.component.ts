@@ -13,6 +13,7 @@ import {TransacaoModel} from "../../shared/models/transacaoModel";
 import {NotaCheckOutService} from "../../shared/services/notaCheckOut.service";
 import {NotaCheckOutModel} from "../../shared/models/notaCheckOut.model";
 import {FormaPagamentoEnum} from "../../shared/enums/FormaPagamentoEnum";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -53,7 +54,8 @@ export class MonitorReservasComponent implements OnInit {
     constructor(private reservaService: ReservaService,
                 private quartoService: QuartoService,
                 private transacaoService: TransacaoService,
-                private notaCheckOutService: NotaCheckOutService) {
+                private notaCheckOutService: NotaCheckOutService,
+                private router: Router) {
         this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
     }
 
@@ -82,12 +84,7 @@ export class MonitorReservasComponent implements OnInit {
     filtraQuarto() {
         this.quartos.forEach(quarto => {
             quarto.reservas = _.compact(this.reservas.filter(r => {
-                if (!_.isNil(r.quarto)) {
-                    if (quarto.nome === r.quarto.nome) {
-                        return r;
-                    }
-                }
-                return null;
+                return (!_.isNil(r.quarto) && (quarto.nome === r.quarto.nome)) ? r : null;
             }))
         });
         this.isLoading = false;
@@ -188,34 +185,6 @@ export class MonitorReservasComponent implements OnInit {
                 notify('Falha ao realizar cancelamento: ' + erro.message, 'error', 3600);
             })
     }
-
-    /*carregaDados() {
-        this.isLoading = true;
-        let calls = forkJoin([
-            this.reservaService.buscarReservasPorPeriodo(
-                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
-                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6]),
-                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
-                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6])),
-            this.quartoService.findAll()
-        ]);
-
-        calls.subscribe(([respReserva, respQuarto]) => {
-                if (respQuarto.ok && respReserva) {
-                    this.quartos = respQuarto.body!;
-                    this.reservas = respReserva.body!;
-                    this.filtraQuarto();
-                }
-            },
-            ([errQuarto, errReserva]) => {
-                if (errQuarto) {
-                    notify('Não foi possível carregar os quartos', 'error', 3600);
-                }
-                if (errReserva) {
-                    notify('Não foi possível carregar as reservas', 'error', 3600);
-                }
-            });
-    }*/
 
     async carregaDados() {
         this.isLoading = true;
@@ -318,5 +287,9 @@ export class MonitorReservasComponent implements OnInit {
         this.totalConsumo = 0;
         this.consumo = [];
         this.estadia = [];
+    }
+
+    cadastraConsumo() {
+        this.router.navigate(['consumo', 'cad', this.reservaDoResumo.id]);
     }
 }

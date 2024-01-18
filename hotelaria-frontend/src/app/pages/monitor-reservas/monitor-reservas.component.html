@@ -24,7 +24,6 @@
             <div *dxTemplate="let data of 'gridTemplate'" style="width: 100%">
                 <dx-data-grid #monitor
                               [dataSource]="quartos"
-                              [rowAlternationEnabled]="true"
                               [showBorders]="true"
                               keyExpr="nome">
                     <dxi-column [visible]="false" caption="Quarto" dataField="nome"></dxi-column>
@@ -79,6 +78,8 @@
                     </strong><br><br>
 
                     <div style="font-size: 18px">
+                        <strong>Reserva: </strong><br>
+                        <span>{{ reservaDoResumo.id }}</span><br>
                         <strong>Hospedes:</strong><br>
                         <span *ngFor="let h of reservaDoResumo.hospedes">
                                               {{ h.nome }}
@@ -104,7 +105,11 @@
                                    text="Check-Out">
                         </dx-button>
                     </div>
-                    <div style="display: flex; justify-content: center; margin-top: 10px">
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px">
+                        <dx-button (onClick)="cadastraConsumo()"
+                                   icon="fa fa-cart-shopping"
+                                   text="Consumo">
+                        </dx-button>
                         <dx-button (onClick)="this.cancelaVisible = true"
                                    icon="fa fa-cancel"
                                    text="Cancelar">
