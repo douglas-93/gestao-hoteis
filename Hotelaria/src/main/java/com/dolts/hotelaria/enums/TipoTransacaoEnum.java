@@ -1,5 +1,8 @@
 package com.dolts.hotelaria.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TipoTransacaoEnum {
     ENTRADA("Entrada"),
     SAIDA("Saída"),
@@ -12,7 +15,4 @@ public enum TipoTransacaoEnum {
         this.descricao = descricao;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
 }

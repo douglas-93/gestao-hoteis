@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ReservaService} from "../../shared/services/reserva.service";
 import {ReservaModel} from "../../shared/models/reserva.model";
 import notify from "devextreme/ui/notify";
@@ -6,10 +6,13 @@ import {Utils} from "../../shared/Utils";
 import {QuartoModel} from "../../shared/models/quarto.model";
 import {QuartoService} from "../../shared/services/quarto.service";
 import {forkJoin, lastValueFrom} from "rxjs";
-import {DxDataGridComponent, DxRadioGroupComponent, DxSelectBoxComponent} from "devextreme-angular";
+import {DxDataGridComponent, DxDateBoxComponent, DxRadioGroupComponent} from "devextreme-angular";
 import _ from "lodash";
 import {TransacaoService} from "../../shared/services/transacao.service";
 import {TransacaoModel} from "../../shared/models/transacaoModel";
+import {NotaCheckOutService} from "../../shared/services/notaCheckOut.service";
+import {NotaCheckOutModel} from "../../shared/models/notaCheckOut.model";
+import {FormaPagamentoEnum} from "../../shared/enums/FormaPagamentoEnum";
 
 
 @Component({
@@ -17,11 +20,12 @@ import {TransacaoModel} from "../../shared/models/transacaoModel";
     templateUrl: './monitor-reservas.component.html',
     styleUrls: ['./monitor-reservas.component.scss']
 })
-export class MonitorReservasComponent implements OnInit, AfterViewInit {
+export class MonitorReservasComponent implements OnInit {
 
     @ViewChild('monitor', {static: false}) monitor: DxDataGridComponent;
     @ViewChild('gridCheckOut', {static: false}) gridCheckOut: DxDataGridComponent;
-    @ViewChild('formaPagamento', {static: false}) formaPagamentoSelectBox: DxRadioGroupComponent;
+    @ViewChild('formaPagamento', {static: false}) formaPagamento: DxRadioGroupComponent;
+    @ViewChild('dataCheckOut', {static: false}) dataCheckOut: DxDateBoxComponent;
 
     reservas: ReservaModel[] = [];
     quartos: QuartoModel[] = [];
@@ -38,24 +42,23 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     totalGeral: number;
     totalEstadia: number;
     totalConsumo: number;
+    valorDesconto: number;
     formaPagamentoVisible: boolean = false;
     dinheiroEntregue: number = 0;
-    formasPag: string[] = ['Cartão Crédito', 'Cartão Débito', 'Pix', 'Dinheiro'];
-    protected readonly Utils = Utils;
+    formasPag = Object.keys(FormaPagamentoEnum).map(key => ({value: key, displayText: FormaPagamentoEnum[key]}));
     formaPagDinheiro: string = '';
+    hoje: Date | number | string = Date.now();
+    protected readonly Utils = Utils;
 
     constructor(private reservaService: ReservaService,
                 private quartoService: QuartoService,
-                private transacaoService: TransacaoService) {
+                private transacaoService: TransacaoService,
+                private notaCheckOutService: NotaCheckOutService) {
         this.diasDaSemana = Utils.gerarDatasSemana(this.semanaGerada);
     }
 
     ngOnInit() {
         this.carregaDados();
-    }
-
-    ngAfterViewInit() {
-
     }
 
     periodoAnterior() {
@@ -186,7 +189,7 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
             })
     }
 
-    carregaDados() {
+    /*carregaDados() {
         this.isLoading = true;
         let calls = forkJoin([
             this.reservaService.buscarReservasPorPeriodo(
@@ -212,7 +215,31 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
                     notify('Não foi possível carregar as reservas', 'error', 3600);
                 }
             });
+    }*/
+
+    async carregaDados() {
+        this.isLoading = true;
+
+        const requests = forkJoin([
+            this.reservaService.buscarReservasPorPeriodo(
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6]),
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[0]),
+                Utils.formatarDataParaStringSemDiaSemana(this.diasDaSemana[6])
+            ),
+            this.quartoService.findAll()
+        ]);
+
+        const [respReserva, respQuarto] = await lastValueFrom(requests);
+
+        if (respQuarto.ok && respReserva.ok) {
+            this.quartos = respQuarto.body!;
+            this.reservas = respReserva.body!;
+            this.filtraQuarto();
+        }
+        this.isLoading = false;
     }
+
 
     retornaTexto(r: any) {
         if (r.length > 0) {
@@ -249,8 +276,39 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
     }
 
     aplicaDesconto(event: any) {
-        let valor = event.value;
-        this.totalGeral = this.totalCheckOut - valor;
+        this.valorDesconto = event.value;
+        this.totalGeral = this.totalCheckOut - this.valorDesconto;
+    }
+
+    defineFormaPagamento(e: any) {
+        this.formaPagDinheiro = e.value;
+    }
+
+    salvaCheckOut() {
+        const notaCheckOut: NotaCheckOutModel = new NotaCheckOutModel();
+        notaCheckOut.reserva = this.reservaDoResumo;
+        notaCheckOut.valorDiaria = this.reservaDoResumo.quarto.valorDiaria;
+        notaCheckOut.dataReferencia = Utils.parseDataStringParaDate(Utils.formatarDataParaStringSemDiaSemana(new Date(this.dataCheckOut.value)));
+        notaCheckOut.formaPagamento = this.formaPagamento.value as FormaPagamentoEnum;
+        notaCheckOut.valorConsumido = this.totalConsumo;
+        notaCheckOut.valorDesconto = this.valorDesconto;
+        notaCheckOut.subtotal = this.totalCheckOut;
+        notaCheckOut.valorFinal = this.totalGeral;
+
+        this.notaCheckOutService.save(notaCheckOut).subscribe({
+            next: resp => {
+                if (resp.ok) {
+                    notify('Check-Out realizado com sucesso', 'success', 3600);
+                    this.formaPagamentoVisible = false;
+                    this.isCheckOutVisible = false;
+                    this.carregaDados();
+                }
+            },
+            error: err => {
+                notify('Ocorreu uma falha ao realizar o Check-Out', 'error', 3600);
+                console.error(err);
+            }
+        })
     }
 
     private limpaCheckOut() {
@@ -260,9 +318,5 @@ export class MonitorReservasComponent implements OnInit, AfterViewInit {
         this.totalConsumo = 0;
         this.consumo = [];
         this.estadia = [];
-    }
-
-    defineFormaPagamento(e: any) {
-        this.formaPagDinheiro = e.value;
     }
 }

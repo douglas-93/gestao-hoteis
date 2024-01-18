@@ -1,5 +1,8 @@
 package com.dolts.hotelaria.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TiposProdutoEnum {
     COMIDA("Comida"),
     BEBIDA("Bebida"),
@@ -11,8 +14,5 @@ public enum TiposProdutoEnum {
         this.descricao = descricao;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
 }
 

@@ -2,7 +2,7 @@
 <div class="content-block">
     <div class="dx-card responsive-paddings">
 
-        <dx-load-panel [visible]="isLoading">
+        <dx-load-panel [(visible)]="isLoading">
         </dx-load-panel>
 
         <dx-button (onClick)="periodoAnterior()"
@@ -58,6 +58,9 @@
                         <span *ngIf="formataHospedeReserva(data).at(0)?.checkedIn" style="color: #08cb0b">
                             <i class="fa fa-door-closed"></i>
                         </span>
+                        <span *ngIf="formataHospedeReserva(data).at(0)?.checkedIn && formataHospedeReserva(data).at(0)?.checkedOut" style="color: #08cb0b; margin-left: 5px">
+                            <i class="fa fa-check-double"></i>
+                        </span>
                         <span *ngIf="retornaTexto(formataHospedeReserva(data)) == 'Reservado'" style="color: #cb9e08">
                             <i class="fa fa-check"></i>
                         </span>
@@ -96,7 +99,7 @@
                                    text="Check-In">
                         </dx-button>
                         <dx-button (onClick)="apuraCheckOut()"
-                                   [disabled]="!reservaDoResumo.checkedIn"
+                                   [disabled]="!reservaDoResumo.checkedIn || reservaDoResumo.checkedOut"
                                    icon="fa fa-check-double"
                                    text="Check-Out">
                         </dx-button>
@@ -334,14 +337,23 @@
                   width="40vw">
             <div *dxTemplate="let data  of 'pagamentoTemplate'">
                 <div *ngIf="formaPagamentoVisible">
+                    <div class="row">
+                        <span class="mr" style="font-size: 20px">Data: </span>
+                        <dx-date-box [value]="hoje"
+                                     #dataCheckOut
+                                     displayFormat="dd/MM/yyyy">
+                        </dx-date-box>
+                    </div>
+                    <br>
                     <strong>Forma de Pagamento:</strong>
                     <dx-radio-group #formaPagamento
                                     (onValueChanged)="defineFormaPagamento($event)"
-                                    [items]="formasPag"
-                                    [value]="formasPag"
-                                    layout="horizontal">
+                                    [dataSource]="formasPag"
+                                    displayExpr="displayText"
+                                    layout="horizontal"
+                                    valueExpr="value">
                     </dx-radio-group>
-                    <div *ngIf="formaPagDinheiro === 'Dinheiro'" class="mt">
+                    <div *ngIf="formaPagDinheiro === 'DINHEIRO'" class="mt">
                         <span>Dinheiro Entregue: </span>
                         <dx-number-box [(value)]="dinheiroEntregue"
                                        [min]="0"
@@ -353,13 +365,14 @@
                         <span class="mt" style="font-size: 26px; font-weight: bolder">
                             Valor: {{ Utils.formatarComoMoeda(totalGeral) }}
                         </span>
-                        <span *ngIf="formaPagDinheiro === 'Dinheiro'" class="mt"
+                        <span *ngIf="formaPagDinheiro === 'DINHEIRO'" class="mt"
                               style="font-size: 26px; font-weight: bolder">
                             Troco: {{ Utils.formatarComoMoeda(dinheiroEntregue - totalGeral) }}
                         </span>
                     </div>
                     <div class="mt" style="display: flex; width: 100%; justify-content: flex-end">
-                        <dx-button class="mr"
+                        <dx-button (onClick)="salvaCheckOut()"
+                                   class="mr"
                                    icon="fa fa-floppy-disk"
                                    text="Salvar">
                         </dx-button>
