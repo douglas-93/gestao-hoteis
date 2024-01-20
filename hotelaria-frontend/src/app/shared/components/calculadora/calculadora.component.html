@@ -1,0 +1,17 @@
+<div class="calculator">
+    <dx-text-box [placeholder]="'0'"
+                 [readOnly]=true
+                 [value]=displayValue
+                 id="display"
+                 stylingMode='underlined'
+                 width='100%'>
+    </dx-text-box>
+    <div class="buttons">
+        <div *ngFor="let row of buttons" class="row">
+            <div *ngFor="let button of row">
+                <div (click)="handleButtonClick(button)">{{ button }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
