@@ -15,6 +15,7 @@ export class HomeComponent {
     hotel: HotelModel;
     arquivoDigital: ArquivoDIgitalModel;
     dataHoraHoje: number;
+    isCalculadoraVisible: boolean = false;
 
     constructor(private hotelService: HotelService,
                 private arquivoDigitalService: ArquivoDigitalService) {

@@ -4,12 +4,15 @@
                  [value]=displayValue
                  id="display"
                  stylingMode='underlined'
-                 width='100%'>
+                 width='300px'>
     </dx-text-box>
     <div class="buttons">
         <div *ngFor="let row of buttons" class="row">
             <div *ngFor="let button of row">
-                <div (click)="handleButtonClick(button)">{{ button }}</div>
+                <dx-button (onClick)="handleButtonClick(button)"
+                           [stylingMode]="'outlined'"
+                           [text]="button">
+                </dx-button>
             </div>
         </div>
     </div>

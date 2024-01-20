@@ -1,6 +1,7 @@
 <div class="content-block">
     <div class="dx-card responsive-paddings">
-                <span class="row" style="justify-content: flex-end">Data e Hora: {{ dataHoraHoje | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+        <span class="row"
+              style="justify-content: flex-end">Data e Hora: {{ dataHoraHoje | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
         <div class="row" style="justify-content: space-evenly;">
             <h1 style="font-weight: bolder; font-size: 4rem">{{ hotel.nome }}</h1>
             <img [src]="hotel.logoAsDataSource" class="imagem img-border">
@@ -28,13 +29,20 @@
                 </div>
             </div>
             <div class="col">
-                <div class="botao">
+                <div (click)="isCalculadoraVisible = true" class="botao">
                     <span><i class="fa-solid fa-calculator"></i> Calculadora</span>
                 </div>
             </div>
         </div>
-        <div>
+        <dx-popup [(visible)]="isCalculadoraVisible"
+                  [dragEnabled]="true"
+                  [resizeEnabled]="false"
+                  [showTitle]="true"
+                  [showCloseButton]="true"
+                  title="Calculadora"
+        width="450px"
+        height="450px">
             <app-calculadora></app-calculadora>
-        </div>
+        </dx-popup>
     </div>
 </div>
