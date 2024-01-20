@@ -7,13 +7,13 @@ import {QuartoModel} from "../../shared/models/quarto.model";
 import {QuartoService} from "../../shared/services/quarto.service";
 import {forkJoin, lastValueFrom} from "rxjs";
 import {DxDataGridComponent, DxDateBoxComponent, DxRadioGroupComponent} from "devextreme-angular";
-import _ from "lodash";
 import {TransacaoService} from "../../shared/services/transacao.service";
 import {TransacaoModel} from "../../shared/models/transacaoModel";
 import {NotaCheckOutService} from "../../shared/services/notaCheckOut.service";
 import {NotaCheckOutModel} from "../../shared/models/notaCheckOut.model";
 import {FormaPagamentoEnum} from "../../shared/enums/FormaPagamentoEnum";
 import {Router} from "@angular/router";
+import _ from "lodash";
 
 
 @Component({

@@ -57,7 +57,9 @@
                         <span *ngIf="formataHospedeReserva(data).at(0)?.checkedIn" style="color: #08cb0b">
                             <i class="fa fa-door-closed"></i>
                         </span>
-                        <span *ngIf="formataHospedeReserva(data).at(0)?.checkedIn && formataHospedeReserva(data).at(0)?.checkedOut" style="color: #08cb0b; margin-left: 5px">
+                        <span
+                            *ngIf="formataHospedeReserva(data).at(0)?.checkedIn && formataHospedeReserva(data).at(0)?.checkedOut"
+                            style="color: #08cb0b; margin-left: 5px">
                             <i class="fa fa-check-double"></i>
                         </span>
                         <span *ngIf="retornaTexto(formataHospedeReserva(data)) == 'Reservado'" style="color: #cb9e08">
@@ -107,10 +109,12 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-top: 10px">
                         <dx-button (onClick)="cadastraConsumo()"
+                                   [disabled]="!reservaDoResumo.checkedIn || reservaDoResumo.checkedOut"
                                    icon="fa fa-cart-shopping"
                                    text="Consumo">
                         </dx-button>
                         <dx-button (onClick)="this.cancelaVisible = true"
+                                   [disabled]="reservaDoResumo.checkedOut"
                                    icon="fa fa-cancel"
                                    text="Cancelar">
                         </dx-button>
@@ -344,8 +348,8 @@
                 <div *ngIf="formaPagamentoVisible">
                     <div class="row">
                         <span class="mr" style="font-size: 20px">Data: </span>
-                        <dx-date-box [value]="hoje"
-                                     #dataCheckOut
+                        <dx-date-box #dataCheckOut
+                                     [value]="hoje"
                                      displayFormat="dd/MM/yyyy">
                         </dx-date-box>
                     </div>
