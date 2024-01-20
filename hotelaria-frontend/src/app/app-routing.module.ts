@@ -28,7 +28,7 @@ import {
 } from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
-import {NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {HotelComponent} from './pages/hotel/hotel.component';
 import {CategoriaComponent} from './pages/categoria/categoria.component';
 import {TipoComponent} from './pages/tipo/tipo.component';
@@ -45,6 +45,7 @@ import {ConsumoComponent} from './pages/consumo/consumo.component';
 import {MonitorReservasComponent} from './pages/monitor-reservas/monitor-reservas.component';
 import {ProdutoComponent} from './pages/produto/produto.component';
 import {EstoqueComponent} from './pages/estoque/estoque.component';
+import {CalculadoraComponent} from "./shared/components/calculadora/calculadora.component";
 
 const routes: Routes = [
     {
@@ -214,7 +215,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule, DxSchedulerModule, DevExtremeModule]
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule, DxSchedulerModule, DevExtremeModule, DatePipe]
   ,
     providers: [AuthGuardService]
   ,
@@ -240,7 +241,8 @@ const routes: Routes = [
         ConsumoComponent,
         MonitorReservasComponent,
         ProdutoComponent,
-        EstoqueComponent
+        EstoqueComponent,
+        CalculadoraComponent
     ]
 })
 export class AppRoutingModule {
