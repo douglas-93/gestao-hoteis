@@ -1,6 +1,5 @@
 .reserva-na-semana {
-    background-color: #FFFF99; /* Cor de fundo para destacar as reservas na semana */
-    /* Adicione outros estilos conforme necessário */
+    background-color: #FFFF99;
 }
 
 .card {
@@ -16,16 +15,12 @@
     padding: 10px;
     text-align: center;
     font-size: 14px;
-    transition: box-shadow 0.3s ease;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
 }
 
-/*.quadrinho.vazio {
-    background-color: rgba(128, 255, 128, 0.66);
+.quadrinho:active {
+    transform: scale(0.95);
 }
-
-.quadrinho.ocupado {
-    background-color: rgba(255, 212, 132, 0.6);
-}*/
 
 .quadrinho:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
