@@ -292,4 +292,8 @@ export class MonitorReservasComponent implements OnInit {
     cadastraConsumo() {
         this.router.navigate(['consumo', 'cad', this.reservaDoResumo.id]);
     }
+
+    voltar() {
+        this.router.navigate(['home']);
+    }
 }

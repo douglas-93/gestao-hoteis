@@ -5,15 +5,28 @@
         <dx-load-panel [(visible)]="isLoading">
         </dx-load-panel>
 
-        <dx-button (onClick)="periodoAnterior()"
-                   text="Anterior">
-        </dx-button>
-        <dx-button (onClick)="semanaAtual()"
-                   text="Atual">
-        </dx-button>
-        <dx-button (onClick)="proximoPeriodo()"
-                   text="Próximo">
-        </dx-button>
+        <div class="row mb mt" style="justify-content: center">
+            <dx-button (onClick)="periodoAnterior()"
+                       text="Anterior"
+                       type="default"
+                       class="ml">
+            </dx-button>
+            <dx-button (onClick)="semanaAtual()"
+                       text="Atual"
+                       type="default"
+                       class="ml">
+            </dx-button>
+            <dx-button (onClick)="proximoPeriodo()"
+                       text="Próximo"
+                       type="default"
+                       class="ml">
+            </dx-button>
+            <dx-button (onClick)="voltar()"
+                       text="Home"
+                       icon="home"
+                       class="ml">
+            </dx-button>
+        </div>
         <dx-form>
             <dxi-item [colCount]="4" itemType="group">
                 <dxi-item [colSpan]="3" template="gridTemplate"></dxi-item>

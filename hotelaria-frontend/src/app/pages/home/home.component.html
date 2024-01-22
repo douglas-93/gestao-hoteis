@@ -2,36 +2,87 @@
     <div class="dx-card responsive-paddings">
         <span class="row"
               style="justify-content: flex-end">Data e Hora: {{ dataHoraHoje | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
-        <div class="row" style="justify-content: space-evenly;">
+        <div class="row mb" style="justify-content: space-evenly;">
             <h1 style="font-weight: bolder; font-size: 4rem">{{ hotel.nome }}</h1>
             <img [src]="hotel.logoAsDataSource" class="imagem img-border">
         </div>
-        <div class="row">
-            <div class="col">
-                <h2>Atalhos</h2>
-                <div class="botao">
-                    Quarto
+        <div class="row mt mb" style="justify-content: center">
+            <span style="font-size: 26px; font-weight: bolder">Atalhos</span>
+        </div>
+        <div class="row mt mb" style="justify-content: space-evenly">
+            <dx-button (onClick)="navegarPara('quartos')"
+                       text="Quartos"
+                       icon="fa-solid fa-door-open"
+                       type="default">
+            </dx-button>
+            <dx-button (onClick)="navegarPara('hospedes')"
+                       text="Hospedes"
+                       icon="fa-solid fa-user"
+                       type="default">
+            </dx-button>
+            <dx-button (onClick)="navegarPara('empresas')"
+                       text="Empresas"
+                       icon="fa-solid fa-city"
+                       type="default">
+            </dx-button>
+            <dx-button (onClick)="navegarPara('reservas')"
+                       text="Reservas"
+                       icon="fa-solid fa-calendar-days"
+                       type="default">
+            </dx-button>
+            <dx-button (onClick)="navegarPara('produto')"
+                       text="Produtos"
+                       icon="fa-solid fa-barcode"
+                       type="default">
+            </dx-button>
+            <dx-button (onClick)="navegarPara('monitor-reservas')"
+                       text="Monitor"
+                       icon="fa-solid fa-table"
+                       type="default">
+            </dx-button>
+            <dx-button (onClick)="isCalculadoraVisible = true"
+                       text="Calculadora"
+                       icon="fa-solid fa-calculator"
+                       type="default">
+            </dx-button>
+        </div>
+        <div class="row mb mt" style="justify-content: center">
+            <span style="font-size: 26px; font-weight: bolder">Estatísticas</span>
+        </div>
+        <div class="row mt mb">
+            <div class="stats-container">
+                <div class="stat-block">
+                    <span class="stat-title">Reservas Na Semana: </span><br>
+                    <span class="stat-value">{{ reservasNaSemana }}</span><br>
                 </div>
-                <div class="botao">
-                    Hospede
+                <div class="stat-block">
+                    <span class="stat-title">Reservas Com CheckIn: </span><br>
+                    <span class="stat-value">{{ reservasComCheckIn }}</span><br>
                 </div>
-                <div class="botao">
-                    Empresa
+                <div class="stat-block">
+                    <span class="stat-title">Reservas Com CheckOut: </span><br>
+                    <span class="stat-value">{{ reservasComCheckOut }}</span><br>
                 </div>
-                <div class="botao">
-                    Reserva
+                <div class="stat-block">
+                    <span class="stat-title">Reservas Previstas Para Sair na Semana: </span><br>
+                    <span class="stat-value">{{ reservasPrevistasParaSair }}</span><br>
                 </div>
-                <div class="botao">
-                    Produto
+                <div class="stat-block">
+                    <span class="stat-title">CheckOut Para Hoje: </span><br>
+                    <span class="stat-value">{{ checkOutParaHoje }}</span><br>
                 </div>
-                <div class="botao">
-                    Monitor
+                <div class="stat-block">
+                    <span class="stat-title">Quarto Mais Vago na Semana: </span><br>
+                    <span class="stat-value">{{ quartoMaisVagoDaSemana }}</span><br>
                 </div>
             </div>
-            <div class="col">
-                <div (click)="isCalculadoraVisible = true" class="botao">
-                    <span><i class="fa-solid fa-calculator"></i> Calculadora</span>
-                </div>
+            <div class="stats-container">
+                <ng-container *ngFor="let data of quartosOcupados">
+                    <div class="stat-block">
+                        <span class="stat-title">Quarto {{ data.quarto }}: </span><br>
+                        <span class="stat-value">{{ data.ocupacao }}</span><br>
+                    </div>
+                </ng-container>
             </div>
         </div>
         <dx-popup [(visible)]="isCalculadoraVisible"
@@ -40,8 +91,8 @@
                   [showTitle]="true"
                   [showCloseButton]="true"
                   title="Calculadora"
-        width="450px"
-        height="450px">
+                  width="450px"
+                  height="450px">
             <app-calculadora></app-calculadora>
         </dx-popup>
     </div>
