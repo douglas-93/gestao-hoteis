@@ -11,4 +11,8 @@ export class HotelService extends BaseCRUDService<HotelModel> {
     constructor(http: HttpClient) {
         super('/hotel', http);
     }
+
+    findLastId() {
+        return this.http.get<number>(`${this.url}/lastId`, {observe: 'response'});
+    }
 }

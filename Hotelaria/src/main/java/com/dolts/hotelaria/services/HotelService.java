@@ -16,6 +16,10 @@ public class HotelService extends BaseCRUDService<HotelModel, Long> {
     @Autowired
     private EnderecoService enderecoService;
 
+    public Long findLastId(){
+        return hotelRepository.findLastId();
+    }
+
     @Override
     public AbstractCRUDRepository<HotelModel, Long> getRepository() {
         super.getRepository();

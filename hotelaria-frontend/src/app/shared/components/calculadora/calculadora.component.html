@@ -10,8 +10,8 @@
         <div *ngFor="let row of buttons" class="row">
             <div *ngFor="let button of row">
                 <dx-button (onClick)="handleButtonClick(button)"
-                           [stylingMode]="'outlined'"
-                           [text]="button">
+                           [text]="button"
+                           type="default">
                 </dx-button>
             </div>
         </div>
