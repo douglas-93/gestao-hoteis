@@ -9,6 +9,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.core.io.InputStreamResource;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,9 +35,11 @@ public class RelatorioController {
     private ArquivoDigitalService arquivoDigitalService;
 
     @GetMapping
-    public ResponseEntity<InputStreamResource> generateReport() throws JRException {
+    public ResponseEntity<InputStreamResource> generateReport() throws JRException, FileNotFoundException {
+
+        File file = ResourceUtils.getFile("classpath:relatorios/hospedes.jrxml");
         // Cria o relatório Jasper
-        JasperReport report = JasperCompileManager.compileReport("/home/douglas/IdeaProjects/gestao-hoteis/Hotelaria/src/main/java/com/dolts/hotelaria/relatorios/hospedes.jrxml");
+        JasperReport report = JasperCompileManager.compileReport(file.getAbsolutePath());
 
         // Obtém os dados para o relatório
         List<HospedeModel> data = hospedeService.findAll();
