@@ -39,8 +39,6 @@ import {ReservaComponent} from './pages/reserva/reserva.component';
 import {FormsModule} from "@angular/forms";
 import {EnderecoFormComponent} from "./shared/components/endereco-form/endereco-form.component";
 import {ConfiguracoesComponent} from './pages/configuracoes/configuracoes.component';
-import {CheckInComponent} from './pages/check-in/check-in.component';
-import {CheckOutComponent} from './pages/check-out/check-out.component';
 import {ConsumoComponent} from './pages/consumo/consumo.component';
 import {MonitorReservasComponent} from './pages/monitor-reservas/monitor-reservas.component';
 import {ProdutoComponent} from './pages/produto/produto.component';
@@ -236,8 +234,6 @@ const routes: Routes = [
         ReservaComponent,
         EnderecoFormComponent,
         ConfiguracoesComponent,
-        CheckInComponent,
-        CheckOutComponent,
         ConsumoComponent,
         MonitorReservasComponent,
         ProdutoComponent,

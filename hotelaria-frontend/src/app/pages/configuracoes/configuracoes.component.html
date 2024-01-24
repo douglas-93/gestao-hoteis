@@ -1,1 +1,15 @@
-<p>configuracoes works!</p>
+<h2 class="content-block">Configurações</h2>
+<div class="content-block">
+    <div class="dx-card responsive-paddings">
+        <div class="row">
+            <dx-check-box class="mr"
+                          text="Usar cancelamento automático de reservas">
+            </dx-check-box>
+            <dx-date-box (onValueChanged)="logar($event)"
+                         [(value)]="hora"
+                         text="Hora"
+                         type="time">
+            </dx-date-box>
+        </div>
+    </div>
+</div>
