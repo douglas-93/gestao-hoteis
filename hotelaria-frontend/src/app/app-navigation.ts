@@ -66,6 +66,11 @@ export const navigation = [
         icon: 'fa-solid fa-arrow-right-arrow-left'
     },
     {
+        text: 'Relatorios',
+        path: '/pages/relatorios',
+        icon: 'fa-regular fa-file-pdf'
+    },
+    {
         text: 'Configurações',
         path: '/configuracoes',
         icon: 'fa fa-gear'
