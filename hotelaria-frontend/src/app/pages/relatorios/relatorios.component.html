@@ -1,4 +1,14 @@
 <h2 class="content-block">Relatorios</h2>
 <div class="content-block">
-    <div class="dx-card responsive-paddings">Put your content here</div>
+    <div class="dx-card responsive-paddings">
+        <dx-select-box (onValueChanged)="atualizaRelatorio($event)"
+                       [dataSource]="relatorios"
+                       displayExpr="opcao"
+                       valueExpr="relatorio">
+        </dx-select-box>
+        <dx-button (onClick)="gerar()"
+                   icon="fa-regular fa-file-pdf"
+                   text="Gerar">
+        </dx-button>
+    </div>
 </div>
