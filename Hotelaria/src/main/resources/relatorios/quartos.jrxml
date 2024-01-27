@@ -63,10 +63,10 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="nome" class="java.lang.String"/>
-	<field name="cpf" class="java.lang.String"/>
-	<field name="telefone" class="java.lang.String"/>
-	<field name="celular" class="java.lang.String"/>
-	<field name="email" class="java.lang.String"/>
+	<field name="valorDiaria" class="java.math.BigDecimal"/>
+	<field name="capacidadePessoas" class="java.lang.Integer"/>
+	<field name="categoriaQuarto" class="com.dolts.hotelaria.models.CategoriaQuartoModel"/>
+	<field name="tipoQuarto" class="com.dolts.hotelaria.models.TipoQuartoModel"/>
 	<title>
 		<band height="71" splitType="Stretch">
 			<frame>
@@ -128,7 +128,7 @@
 	<columnHeader>
 		<band height="50">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="30" width="180" height="20" backcolor="#E0E0E0" uuid="62fd08b5-e0b9-4ff3-a2dc-c209b75b205c"/>
+				<reportElement mode="Opaque" x="63" y="30" width="100" height="20" backcolor="#E0E0E0" uuid="62fd08b5-e0b9-4ff3-a2dc-c209b75b205c"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -136,12 +136,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nome]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="10" width="555" height="20" forecolor="#FFFFFF" backcolor="#030303" uuid="41d40793-e2f1-48b3-90b3-82242caca7e9">
+				<reportElement mode="Opaque" x="63" y="10" width="434" height="20" forecolor="#FFFFFF" backcolor="#030303" uuid="41d40793-e2f1-48b3-90b3-82242caca7e9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -153,10 +153,10 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Listagem de Hospedes]]></text>
+				<text><![CDATA[Listagem de Quartos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="180" y="30" width="80" height="20" backcolor="#E0E0E0" uuid="36890003-2da3-41ce-9ae1-5903272d20eb"/>
+				<reportElement mode="Opaque" x="347" y="30" width="80" height="20" backcolor="#E0E0E0" uuid="36890003-2da3-41ce-9ae1-5903272d20eb"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -164,12 +164,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[CPF]]></text>
+				<text><![CDATA[Valor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="260" y="30" width="70" height="20" backcolor="#E0E0E0" uuid="9260eaeb-c1e5-4ef6-8ff3-1d15958240eb"/>
+				<reportElement mode="Opaque" x="427" y="30" width="70" height="20" backcolor="#E0E0E0" uuid="9260eaeb-c1e5-4ef6-8ff3-1d15958240eb"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -177,14 +177,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Telefone]]></text>
+				<text><![CDATA[Capacidade]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="330" y="30" width="75" height="20" backcolor="#E0E0E0" uuid="0ea45db0-94ec-4ef4-9b80-966f534b246b">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
+				<reportElement mode="Opaque" x="163" y="30" width="90" height="20" backcolor="#E0E0E0" uuid="4a6d3441-2a58-46c8-a2e1-cad8c5558032"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -192,14 +190,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Celular]]></text>
+				<text><![CDATA[Tipo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="405" y="30" width="150" height="20" backcolor="#E0E0E0" uuid="037df30b-fcdc-47c9-80a6-eebc32497717">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
+				<reportElement mode="Opaque" x="253" y="30" width="94" height="20" backcolor="#E0E0E0" uuid="8a657703-639c-4bf8-9adb-758124cf9abf"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -207,27 +203,29 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font size="12" isBold="true"/>
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[E-mail]]></text>
+				<text><![CDATA[Categoria]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="16">
 			<textField>
-				<reportElement x="0" y="0" width="180" height="16" uuid="e71e70e6-a067-42f9-968a-c237ea771c37"/>
+				<reportElement x="63" y="0" width="100" height="16" uuid="e71e70e6-a067-42f9-968a-c237ea771c37"/>
 				<box leftPadding="5">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###.###.###-##" isBlankWhenNull="true">
-				<reportElement x="180" y="0" width="80" height="16" uuid="3bc03fe2-c1c1-4e87-86a4-0605f062c081"/>
+			<textField pattern="R$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="347" y="0" width="80" height="16" uuid="3bc03fe2-c1c1-4e87-86a4-0605f062c081"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -237,54 +235,46 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{cpf} != null && java.util.regex.Pattern.compile("(\\d{3})(\\d{3})(\\d{3})(\\d{2})").matcher($F{cpf}).matches()) 
-? java.util.regex.Pattern.compile("(\\d{3})(\\d{3})(\\d{3})(\\d{2})").matcher($F{cpf}).replaceAll("$1.$2.$3-$4") 
-: ""]]></textFieldExpression>
-			</textField>
-			<textField pattern="(##) ####-####" isBlankWhenNull="true">
-				<reportElement x="260" y="0" width="70" height="16" uuid="66eb0903-0402-4ee1-b9a5-e2fdfe82d65b"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{telefone} != null && java.util.regex.Pattern.compile("(\\d{2})(\\d{4})(\\d{4})").matcher($F{telefone}).matches()) 
-? java.util.regex.Pattern.compile("(\\d{2})(\\d{4})(\\d{4})").matcher($F{telefone}).replaceAll("($1) $2-$3") 
-: ""]]></textFieldExpression>
-			</textField>
-			<textField pattern="(##) # ####-####" isBlankWhenNull="true">
-				<reportElement x="330" y="0" width="75" height="16" uuid="dcab0c59-747a-4971-ab5a-4278eadc0abd">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{celular} != null && java.util.regex.Pattern.compile("(\\d{2})(\\d{1})(\\d{4})(\\d{4})").matcher($F{celular}).matches()) 
-? java.util.regex.Pattern.compile("(\\d{2})(\\d{1})(\\d{4})(\\d{4})").matcher($F{celular}).replaceAll("($1) $2 $3-$4") 
-: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{valorDiaria}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="405" y="0" width="150" height="16" uuid="bdc19cfe-1488-4ae6-ad0b-7c2afd0c6497"/>
+				<reportElement x="427" y="0" width="70" height="16" uuid="66eb0903-0402-4ee1-b9a5-e2fdfe82d65b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{capacidadePessoas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="163" y="0" width="90" height="16" uuid="e8750c1d-6a74-4182-b7fd-79b41ac19ce8"/>
 				<box leftPadding="5">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tipoQuarto}.getNome()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="253" y="0" width="94" height="16" uuid="6ab51035-a642-48a1-a246-126f17e7ba3d"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{categoriaQuarto}.getNome()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
