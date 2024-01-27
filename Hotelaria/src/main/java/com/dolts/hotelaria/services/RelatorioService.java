@@ -13,6 +13,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +23,15 @@ import java.util.Map;
 public class RelatorioService {
 
     @Autowired
-    private HospedeService hospedeService;
-    @Autowired
     private HotelService hotelService;
     @Autowired
     private ArquivoDigitalService arquivoDigitalService;
+    @Autowired
+    private HospedeService hospedeService;
+    @Autowired
+    private ProdutoService produtoService;
+    @Autowired
+    private QuartoService quartoService;
 
 
     public InputStreamResource gerarRelatorio(String nomeRelatorio) throws JRException, FileNotFoundException {
@@ -79,7 +84,11 @@ public class RelatorioService {
     public List<?> getData(String relatorio) {
         switch (relatorio) {
             case "hospedes":
-                return hospedeService.findAll();
+                return this.hospedeService.findAll();
+            case "produtos":
+                return this.produtoService.findAll();
+            case "quartos":
+                return this.quartoService.findAll();
             default:
                 return Collections.emptyList();
         }

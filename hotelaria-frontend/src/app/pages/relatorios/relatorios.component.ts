@@ -21,10 +21,20 @@ export class RelatoriosComponent {
     }
 
     ngOnInit() {
-        this.relatorios = [{
-            relatorio: 'hospedes',
-            opcao: 'Relação de Hospedes'
-        }]
+        this.relatorios = [
+            {
+                relatorio: 'hospedes',
+                opcao: 'Relação de Hospedes'
+            },
+            {
+                relatorio: 'produtos',
+                opcao: 'Relação de Produtos e Serviços'
+            },
+            {
+                relatorio: 'quartos',
+                opcao: 'Relação de Quartos'
+            },
+        ]
     }
 
     criaElemento() {
