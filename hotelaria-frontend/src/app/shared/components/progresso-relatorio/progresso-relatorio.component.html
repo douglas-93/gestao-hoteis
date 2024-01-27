@@ -8,15 +8,21 @@
     </div>
 
     <dx-button (onClick)="downloadRelatorio()"
-               [disabled]="!erro && !pronto"
+               [disabled]="!pronto"
                icon="fa-solid fa-download"
                hint="Baixar"
                class="ml">
     </dx-button>
     <dx-button (onClick)="renderizarPDF()"
-               [disabled]="!erro && !pronto"
+               [disabled]="!pronto"
                icon="fa-regular fa-file-pdf"
                hint="Visualizar"
+               class="ml">
+    </dx-button>
+    <dx-button (onClick)="logErro()"
+               [disabled]="!erro"
+               icon="fa-regular fa-rectangle-list"
+               hint="Log do erro"
                class="ml">
     </dx-button>
 </div>
@@ -30,4 +36,28 @@
           title="Relatorio"
           height="700px">
     <object #pdfViewer height="600" width="100%"></object>
+</dx-popup>
+<dx-popup (onHiding)="errorVisible = false"
+          [dragEnabled]="false"
+          [resizeEnabled]="false"
+          [showCloseButton]="true"
+          [showTitle]="true"
+          [visible]="errorVisible"
+          title="Log de Erro">
+    <dx-text-area #erroMessageTxtArea
+                  [readOnly]="true"
+                  [value]="erroMessage">
+    </dx-text-area>
+    <div class="row mt" style="justify-content: flex-end">
+        <dx-button (onClick)="copiar()"
+                   text="Copiar"
+                   icon="fa-regular fa-clipboard"
+                   class="mr">
+        </dx-button>
+        <dx-button (onClick)="errorVisible = false"
+                   text="Fechar"
+                   icon="fa fa-arrow-rotate-left"
+                   class="ml">
+        </dx-button>
+    </div>
 </dx-popup>

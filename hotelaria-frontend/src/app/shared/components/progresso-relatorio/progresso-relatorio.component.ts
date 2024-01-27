@@ -2,6 +2,7 @@ import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import _ from "lodash";
 import notify from "devextreme/ui/notify";
 import {RelatorioService} from "../../services/relatorio.service";
+import {DxTextAreaComponent} from "devextreme-angular";
 
 @Component({
     selector: 'app-progresso-relatorio',
@@ -11,7 +12,7 @@ import {RelatorioService} from "../../services/relatorio.service";
 export class ProgressoRelatorioComponent {
 
     @ViewChild('pg') pg: HTMLDivElement;
-
+    @ViewChild('erroMessageTxtArea') erroMessageTxtArea: DxTextAreaComponent;
     @ViewChild('pdfViewer') pdfViewer: ElementRef;
 
     @Input()
@@ -25,6 +26,8 @@ export class ProgressoRelatorioComponent {
 
     erro: boolean = false;
     pronto: boolean = false;
+    erroMessage: string = '';
+    errorVisible: boolean = false;
 
     constructor(private relatorioService: RelatorioService) {
     }
@@ -32,14 +35,17 @@ export class ProgressoRelatorioComponent {
     ngOnInit() {
         this.relatorioService.gerarRelatorio(this.nomeRelatorio).subscribe({
             next: resp => {
-                this.fileBlob = resp;
+                if (resp) {
+                    this.fileBlob = resp;
+                    this.pronto = true;
+                }
             },
             complete: () => {
                 this.progress = 100;
-                this.pronto = true;
             },
             error: err => {
                 this.erro = true;
+                this.erroMessage = err.message;
                 notify('Falha ao gerar o relatório', 'error', 3600);
             }
         });
@@ -68,5 +74,16 @@ export class ProgressoRelatorioComponent {
         pdfObject.type = 'application/pdf';
 
         // O conteúdo da tag object será exibido automaticamente
+    }
+
+    logErro() {
+        this.erroMessageTxtArea.text = this.erroMessage;
+        this.errorVisible = true;
+    }
+
+    copiar() {
+        navigator.clipboard.writeText(this.erroMessage).then(() => {
+            notify('Texto copiado com sucesso!', 'success', 3600);
+        })
     }
 }
