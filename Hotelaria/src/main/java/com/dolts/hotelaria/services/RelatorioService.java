@@ -45,7 +45,6 @@ public class RelatorioService {
 
         // Gera o relatório
         JasperPrint print = JasperFillManager.fillReport(report, param, new JRBeanCollectionDataSource(dataSource));
-//        JasperPrint print = JasperFillManager.fillReport(report, param, new JRBeanCollectionDataSource(hospedeService.findAll()));
 
         // Cria um InputStreamResource a partir do array de bytes do PDF
         return new org.springframework.core.io.InputStreamResource(new ByteArrayInputStream(JasperExportManager.exportReportToPdf(print)));
