@@ -28,7 +28,7 @@ import {
 } from 'devextreme-angular';
 import {BaseCrudComponent} from "./shared/components/base-crud/base-crud.component";
 import {ToolbarComponent} from "./shared/components/toolbar/toolbar.component";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {HotelComponent} from './pages/hotel/hotel.component';
 import {CategoriaComponent} from './pages/categoria/categoria.component';
 import {TipoComponent} from './pages/tipo/tipo.component';
@@ -45,6 +45,8 @@ import {ProdutoComponent} from './pages/produto/produto.component';
 import {EstoqueComponent} from './pages/estoque/estoque.component';
 import {CalculadoraComponent} from "./shared/components/calculadora/calculadora.component";
 import { RelatoriosComponent } from './pages/relatorios/relatorios.component';
+import {AppModule} from "./app.module";
+import {ProgressoRelatorioComponent} from "./shared/components/progresso-relatorio/progresso-relatorio.component";
 
 const routes: Routes = [
   {
@@ -219,7 +221,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule, DxSchedulerModule, DevExtremeModule, DatePipe]
+    imports: [RouterModule.forRoot(routes, {useHash: true}), DxDataGridModule, DxFormModule, DxButtonModule, NgIf, DxTextBoxModule, DxCheckBoxModule, FormsModule, DxSwitchModule, DxNumberBoxModule, DxSelectBoxModule, DxTabPanelModule, DxListModule, DxFileUploaderModule, DxGalleryModule, NgForOf, DxDateBoxModule, DxTextAreaModule, DxPopupModule, DxAutocompleteModule, DxCalendarModule, DxLoadIndicatorModule, DxSchedulerModule, DevExtremeModule, DatePipe, NgClass]
   ,
     providers: [AuthGuardService]
   ,
@@ -245,7 +247,8 @@ const routes: Routes = [
         ProdutoComponent,
         EstoqueComponent,
         CalculadoraComponent,
-        RelatoriosComponent
+        RelatoriosComponent,
+        ProgressoRelatorioComponent
     ]
 })
 export class AppRoutingModule {

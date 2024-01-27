@@ -1,0 +1,33 @@
+<div class="row mt mb" style="align-items: center;">
+    <i class="fa-regular fa-file-pdf mr"></i> <span class="mr"> {{ nomeRelatorio + '.pdf' }}</span>
+
+    <div class="loading-bar mr ml"
+         [ngClass]="{'complete': progress === 100}"
+         [ngClass]="{'erro': erro}">
+        <div [ngClass]="{'progress-bar': !erro}" [style.width.%]="progress" #pg></div>
+    </div>
+
+    <dx-button (onClick)="downloadRelatorio()"
+               [disabled]="!erro && !pronto"
+               icon="fa-solid fa-download"
+               hint="Baixar"
+               class="ml">
+    </dx-button>
+    <dx-button (onClick)="renderizarPDF()"
+               [disabled]="!erro && !pronto"
+               icon="fa-regular fa-file-pdf"
+               hint="Visualizar"
+               class="ml">
+    </dx-button>
+</div>
+
+<dx-popup (onHiding)="renderVisible = false"
+          [dragEnabled]="false"
+          [resizeEnabled]="false"
+          [showCloseButton]="true"
+          [showTitle]="true"
+          [visible]="renderVisible"
+          title="Relatorio"
+          height="700px">
+    <object #pdfViewer height="600" width="100%"></object>
+</dx-popup>

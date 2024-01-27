@@ -1,0 +1,31 @@
+.loading-bar {
+    width: 100%;
+    height: 5px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #E64B16;
+    animation: progressAnimation 2s linear infinite;
+}
+
+.complete .progress-bar {
+    animation: none;
+}
+
+.erro {
+    background-color: gray !important;
+}
+
+@keyframes progressAnimation {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}

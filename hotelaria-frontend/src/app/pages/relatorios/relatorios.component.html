@@ -1,38 +1,20 @@
 <h2 class="content-block">Relatorios</h2>
 <div class="content-block">
     <div class="dx-card responsive-paddings">
-        <dx-select-box (onValueChanged)="atualizaRelatorio($event)"
-                       [dataSource]="relatorios"
-                       displayExpr="opcao"
-                       valueExpr="relatorio">
-        </dx-select-box>
-        <dx-button (onClick)="gerar()"
-                   icon="fa-regular fa-file-pdf"
-                   text="Gerar">
-        </dx-button>
-
-        <div>
-            <span><i class="fa-regular fa-file-pdf"></i> {{ nomeRelatorio + '.pdf' }}</span>
-            <dx-load-indicator [visible]="loading"></dx-load-indicator>
-            <dx-button (onClick)="downloadRelatorio()"
-                       icon="fa-solid fa-download"
-                       text="Baixar">
-            </dx-button>
-            <dx-button (onClick)="renderizarPDF()"
+        <div class="row" style="align-items: center; justify-content: flex-start">
+            <dx-select-box (onValueChanged)="atualizaRelatorio($event)"
+                           [dataSource]="relatorios"
+                           class="mr"
+                           displayExpr="opcao"
+                           valueExpr="relatorio">
+            </dx-select-box>
+            <dx-button (onClick)="gerar()"
+                       class="ml"
                        icon="fa-regular fa-file-pdf"
-                       text="Visualizar">
+                       text="Gerar">
             </dx-button>
         </div>
-
-        <dx-popup (onHiding)="renderVisible = false"
-                  [dragEnabled]="false"
-                  [resizeEnabled]="false"
-                  [showCloseButton]="true"
-                  [showTitle]="true"
-                  [visible]="renderVisible"
-                  title="Relatorio"
-        height="700px">
-            <object #pdfViewer height="600" width="100%"></object>
-        </dx-popup>
+        <div #relatoriosSendoGerados class="mt">
+        </div>
     </div>
 </div>

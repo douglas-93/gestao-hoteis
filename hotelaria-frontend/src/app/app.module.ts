@@ -15,7 +15,8 @@ import {UnauthenticatedContentModule} from './unauthenticated-content';
 import {AppRoutingModule} from './app-routing.module';
 import {RouterModule} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
-import {DxButtonModule, DxDataGridModule, DxFormModule, DxTextBoxModule} from "devextreme-angular";
+import {DxButtonModule, DxDataGridModule, DxFormModule, DxPopupModule, DxTextBoxModule} from "devextreme-angular";
+import { ProgressoRelatorioComponent } from './shared/components/progresso-relatorio/progresso-relatorio.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import {DxButtonModule, DxDataGridModule, DxFormModule, DxTextBoxModule} from "d
         DxFormModule,
         DxTextBoxModule,
         DxButtonModule,
-        DxDataGridModule
+        DxDataGridModule,
+        DxPopupModule
     ],
     providers: [
         AuthService,

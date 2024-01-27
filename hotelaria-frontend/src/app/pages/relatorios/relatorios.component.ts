@@ -1,5 +1,6 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, ViewChild, ViewContainerRef} from '@angular/core';
 import {RelatorioService} from "../../shared/services/relatorio.service";
+import {ProgressoRelatorioComponent} from "../../shared/components/progresso-relatorio/progresso-relatorio.component";
 import notify from "devextreme/ui/notify";
 import _ from "lodash";
 
@@ -10,15 +11,13 @@ import _ from "lodash";
 })
 export class RelatoriosComponent {
 
-    @ViewChild('pdfViewer') pdfViewer: ElementRef;
+    @ViewChild('relatoriosSendoGerados', {read: ViewContainerRef}) relatoriosSendoGerados: ViewContainerRef;
 
     relatorios: { relatorio: string, opcao: string }[];
-    nomeRelatorio: string;
-    fileBlob: Blob;
-    loading: boolean = false;
-    renderVisible: boolean = false;
+    nomeRelatorio: string = '';
 
-    constructor(private relatorioService: RelatorioService) {
+    constructor(private relatorioService: RelatorioService,
+                private componentFactoryResolver: ComponentFactoryResolver) {
     }
 
     ngOnInit() {
@@ -28,44 +27,25 @@ export class RelatoriosComponent {
         }]
     }
 
-    gerar() {
-        this.loading = true;
-        this.relatorioService.gerarRelatorio(this.nomeRelatorio).subscribe({
-            next: resp => {
-                this.fileBlob = resp;
-            },
-            complete: () => {
-                this.loading = false;
-            }
-        });
-    }
+    criaElemento() {
+        const factory = this.componentFactoryResolver.resolveComponentFactory(ProgressoRelatorioComponent);
+        const componentRef = this.relatoriosSendoGerados.createComponent(factory);
 
-    downloadRelatorio() {
-        if (_.isNil(this.fileBlob)) {
-            notify('o arquivo nao esta pronto');
-            return;
-        }
-        const url = window.URL.createObjectURL(this.fileBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${this.nomeRelatorio}.pdf`;
-        link.click();
-    }
-
-    renderizarPDF() {
-        this.renderVisible = true;
-
-        const pdfObject = this.pdfViewer.nativeElement;
-        const pdfUrl = URL.createObjectURL(this.fileBlob);
-
-        // Configurar o objeto para exibir o PDF
-        pdfObject.data = pdfUrl;
-        pdfObject.type = 'application/pdf';
-
-        // O conteúdo da tag object será exibido automaticamente
+        const progressoRelatorioInstance = componentRef.instance as ProgressoRelatorioComponent;
+        progressoRelatorioInstance.nomeRelatorio = this.nomeRelatorio;
     }
 
     atualizaRelatorio(e: any) {
         this.nomeRelatorio = e.value;
+    }
+
+    gerar() {
+        console.log(this.nomeRelatorio)
+        if (_.isNil(this.nomeRelatorio) ||
+            _.isEmpty(this.nomeRelatorio)) {
+            notify('Escolha um relatório', 'warning', 3600);
+        } else {
+            this.criaElemento();
+        }
     }
 }
