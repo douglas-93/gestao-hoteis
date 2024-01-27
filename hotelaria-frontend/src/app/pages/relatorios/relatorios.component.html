@@ -10,5 +10,29 @@
                    icon="fa-regular fa-file-pdf"
                    text="Gerar">
         </dx-button>
+
+        <div>
+            <span><i class="fa-regular fa-file-pdf"></i> {{ nomeRelatorio + '.pdf' }}</span>
+            <dx-load-indicator [visible]="loading"></dx-load-indicator>
+            <dx-button (onClick)="downloadRelatorio()"
+                       icon="fa-solid fa-download"
+                       text="Baixar">
+            </dx-button>
+            <dx-button (onClick)="renderizarPDF()"
+                       icon="fa-regular fa-file-pdf"
+                       text="Visualizar">
+            </dx-button>
+        </div>
+
+        <dx-popup (onHiding)="renderVisible = false"
+                  [dragEnabled]="false"
+                  [resizeEnabled]="false"
+                  [showCloseButton]="true"
+                  [showTitle]="true"
+                  [visible]="renderVisible"
+                  title="Relatorio"
+        height="700px">
+            <object #pdfViewer height="600" width="100%"></object>
+        </dx-popup>
     </div>
 </div>
