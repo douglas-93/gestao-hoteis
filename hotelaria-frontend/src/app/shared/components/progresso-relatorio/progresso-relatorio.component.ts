@@ -44,8 +44,10 @@ export class ProgressoRelatorioComponent {
                 this.progress = 100;
             },
             error: err => {
+                console.log(err)
                 this.erro = true;
                 this.erroMessage = err.message;
+                this.erroMessage += `\n\n${err.trace}`;
                 notify('Falha ao gerar o relatório', 'error', 3600);
             }
         });

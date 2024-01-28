@@ -3,6 +3,7 @@ import {RelatorioService} from "../../shared/services/relatorio.service";
 import {ProgressoRelatorioComponent} from "../../shared/components/progresso-relatorio/progresso-relatorio.component";
 import notify from "devextreme/ui/notify";
 import _ from "lodash";
+import {TipoTransacaoEnum} from "../../shared/enums/TipoTransacaoEnum";
 
 @Component({
     selector: 'app-relatorios',
@@ -15,6 +16,10 @@ export class RelatoriosComponent {
 
     relatorios: { relatorio: string, opcao: string }[];
     nomeRelatorio: string = '';
+    hoje: Date = new Date();
+    dataInicial: Date | number | string;
+    dataFinal: Date | number | string;
+    tiposMovimento
 
     constructor(private relatorioService: RelatorioService,
                 private componentFactoryResolver: ComponentFactoryResolver) {
@@ -34,7 +39,24 @@ export class RelatoriosComponent {
                 relatorio: 'quartos',
                 opcao: 'Relação de Quartos'
             },
-        ]
+            {
+                relatorio: 'reservasPeriodo',
+                opcao: 'Reservas por Período'
+            },
+            {
+                relatorio: 'consumoReserva',
+                opcao: 'Consumo por Reserva'
+            },
+            {
+                relatorio: 'movimentacao',
+                opcao: 'Movimentação de Produto'
+            },
+        ];
+
+        this.tiposMovimento = Object.keys(TipoTransacaoEnum).map(key => ({
+            value: key
+          , displayText: TipoTransacaoEnum[key]
+        }));
     }
 
     criaElemento() {

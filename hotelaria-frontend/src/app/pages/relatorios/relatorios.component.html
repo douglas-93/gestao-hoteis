@@ -15,6 +15,85 @@
                        text="Gerar">
             </dx-button>
         </div>
+
+
+        <div *ngIf="nomeRelatorio === 'reservasPeriodo'" class="mb mt">
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Data Inicial: </span>
+                <dx-date-box [(value)]="dataInicial"
+                             [max]="hoje"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy"
+                             width="300px">
+                </dx-date-box>
+            </div>
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Data Final: </span>
+                <dx-date-box [(value)]="dataFinal"
+                             [max]="hoje"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy"
+                             width="300px">
+                </dx-date-box>
+            </div>
+        </div>
+
+
+        <div *ngIf="nomeRelatorio === 'consumoReserva'" class="mb mt">
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Data Inicial: </span>
+                <dx-date-box [(value)]="dataInicial"
+                             [max]="hoje"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy"
+                             width="300px">
+                </dx-date-box>
+            </div>
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Data Final: </span>
+                <dx-date-box [(value)]="dataFinal"
+                             [max]="hoje"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy"
+                             width="300px">
+                </dx-date-box>
+            </div>
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Reserva: </span>
+                <dx-select-box width="300px">
+                </dx-select-box>
+            </div>
+        </div>
+
+
+        <div *ngIf="nomeRelatorio === 'movimentacao'" class="mb mt">
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Data Inicial: </span>
+                <dx-date-box [(value)]="dataInicial"
+                             [max]="hoje"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy"
+                             width="300px">
+                </dx-date-box>
+            </div>
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Data Final: </span>
+                <dx-date-box [(value)]="dataFinal"
+                             [max]="hoje"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy"
+                             width="300px">
+                </dx-date-box>
+            </div>
+            <div class="row mt mb" style="width: 40%; justify-content: space-between">
+                <span>Tipo de Movimento: </span>
+                <dx-select-box [dataSource]="tiposMovimento"
+                               displayExpr="displayText"
+                               valueExpr="value"
+                               width="300px">
+                </dx-select-box>
+            </div>
+        </div>
         <div #relatoriosSendoGerados class="mt">
         </div>
     </div>
