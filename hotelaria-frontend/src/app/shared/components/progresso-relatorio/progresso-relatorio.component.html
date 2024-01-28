@@ -1,5 +1,8 @@
 <div class="row mt mb" style="align-items: center;">
-    <i class="fa-regular fa-file-pdf mr"></i> <span class="mr"> {{ nomeRelatorio + '.pdf' }}</span>
+
+    <div class="row" style="width: 250px">
+        <i class="fa-regular fa-file-pdf mr"></i> <span class="mr"> {{ nomeRelatorio + '.pdf' }}</span>
+    </div>
 
     <div class="loading-bar mr ml"
          [ngClass]="{'complete': progress === 100}"
