@@ -1,8 +1,14 @@
 package com.dolts.hotelaria.controllers;
 
+import com.dolts.hotelaria.dto.PageRequestDTO;
+import com.dolts.hotelaria.dto.RequestDTO;
 import com.dolts.hotelaria.models.ReservaModel;
+import com.dolts.hotelaria.services.FiltersSpecifications;
 import com.dolts.hotelaria.services.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +23,8 @@ public class ReservaController {
 
     @Autowired
     private ReservaService reservaService;
+    @Autowired
+    private FiltersSpecifications<ReservaModel> reservaModelFiltersSpecifications;
 
     @PostMapping
     public ResponseEntity<ReservaModel> create(@RequestBody ReservaModel entity) {
@@ -123,6 +131,23 @@ public class ReservaController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(entity);
+    }
+
+    @PostMapping("/specification")
+    public List<ReservaModel> findReservas(@RequestBody RequestDTO requestDTO) {
+        Specification<ReservaModel> specification = reservaModelFiltersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+        return reservaService.getRepository().findAll(specification);
+    }
+
+    @PostMapping("/specification/pagination")
+    public Page<ReservaModel> findReservasPages(@RequestBody RequestDTO requestDTO) {
+        Specification<ReservaModel> specification = reservaModelFiltersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+
+        Pageable pageable = new PageRequestDTO().getPageable(requestDTO.getPageDTO());
+
+        return reservaService.getRepository().findAll(specification, pageable);
     }
 }
 
