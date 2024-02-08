@@ -4,10 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
 public class RequestDTO implements Serializable {
-    String columnName;
-    String value;
+    private List<SearchRequestDTO> searchRequestDTOS;
+    private GlobalOperator globalOperator;
+    private PageRequestDTO pageDTO;
+
+    public enum GlobalOperator {
+        AND, OR;
+    }
 }

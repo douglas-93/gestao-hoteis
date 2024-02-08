@@ -1,16 +1,15 @@
 package com.dolts.hotelaria.controllers;
 
+import com.dolts.hotelaria.dto.PageRequestDTO;
 import com.dolts.hotelaria.dto.RequestDTO;
 import com.dolts.hotelaria.models.HospedeModel;
 import com.dolts.hotelaria.services.FiltersSpecifications;
 import com.dolts.hotelaria.services.HospedeService;
 import com.dolts.hotelaria.utils.controller.AbstractCRUDController;
 import com.dolts.hotelaria.utils.service.BaseCRUDService;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +41,19 @@ public class HospedeController extends AbstractCRUDController<HospedeModel, Long
 
     @PostMapping("/specification")
     public List<HospedeModel> findHospedes(@RequestBody RequestDTO requestDTO) {
-        Specification<HospedeModel> specification = hospedeModelFiltersSpecifications.getSearchSpecification(requestDTO);
+        Specification<HospedeModel> specification = hospedeModelFiltersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
         return hospedeService.getRepository().findAll(specification);
+    }
+
+    @PostMapping("/specification/pagination")
+    public Page<HospedeModel> findHospedesPages(@RequestBody RequestDTO requestDTO) {
+        Specification<HospedeModel> specification = hospedeModelFiltersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+
+        Pageable pageable = new PageRequestDTO().getPageable(requestDTO.getPageDTO());
+
+        return hospedeService.getRepository().findAll(specification, pageable);
     }
 
     @Override
