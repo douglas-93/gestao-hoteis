@@ -1,12 +1,14 @@
 package com.dolts.hotelaria.controllers;
 
+import com.dolts.hotelaria.dto.PageRequestDTO;
+import com.dolts.hotelaria.dto.RequestDTO;
 import com.dolts.hotelaria.models.ImagemQuartoModel;
 import com.dolts.hotelaria.models.QuartoModel;
-import com.dolts.hotelaria.services.CategoriaQuartoService;
-import com.dolts.hotelaria.services.ImagemQuartoService;
-import com.dolts.hotelaria.services.QuartoService;
-import com.dolts.hotelaria.services.TipoQuartoService;
+import com.dolts.hotelaria.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,9 +26,7 @@ public class QuartoController {
     @Autowired
     private QuartoService quartoService;
     @Autowired
-    private CategoriaQuartoService categoriaQuartoService;
-    @Autowired
-    private TipoQuartoService tipoQuartoService;
+    private FiltersSpecifications<QuartoModel> quartoModelFiltersSpecifications;
     @Autowired
     private ImagemQuartoService imagemQuartoService;
 
@@ -90,6 +90,23 @@ public class QuartoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(entity);
+    }
+
+    @PostMapping("/specification")
+    public List<QuartoModel> findHospedes(@RequestBody RequestDTO requestDTO) {
+        Specification<QuartoModel> specification = quartoModelFiltersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+        return quartoService.getRepository().findAll(specification);
+    }
+
+    @PostMapping("/specification/pagination")
+    public Page<QuartoModel> findHospedesPages(@RequestBody RequestDTO requestDTO) {
+        Specification<QuartoModel> specification = quartoModelFiltersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+
+        Pageable pageable = new PageRequestDTO().getPageable(requestDTO.getPageDTO());
+
+        return quartoService.getRepository().findAll(specification, pageable);
     }
 
 }

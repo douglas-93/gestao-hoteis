@@ -1,6 +1,14 @@
 package com.dolts.hotelaria.utils.controller;
 
+import com.dolts.hotelaria.dto.PageRequestDTO;
+import com.dolts.hotelaria.dto.RequestDTO;
+import com.dolts.hotelaria.models.HospedeModel;
+import com.dolts.hotelaria.services.FiltersSpecifications;
 import com.dolts.hotelaria.utils.service.BaseCRUDService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,6 +16,9 @@ import java.util.List;
 
 @CrossOrigin(origins = "*",maxAge = 3600)
 public abstract class AbstractCRUDController<T, D> {
+
+    @Autowired
+    private FiltersSpecifications<T> filtersSpecifications;
 
     protected abstract BaseCRUDService<T, D> getService();
 
@@ -46,6 +57,23 @@ public abstract class AbstractCRUDController<T, D> {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(entity);
+    }
+
+    @PostMapping("/specification")
+    public List<T> findHospedes(@RequestBody RequestDTO requestDTO) {
+        Specification<T> specification = filtersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+        return this.getService().getRepository().findAll(specification);
+    }
+
+    @PostMapping("/specification/pagination")
+    public Page<T> findHospedesPages(@RequestBody RequestDTO requestDTO) {
+        Specification<T> specification = filtersSpecifications
+                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+
+        Pageable pageable = new PageRequestDTO().getPageable(requestDTO.getPageDTO());
+
+        return this.getService().getRepository().findAll(specification, pageable);
     }
 }
 

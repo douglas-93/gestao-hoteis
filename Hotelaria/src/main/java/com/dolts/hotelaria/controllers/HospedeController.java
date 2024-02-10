@@ -24,37 +24,6 @@ public class HospedeController extends AbstractCRUDController<HospedeModel, Long
 
     @Autowired
     private HospedeService hospedeService;
-    @Autowired
-    private FiltersSpecifications<HospedeModel> hospedeModelFiltersSpecifications;
-
-    /*@PostMapping("/specification")
-    public List<HospedeModel> findHospedes() {
-        Specification<HospedeModel> specification = new Specification<HospedeModel>() {
-            @Override
-            public Predicate toPredicate(Root<HospedeModel> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.like(root.get("nome"), "%glas%");
-            }
-        };
-
-        return hospedeService.getRepository().findAll(specification);
-    }*/
-
-    @PostMapping("/specification")
-    public List<HospedeModel> findHospedes(@RequestBody RequestDTO requestDTO) {
-        Specification<HospedeModel> specification = hospedeModelFiltersSpecifications
-                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
-        return hospedeService.getRepository().findAll(specification);
-    }
-
-    @PostMapping("/specification/pagination")
-    public Page<HospedeModel> findHospedesPages(@RequestBody RequestDTO requestDTO) {
-        Specification<HospedeModel> specification = hospedeModelFiltersSpecifications
-                .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
-
-        Pageable pageable = new PageRequestDTO().getPageable(requestDTO.getPageDTO());
-
-        return hospedeService.getRepository().findAll(specification, pageable);
-    }
 
     @Override
     protected BaseCRUDService<HospedeModel, Long> getService() {
