@@ -51,9 +51,26 @@ export class BaseCRUDService<T> {
         Object.keys(entity).filter(key => !_.isNil(entity[key])).forEach(key => {
             const searchRequest: SearchRequestDTO = new SearchRequestDTO();
             searchRequest.columnName = key;
-            searchRequest.value = entity[key];
-            searchRequest.operation = Operation.LIKE;
-            this._requestDTO.searchRequestDTOS.push(searchRequest);
+
+            switch (typeof entity[key]) {
+                case "string": {
+                    searchRequest.value = entity[key];
+                    searchRequest.operation = Operation.LIKE;
+                    break;
+                }
+
+                case "number": {
+                    searchRequest.value = entity[key].toString();
+                    searchRequest.operation = Operation.EQUAL;
+                    break;
+                }
+
+                default: {
+                    searchRequest.value = entity[key];
+                }
+            }
+
+                this._requestDTO.searchRequestDTOS.push(searchRequest);
         })
 
         return this._requestDTO;

@@ -7,7 +7,52 @@
            [listTitle]="'Listagem de Reservas'"
            [mode]="mode">
 
-    <div list-filter-fields></div>
+    <div list-filter-fields>
+        <dx-form [formData]="reservaFilter">
+            <dxi-item [colCount]="5" itemType="group">
+                <dxi-item [label]="{text:'Número da Reserva'}" dataField="id" template="idTemplate">
+                </dxi-item>
+                <dxi-item dataField="quarto" template="quartoTemplate">
+                </dxi-item>
+                <dxi-item dataField="hospedes" template="hospedeTemplate">
+                </dxi-item>
+                <dxi-item dataField="dataPrevistaSaida" template="dataPrevistaSaidaTemplate">
+                </dxi-item>
+                <dxi-item dataField="dataEntrada" template="dataEntradaTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <!--            TEMPLATE            -->
+            <div *dxTemplate="let data of 'idTemplate'">
+                <dx-number-box [(value)]="reservaFilter.id"
+                               [min]="1"
+                               [showClearButton]="true">
+                </dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'quartoTemplate'">
+                <dx-autocomplete [(value)]="nomeQuartoFilter"
+                                 [dataSource]="quartos"
+                                 [showClearButton]="true"
+                                 displayValue="nome"
+                                 valueExpr="nome">
+                </dx-autocomplete>
+            </div>
+            <div *dxTemplate="let data of 'hospedeTemplate'">
+                <dx-autocomplete [(value)]="nomeHospedeFilter"
+                                 [dataSource]="hospedes"
+                                 [showClearButton]="true"
+                                 displayValue="nome"
+                                 valueExpr="nome">
+                </dx-autocomplete>
+            </div>
+            <div *dxTemplate="let data of 'dataEntradaTemplate'">
+                <dx-date-box></dx-date-box>
+            </div>
+            <div *dxTemplate="let data of 'dataPrevistaSaidaTemplate'">
+                <dx-date-box></dx-date-box>
+            </div>
+        </dx-form>
+    </div>
     <div list-result>
         <dx-data-grid (onRowDblClick)="editar()"
                       (onSelectionChanged)="selecionaReserva($event)"
@@ -16,11 +61,13 @@
 
             <dxo-selection mode="single"></dxo-selection>
 
+            <dxi-column alignment="center" caption="N° da Reserva" dataField="id" width="auto">
+            </dxi-column>
             <dxi-column alignment="center"
                         cellTemplate="hospedesTemplate"
                         dataField="hospedes">
             </dxi-column>
-            <dxi-column alignment="center" dataField="quarto.nome" width="auto">
+            <dxi-column alignment="center" caption="Quarto" dataField="quarto.nome" width="auto">
             </dxi-column>
             <dxi-column alignment="center"
                         dataField="dataEntrada"
@@ -50,8 +97,8 @@
             <!--            TEMPLATE        -->
 
             <div *dxTemplate="let data of 'hospedesTemplate'">
-                <div *ngFor="let h of data.data.hospedes">
-                    {{ h.nome + ' - ' + Utils.formatarCPF(h.cpf) }}
+                <div *ngFor="let h of data.data.hospedes" title="{{ h.nome + ' - ' + Utils.formatarCPF(h.cpf) }}">
+                    {{ h.nome }}
                 </div>
             </div>
 

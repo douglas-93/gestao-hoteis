@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ModeEnum} from "../../shared/enums/mode.enum";
 import {Router} from "@angular/router";
 import {forkJoin} from "rxjs";
@@ -19,13 +19,15 @@ import {ReservaModel} from "../../shared/models/reserva.model";
 import {ReservaService} from "../../shared/services/reserva.service";
 import {EmpresaModel} from "../../shared/models/empresa.model";
 import {EmpresaService} from "../../shared/services/empresa.service";
+import {RequestDTO} from "../../shared/dto/requestDTO";
+import {Operation, SearchRequestDTO} from "../../shared/dto/searchRequestDTO";
 
 @Component({
     selector: 'app-reserva',
     templateUrl: './reserva.component.html',
     styleUrls: ['./reserva.component.scss']
 })
-export class ReservaComponent implements OnInit, AfterViewInit {
+export class ReservaComponent implements OnInit {
 
     @ViewChild('hospedeAutoComplete') hospedeAutoComplete: DxAutocompleteComponent;
     @ViewChild('gridDeHospedesNaReserva') gridDeHospedesNaReserva: DxDataGridComponent;
@@ -44,6 +46,9 @@ export class ReservaComponent implements OnInit, AfterViewInit {
     empresas: EmpresaModel[] = [];
     reservas: ReservaModel[] = [];
     reservasJaRealizadas: ReservaModel[] = [];
+    reservaFilter: ReservaModel;
+    nomeHospedeFilter: string = '';
+    nomeQuartoFilter: string = '';
     protected readonly Utils = Utils;
 
     constructor(private router: Router,
@@ -57,7 +62,9 @@ export class ReservaComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.reserva = new ReservaModel();
+        this.reservaFilter = new ReservaModel();
         this.reserva.quarto = new QuartoModel();
+        this.reservaFilter.quarto = new QuartoModel();
         this.buscaDadosIniciais();
 
         let edit: boolean = this.router.url.includes('edit');
@@ -68,10 +75,6 @@ export class ReservaComponent implements OnInit, AfterViewInit {
             this.findReserva(this.router.url.split('/').pop()!)
         }
     }
-
-    ngAfterViewInit(): void {
-    }
-
 
     findReserva(id: string) {
         let idAsNumber = Number(id);
@@ -98,6 +101,48 @@ export class ReservaComponent implements OnInit, AfterViewInit {
     }
 
     buscar() {
+        const excludeColumns = ["isEmpresa", "hospedes", "quartos", "quarto"];
+
+        let keys = Object.keys(this.reservaFilter).filter(r => !excludeColumns.includes(r));
+        if (keys.length > 0
+            || (this.nomeHospedeFilter != '' && !_.isNil(this.nomeHospedeFilter))
+            || (this.nomeQuartoFilter != '' && !_.isNil(this.nomeQuartoFilter))) {
+
+            const requestDTO: RequestDTO = this.reservaService.createSearchRequest(this.reservaFilter);
+
+            requestDTO.searchRequestDTOS = requestDTO.searchRequestDTOS
+                .filter(r => !excludeColumns.includes(r.columnName));
+
+            if ((this.nomeQuartoFilter != '' && !_.isNil(this.nomeQuartoFilter))) {
+                const nomeQuartoSearchRequest: SearchRequestDTO = new SearchRequestDTO();
+                nomeQuartoSearchRequest.columnName = 'nome';
+                nomeQuartoSearchRequest.value = this.nomeQuartoFilter;
+                nomeQuartoSearchRequest.operation = Operation.JOIN;
+                nomeQuartoSearchRequest.joinTable = 'quarto'
+                requestDTO.searchRequestDTOS.push(nomeQuartoSearchRequest);
+            }
+
+
+            if ((this.nomeHospedeFilter != '' && !_.isNil(this.nomeHospedeFilter))) {
+                const nomeHospedeSearchRequest: SearchRequestDTO = new SearchRequestDTO();
+                nomeHospedeSearchRequest.columnName = 'nome';
+                nomeHospedeSearchRequest.value = this.nomeHospedeFilter;
+                nomeHospedeSearchRequest.operation = Operation.JOIN;
+                nomeHospedeSearchRequest.joinTable = 'hospedes';
+                requestDTO.searchRequestDTOS.push(nomeHospedeSearchRequest);
+            }
+
+            this.reservaService.specification(requestDTO).subscribe({
+                next: resp => {
+                    if (resp.ok) {
+                        this.reservas = resp.body!;
+                    }
+                }
+            })
+
+            return;
+        }
+
         this.reservaService.findAll().subscribe(resp => {
             if (resp.ok) {
                 this.reservas = resp.body!;
@@ -124,7 +169,6 @@ export class ReservaComponent implements OnInit, AfterViewInit {
 
                     if (resp.status === 204 && resp.body === null) {
                         notify('Data e quarto disponíveis', 'success', 3600);
-                        console.log(this.reserva)
                         if (_.isNil(this.reserva.quarto)) {
                             this.reserva.quarto = new QuartoModel();
                         }

@@ -6,13 +6,26 @@
            [listTitle]="'Listagem de Tipo'"
            [mode]="mode">
     <div class="mt mb" list-filter-fields>
-        <div class="row">
-            <span class="mr">Tipo</span>
-            <dx-text-box [showClearButton]="true"
-                         labelMode="hidden"
-                         width="500">
-            </dx-text-box>
-        </div>
+        <dx-form class="mt mb">
+            <dxi-item [colCount]="2" itemType="group">
+                <dxi-item [label]="{text: 'ID'}" dataField="id" template="idTemplate">
+                </dxi-item>
+                <dxi-item [label]="{text: 'Nome do Tipo'}" dataField="nome" template="nomeTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <!--            TEMPLATE        -->
+            <div *dxTemplate="let data of 'idTemplate'">
+                <dx-number-box [(value)]="tipoFilter.id"
+                               [showClearButton]="true">
+                </dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'nomeTemplate'">
+                <dx-text-box [(value)]="tipoFilter.nome"
+                             [showClearButton]="true">
+                </dx-text-box>
+            </div>
+        </dx-form>
     </div>
 
     <div class="mt" list-result>
@@ -22,6 +35,17 @@
                       [rowAlternationEnabled]="true"
                       [showBorders]="true">
             <dxo-selection mode="single"></dxo-selection>
+            <dxi-column alignment="center"
+                        caption="ID"
+                        dataField="id">
+            </dxi-column>
+            <dxi-column alignment="center"
+                        dataField="nome">
+            </dxi-column>
+            <dxi-column alignment="center"
+                        caption="Ativo"
+                        dataField="ativa">
+            </dxi-column>
         </dx-data-grid>
     </div>
 

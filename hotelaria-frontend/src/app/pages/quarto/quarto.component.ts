@@ -15,6 +15,8 @@ import {Utils} from "../../shared/Utils";
 import _ from "lodash";
 import {ImagemQuartoService} from "../../shared/services/imagemQuarto.service";
 import {ImagemQuartoModel} from "../../shared/models/imagemQuarto.model";
+import {RequestDTO} from "../../shared/dto/requestDTO";
+import {Operation} from "../../shared/dto/searchRequestDTO";
 import ChangeEvent = DevExpress.ui.dxTextBox.ChangeEvent;
 
 @Component({
@@ -32,6 +34,7 @@ export class QuartoComponent implements OnInit {
 
     mode: ModeEnum = ModeEnum.LIST;
     quarto: QuartoModel;
+    quartoFilter: QuartoModel;
     imgData: any[] = [];
     tipos: TipoQuartoModel[] = [];
     categorias: CategoriaQuartoModel[] = [];
@@ -56,6 +59,7 @@ export class QuartoComponent implements OnInit {
             this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
 
         this.quarto = new QuartoModel();
+        this.quartoFilter = new QuartoModel();
         this.quarto.ativo = true;
         this.getTipoECategoria();
 
@@ -65,9 +69,41 @@ export class QuartoComponent implements OnInit {
     }
 
     buscar() {
+
+        if (Object.keys(this.quartoFilter).length > 0) {
+
+            const requestDTO: RequestDTO = this.quartoService.createSearchRequest(this.quartoFilter);
+
+            requestDTO.searchRequestDTOS.forEach(r => {
+                if (r.columnName === 'tipoQuarto') {
+                    r.columnName = 'id';
+                    r.value = r.value['id'];
+                    r.operation = Operation.JOIN;
+                    r.joinTable = 'tipoQuarto';
+                }
+
+                if (r.columnName === 'categoriaQuarto') {
+                    r.columnName = 'id';
+                    r.value = r.value['id'];
+                    r.operation = Operation.JOIN;
+                    r.joinTable = 'categoriaQuarto';
+                }
+            });
+
+            this.quartoService.specification(requestDTO).subscribe({
+                next: resp => {
+                    if (resp.ok) {
+                        this.quartosCadastrados = resp.body!;
+                    }
+                }
+            });
+
+            return;
+        }
+
         this.quartoService.findAll().subscribe(resp => {
             if (resp.ok) {
-                this.quartosCadastrados = resp.body!
+                this.quartosCadastrados = resp.body!;
             }
         })
     }
@@ -83,10 +119,8 @@ export class QuartoComponent implements OnInit {
             this.quarto.itens = this.listaItens.items;
 
             const imagensNovas = this.filtraImagensNovas(this.quartoImagens);
-            console.log("Imagens Novas: " + imagensNovas)
 
             const imagensExcluidas = this.filtraImagensExcluidas(this.quartoImagens);
-            console.log("Imagens Excluidas: " + imagensExcluidas)
 
 
             const salvarQuarto = () => {

@@ -72,7 +72,6 @@ export class RelatoriosComponent {
     }
 
     gerar() {
-        console.log(this.nomeRelatorio)
         if (_.isNil(this.nomeRelatorio) ||
             _.isEmpty(this.nomeRelatorio)) {
             notify('Escolha um relatório', 'warning', 3600);

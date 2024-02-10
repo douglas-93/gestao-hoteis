@@ -8,7 +8,57 @@
            [mode]="mode">
 
     <div list-filter-fields>
+        <dx-form [formData]="quartoFilter"
+                 class="mt mb">
 
+            <dxi-item [colCount]="4" itemType="group">
+                <dxi-item [label]="{text:'Nome'}"
+                          dataField="nome"
+                          template="nomeTemplate">
+                </dxi-item>
+                <dxi-item [label]="{text:'Capacidade de Pessoas'}"
+                          dataField="capacidadePessoas"
+                          template="capacidadePessoasTemplate">
+                </dxi-item>
+                <dxi-item [label]="{text:'Tipo do Quarto'}"
+                          dataField="tipoQuarto"
+                          template="tipoQuartoTemplate">
+                </dxi-item>
+                <dxi-item [label]="{text:'Categoria do Quarto'}"
+                          dataField="categoriaQuarto"
+                          template="categoriaQuartoTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <div *dxTemplate="let data of 'nomeTemplate'">
+                <dx-text-box [(value)]="quartoFilter.nome"
+                             [showClearButton]="true">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'capacidadePessoasTemplate'">
+                <dx-number-box [(value)]="quartoFilter.capacidadePessoas"
+                               [min]="1"
+                               [showClearButton]="true">
+                </dx-number-box>
+            </div>
+
+            <div *dxTemplate="let data of 'tipoQuartoTemplate'">
+                <dx-select-box [(value)]="quartoFilter.tipoQuarto"
+                               [dataSource]="tipos"
+                               [showClearButton]="true"
+                               displayExpr="nome">
+                </dx-select-box>
+            </div>
+            <div *dxTemplate="let data of 'categoriaQuartoTemplate'">
+                <dx-select-box [(value)]="quartoFilter.categoriaQuarto"
+                               [dataSource]="categorias"
+                               [showClearButton]="true"
+                               displayExpr="nome">
+                </dx-select-box>
+            </div>
+
+        </dx-form>
     </div>
 
     <div list-result>

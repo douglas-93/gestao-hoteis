@@ -7,6 +7,7 @@ import {CategoriaService} from "../../shared/services/categoria.service";
 import {DxTextBoxComponent} from "devextreme-angular";
 import {BaseCrudComponent} from "../../shared/components/base-crud/base-crud.component";
 import _ from "lodash";
+import {RequestDTO} from "../../shared/dto/requestDTO";
 
 
 @Component({
@@ -23,6 +24,7 @@ export class CategoriaComponent implements OnInit {
     categorias: CategoriaQuartoModel[];
     categoria: CategoriaQuartoModel;
     categoriaSelecinada: CategoriaQuartoModel;
+    categoriaFilter: CategoriaQuartoModel;
     protected readonly ModeEnum = ModeEnum;
 
     constructor(private router: Router,
@@ -35,12 +37,31 @@ export class CategoriaComponent implements OnInit {
         this.mode = (this.router.url.includes('cad') ||
             this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
 
+        this.categoriaFilter = new CategoriaQuartoModel();
+        // @ts-ignore
+        delete this.categoriaFilter.ativa;
+
         if (edit) {
             this.findCategoria(this.router.url.split('/').pop()!)
         }
     }
 
     buscar() {
+
+        if (Object.keys(this.categoriaFilter).length > 0) {
+
+            const requestDTO: RequestDTO = this.categoriaService.createSearchRequest(this.categoriaFilter);
+
+            this.categoriaService.specification(requestDTO).subscribe({
+                next: resp => {
+                    if (resp.ok) {
+                        this.categorias = resp.body!;
+                    }
+                }
+            });
+            return;
+        }
+
         this.categoriaService.findAll().subscribe(res => {
             if (res.ok) {
                 this.categorias = res.body!

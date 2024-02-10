@@ -7,6 +7,7 @@ import {TipoQuartoModel} from "../../shared/models/tipoQuarto.model";
 import {TipoService} from "../../shared/services/tipo.service";
 import {BaseCrudComponent} from "../../shared/components/base-crud/base-crud.component";
 import _ from "lodash";
+import {RequestDTO} from "../../shared/dto/requestDTO";
 
 @Component({
     selector: 'app-tipo',
@@ -23,6 +24,7 @@ export class TipoComponent implements OnInit {
     tipo: TipoQuartoModel;
     tipoSelecionado: TipoQuartoModel;
     protected readonly ModeEnum = ModeEnum;
+    tipoFilter: TipoQuartoModel;
 
     constructor(private router: Router,
                 private tipoService: TipoService) {
@@ -33,12 +35,32 @@ export class TipoComponent implements OnInit {
         let edit: boolean = this.router.url.includes('edit');
         this.mode = (this.router.url.includes('cad') ||
             this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
+
+        this.tipoFilter = new TipoQuartoModel();
+        // @ts-ignore
+        delete this.tipoFilter.ativa;
+
         if (edit) {
             this.findCategoria(this.router.url.split('/').pop()!)
         }
     }
 
     buscar() {
+
+        if (Object.keys(this.tipoFilter).length > 0) {
+
+            const requestDTO: RequestDTO = this.tipoService.createSearchRequest(this.tipoFilter);
+
+            this.tipoService.specification(requestDTO).subscribe({
+                next: resp => {
+                    if (resp.ok) {
+                        this.tipos = resp.body!;
+                    }
+                }
+            });
+            return;
+        }
+
         this.tipoService.findAll().subscribe(res => {
             if (res.ok) {
                 this.tipos = res.body!
