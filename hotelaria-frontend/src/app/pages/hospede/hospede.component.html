@@ -6,7 +6,39 @@
            [listTitle]="'Listagem de Hospedes'"
            [mode]="mode">
     <div list-filter-fields>
+        <dx-form [formData]="hospedeFilter">
+            <dxi-item itemType="group" [colCount]="3">
+                <dxi-item dataField="nome"
+                          template="nomeTemplate"
+                          [label]="{text: 'Nome'}">
+                </dxi-item>
+                <dxi-item dataField="cpf"
+                          template="cpfTemplate"
+                          [label]="{text: 'CPF'}">
+                </dxi-item>
+                <dxi-item dataField="rg"
+                          template="rgTemplate"
+                          [label]="{text: 'RG'}">
+                </dxi-item>
+            </dxi-item>
 
+            <!--            TEMPLATE            -->
+
+            <div *dxTemplate="let data of 'nomeTemplate'">
+                <dx-text-box [(value)]="hospedeFilter.nome">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'cpfTemplate'">
+                <dx-text-box [(value)]="hospedeFilter.cpf">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'rgTemplate'">
+                <dx-text-box [(value)]="hospedeFilter.rg">
+                </dx-text-box>
+            </div>
+        </dx-form>
     </div>
 
     <div list-result>

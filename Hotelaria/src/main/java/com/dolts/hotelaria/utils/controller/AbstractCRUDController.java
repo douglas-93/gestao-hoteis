@@ -60,20 +60,20 @@ public abstract class AbstractCRUDController<T, D> {
     }
 
     @PostMapping("/specification")
-    public List<T> findHospedes(@RequestBody RequestDTO requestDTO) {
+    public ResponseEntity<List<T>> findHospedes(@RequestBody RequestDTO requestDTO) {
         Specification<T> specification = filtersSpecifications
                 .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
-        return this.getService().getRepository().findAll(specification);
+        return ResponseEntity.ok(this.getService().getRepository().findAll(specification));
     }
 
     @PostMapping("/specification/pagination")
-    public Page<T> findHospedesPages(@RequestBody RequestDTO requestDTO) {
+    public ResponseEntity<Page<T>> findHospedesPages(@RequestBody RequestDTO requestDTO) {
         Specification<T> specification = filtersSpecifications
                 .getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
 
         Pageable pageable = new PageRequestDTO().getPageable(requestDTO.getPageDTO());
 
-        return this.getService().getRepository().findAll(specification, pageable);
+        return ResponseEntity.ok(this.getService().getRepository().findAll(specification, pageable));
     }
 }
 

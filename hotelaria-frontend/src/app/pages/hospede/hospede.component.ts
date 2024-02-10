@@ -7,6 +7,7 @@ import {EnderecoFormComponent} from "../../shared/components/endereco-form/ender
 import {DxFormComponent} from "devextreme-angular";
 import {HospedeService} from "../../shared/services/hospede.service";
 import {Utils} from "../../shared/Utils";
+import {GlobalOperator, RequestDTO} from "../../shared/dto/requestDTO";
 
 @Component({
     selector: 'app-hospede',
@@ -21,8 +22,11 @@ export class HospedeComponent implements OnInit {
     mode: ModeEnum = ModeEnum.LIST;
     hoje: Date = new Date(Date.now());
     hospede: HospedeModel;
+    hospedeFilter: HospedeModel;
     gridResult: HospedeModel[] = [];
     hospedeSelecinado: HospedeModel;
+    nomeFilter: string = '';
+    requestDTO: RequestDTO;
     protected readonly Utils = Utils;
 
     constructor(private router: Router,
@@ -35,13 +39,34 @@ export class HospedeComponent implements OnInit {
             this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
 
         this.hospede = new HospedeModel();
+        this.hospedeFilter = new HospedeModel();
+        // @ts-ignore
+        delete this.hospedeFilter.ativo;
 
         if (edit) {
             this.findHospede(this.router.url.split('/').pop()!)
         }
+
+        this.requestDTO = new RequestDTO();
     }
 
     buscar() {
+
+        if (Object.keys(this.hospedeFilter).length > 0) {
+
+            this.requestDTO = this.hospedeServide.createSearchRequest(this.hospedeFilter);
+
+            this.hospedeServide.specification(this.requestDTO).subscribe({
+                next: (resp) => {
+                    if (resp.ok) {
+                        this.gridResult = resp.body!;
+                    }
+                }
+            });
+
+            return;
+        }
+
         this.hospedeServide.findAll().subscribe(resp => {
             if (resp.ok) {
                 this.gridResult = resp.body!;
