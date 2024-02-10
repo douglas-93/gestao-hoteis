@@ -9,6 +9,8 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,10 +35,10 @@ public class FiltersSpecifications<T> {
             for (SearchRequestDTO requestDTO : searchRequestDTOS) {
 
                 switch (requestDTO.getOperation()) {
-                    case EQUAL -> {
+                    /*case EQUAL -> {
                         Predicate equal = criteriaBuilder.equal(root.get(requestDTO.getColumnName()), requestDTO.getValue());
                         predicates.add(equal);
-                    }
+                    }*/
                     case LIKE -> {
                         Predicate like = criteriaBuilder.like(root.get(requestDTO.getColumnName()), "%" + requestDTO.getValue() + "%");
                         predicates.add(like);
@@ -46,22 +48,6 @@ public class FiltersSpecifications<T> {
 
                         Predicate in = root.get(requestDTO.getColumnName()).in(Arrays.asList(splited));
                         predicates.add(in);
-                    }
-                    case GREATER_THAN -> {
-                        Predicate greaterThan = criteriaBuilder.greaterThan(root.get(requestDTO.getColumnName()), requestDTO.getValue());
-                        predicates.add(greaterThan);
-                    }
-                    case LESS_THAN -> {
-                        Predicate lessThan = criteriaBuilder.lessThan(root.get(requestDTO.getColumnName()), requestDTO.getValue());
-                        predicates.add(lessThan);
-                    }
-                    case GREATER_THAN_EQUAL -> {
-                        Predicate greaterThanOrEqualTo = criteriaBuilder.greaterThanOrEqualTo(root.get(requestDTO.getColumnName()), requestDTO.getValue());
-                        predicates.add(greaterThanOrEqualTo);
-                    }
-                    case LESS_THAN_EQUAL -> {
-                        Predicate lessThanOrEqualTo = criteriaBuilder.lessThanOrEqualTo(root.get(requestDTO.getColumnName()), requestDTO.getValue());
-                        predicates.add(lessThanOrEqualTo);
                     }
                     case BETWEEN -> {
                         /*10,20*/
@@ -74,6 +60,45 @@ public class FiltersSpecifications<T> {
                         Predicate join = criteriaBuilder.equal(root.join(requestDTO.getJoinTable()).get(requestDTO.getColumnName()), requestDTO.getValue());
                         predicates.add(join);
                     }
+
+                    case EQUAL, GREATER_THAN, LESS_THAN, GREATER_THAN_EQUAL, LESS_THAN_EQUAL -> {
+                        Object value;
+                        if (root.get(requestDTO.getColumnName()).getJavaType() == LocalDate.class) {
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                            value = LocalDate.parse(requestDTO.getValue(), formatter);
+                        } else {
+                            // Se não for LocalDate, assumimos que é um tipo de dados compatível com a comparação direta
+                            value = requestDTO.getValue();
+                        }
+
+                        switch (requestDTO.getOperation()) {
+                            case EQUAL -> {
+                                Predicate predicate = criteriaBuilder.equal(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                predicates.add(predicate);
+                            }
+                            case GREATER_THAN -> {
+                                Predicate predicate = criteriaBuilder.greaterThan(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                predicates.add(predicate);
+                            }
+                            case LESS_THAN -> {
+                                Predicate predicate = criteriaBuilder.lessThan(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                predicates.add(predicate);
+                            }
+                            case GREATER_THAN_EQUAL -> {
+                                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                predicates.add(predicate);
+                            }
+                            case LESS_THAN_EQUAL -> {
+                                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                predicates.add(predicate);
+                            }
+                            default -> {
+                                throw new IllegalArgumentException("Operação inválida para tipo de dados LocalDate");
+                            }
+                        }
+                    }
+
+
                     default -> {
                         throw new IllegalArgumentException("Argumento inválido");
                     }
