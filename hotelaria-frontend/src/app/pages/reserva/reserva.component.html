@@ -8,7 +8,8 @@
            [mode]="mode">
 
     <div list-filter-fields>
-        <dx-form [formData]="reservaFilter">
+        <dx-form [formData]="reservaFilter"
+                 class="mb mt">
             <dxi-item [colCount]="5" itemType="group">
                 <dxi-item [label]="{text:'Número da Reserva'}" dataField="id" template="idTemplate">
                 </dxi-item>
