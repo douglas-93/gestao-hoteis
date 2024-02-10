@@ -6,7 +6,8 @@
            [listTitle]="'Listagem de Hospedes'"
            [mode]="mode">
     <div list-filter-fields>
-        <dx-form [formData]="hospedeFilter">
+        <dx-form [formData]="hospedeFilter"
+                 class="mt mb">
             <dxi-item itemType="group" [colCount]="3">
                 <dxi-item dataField="nome"
                           template="nomeTemplate"
@@ -25,17 +26,22 @@
             <!--            TEMPLATE            -->
 
             <div *dxTemplate="let data of 'nomeTemplate'">
-                <dx-text-box [(value)]="hospedeFilter.nome">
+                <dx-text-box [(value)]="hospedeFilter.nome"
+                             [showClearButton]="true">
                 </dx-text-box>
             </div>
 
             <div *dxTemplate="let data of 'cpfTemplate'">
-                <dx-text-box [(value)]="hospedeFilter.cpf">
+                <dx-text-box [(value)]="hospedeFilter.cpf"
+                             [showClearButton]="true"
+                             mask="000.000.000-00">
                 </dx-text-box>
             </div>
 
             <div *dxTemplate="let data of 'rgTemplate'">
-                <dx-text-box [(value)]="hospedeFilter.rg">
+                <dx-text-box [(value)]="hospedeFilter.rg"
+                             [showClearButton]="true"
+                             mask="AA-00.000.000">
                 </dx-text-box>
             </div>
         </dx-form>

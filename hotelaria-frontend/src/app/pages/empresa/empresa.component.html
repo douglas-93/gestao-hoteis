@@ -6,7 +6,44 @@
            [listTitle]="'Listagem de Empresas'"
            [mode]="mode">
     <div list-filter-fields>
+        <dx-form [formData]="empresaFilter"
+                 class="mt mb">
+            <dxi-item itemType="group" [colCount]="3">
+                <dxi-item dataField="razaoSocial"
+                          template="razaoSocialTemplate"
+                          [label]="{text: 'Razão Social'}">
+                </dxi-item>
+                <dxi-item dataField="nomeFantasia"
+                          template="nomeFantasiaTemplate"
+                          [label]="{text: 'Nome Fantasia'}">
+                </dxi-item>
+                <dxi-item dataField="cnpj"
+                          template="cnpjTemplate"
+                          [label]="{text: 'CNPJ'}">
+                </dxi-item>
+            </dxi-item>
 
+            <!--            TEMPLATE            -->
+
+            <div *dxTemplate="let data of 'razaoSocialTemplate'">
+                <dx-text-box [(value)]="empresaFilter.razaoSocial"
+                             [showClearButton]="true">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'nomeFantasiaTemplate'">
+                <dx-text-box [(value)]="empresaFilter.nomeFantasia"
+                             [showClearButton]="true">
+                </dx-text-box>
+            </div>
+
+            <div *dxTemplate="let data of 'cnpjTemplate'">
+                <dx-text-box [(value)]="empresaFilter.cnpj"
+                             [showClearButton]="true"
+                             mask="00.000.000/0000-00">
+                </dx-text-box>
+            </div>
+        </dx-form>
     </div>
 
     <div list-result>
@@ -56,7 +93,7 @@
         <dx-tab-panel>
             <dxi-item title="Dados Cadastrais">
                 <dx-form #empresaForm>
-                    <dxi-item colCount="5" itemType="group">
+                    <dxi-item [colCount]="5" itemType="group">
                         <dxi-item [colSpan]="2"
                                   [label]="{text: 'Razão Social'}"
                                   dataField="razaoSocial"
@@ -71,7 +108,7 @@
                         </dxi-item>
                     </dxi-item>
 
-                    <dxi-item colCount="4" itemType="group">
+                    <dxi-item [colCount]="4" itemType="group">
                         <dxi-item [label]="{text: 'CNPJ'}"
                                   dataField="cnpj"
                                   template="cnpjTemplate">
@@ -87,7 +124,7 @@
                         </dxi-item>
                     </dxi-item>
 
-                    <dxi-item colCount="3" itemType="group">
+                    <dxi-item [colCount]="3" itemType="group">
                         <dxi-item dataField="telefone"
                                   template="telefoneTemplate">
                         </dxi-item>
@@ -159,7 +196,7 @@
 
             <dxi-item title="Observações">
                 <dx-form>
-                    <dxi-item colCount="2" itemType="group">
+                    <dxi-item [colCount]="2" itemType="group">
                         <dxi-item [colSpan]="2"
                                   [label]="{text: 'Observações'}"
                                   dataField="observacao"

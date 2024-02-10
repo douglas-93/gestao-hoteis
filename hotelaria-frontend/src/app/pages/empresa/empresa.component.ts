@@ -7,6 +7,7 @@ import {EmpresaModel} from "../../shared/models/empresa.model";
 import {EmpresaService} from "../../shared/services/empresa.service";
 import notify from "devextreme/ui/notify";
 import {Utils} from "../../shared/Utils";
+import {RequestDTO} from "../../shared/dto/requestDTO";
 
 @Component({
     selector: 'app-empresa', templateUrl: './empresa.component.html', styleUrls: ['./empresa.component.scss']
@@ -21,6 +22,7 @@ export class EmpresaComponent implements OnInit {
     gridResult: EmpresaModel[] = [];
     empresaSelecinado: EmpresaModel;
     protected readonly Utils = Utils;
+    empresaFilter: EmpresaModel;
 
     constructor(private router: Router,
                 private empresaService: EmpresaService) {
@@ -31,6 +33,9 @@ export class EmpresaComponent implements OnInit {
         this.mode = (this.router.url.includes('cad') || this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
 
         this.empresa = new EmpresaModel();
+        this.empresaFilter = new EmpresaModel();
+        // @ts-ignore
+        delete this.empresaFilter.ativo;
 
         if (edit) {
             this.findEmpresa(this.router.url.split('/').pop()!)
@@ -38,6 +43,20 @@ export class EmpresaComponent implements OnInit {
     }
 
     buscar() {
+
+        if (Object.keys(this.empresaFilter).length > 0) {
+            const requestDTO: RequestDTO = this.empresaService.createSearchRequest(this.empresaFilter);
+
+            this.empresaService.specification(requestDTO).subscribe({
+                next: resp => {
+                    if (resp.ok) {
+                        this.gridResult = resp.body!
+                    }
+                }
+            })
+            return;
+        }
+
         this.empresaService.findAll().subscribe(resp => {
             if (resp.ok) {
                 this.gridResult = resp.body!

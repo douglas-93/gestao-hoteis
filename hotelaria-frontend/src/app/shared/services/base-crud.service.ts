@@ -7,7 +7,7 @@ import {Operation, SearchRequestDTO} from "../dto/searchRequestDTO";
 export class BaseCRUDService<T> {
 
     url: string = environment.BASE_URL;
-    requestDTO: RequestDTO;
+    private _requestDTO: RequestDTO;
 
     constructor(servicePath: string,
                 protected http: HttpClient) {
@@ -43,9 +43,9 @@ export class BaseCRUDService<T> {
     }
 
     createSearchRequest(entity: T, globalOperator: GlobalOperator = GlobalOperator.AND) {
-        this.requestDTO = new RequestDTO();
-        this.requestDTO.globalOperator = globalOperator;
-        this.requestDTO.searchRequestDTOS = [];
+        this._requestDTO = new RequestDTO();
+        this._requestDTO.globalOperator = globalOperator;
+        this._requestDTO.searchRequestDTOS = [];
 
         // @ts-ignore
         Object.keys(entity).filter(key => !_.isNil(entity[key])).forEach(key => {
@@ -53,9 +53,9 @@ export class BaseCRUDService<T> {
             searchRequest.columnName = key;
             searchRequest.value = entity[key];
             searchRequest.operation = Operation.LIKE;
-            this.requestDTO.searchRequestDTOS.push(searchRequest);
+            this._requestDTO.searchRequestDTOS.push(searchRequest);
         })
 
-        return this.requestDTO;
+        return this._requestDTO;
     }
 }
