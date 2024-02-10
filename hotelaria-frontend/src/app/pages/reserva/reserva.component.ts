@@ -113,6 +113,13 @@ export class ReservaComponent implements OnInit {
             requestDTO.searchRequestDTOS = requestDTO.searchRequestDTOS
                 .filter(r => !excludeColumns.includes(r.columnName));
 
+            requestDTO.searchRequestDTOS.forEach(r => {
+                if (r.columnName.includes('data')) {
+                    r.value = Utils.formatarDataParaStringSemDiaSemana(new Date(r.value));
+                    r.operation = Operation.EQUAL;
+                }
+            })
+
             if ((this.nomeQuartoFilter != '' && !_.isNil(this.nomeQuartoFilter))) {
                 const nomeQuartoSearchRequest: SearchRequestDTO = new SearchRequestDTO();
                 nomeQuartoSearchRequest.columnName = 'nome';

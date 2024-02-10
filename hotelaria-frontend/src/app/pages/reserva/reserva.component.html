@@ -47,10 +47,18 @@
                 </dx-autocomplete>
             </div>
             <div *dxTemplate="let data of 'dataEntradaTemplate'">
-                <dx-date-box></dx-date-box>
+                <dx-date-box [(value)]="reservaFilter.dataEntrada"
+                             [showClearButton]="true"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy">
+                </dx-date-box>
             </div>
             <div *dxTemplate="let data of 'dataPrevistaSaidaTemplate'">
-                <dx-date-box></dx-date-box>
+                <dx-date-box [(value)]="reservaFilter.dataPrevistaSaida"
+                             [showClearButton]="true"
+                             [useMaskBehavior]="true"
+                             displayFormat="dd/MM/yyyy">
+                </dx-date-box>
             </div>
         </dx-form>
     </div>
