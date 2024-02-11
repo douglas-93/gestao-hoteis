@@ -35,10 +35,6 @@ public class FiltersSpecifications<T> {
             for (SearchRequestDTO requestDTO : searchRequestDTOS) {
 
                 switch (requestDTO.getOperation()) {
-                    /*case EQUAL -> {
-                        Predicate equal = criteriaBuilder.equal(root.get(requestDTO.getColumnName()), requestDTO.getValue());
-                        predicates.add(equal);
-                    }*/
                     case LIKE -> {
                         Predicate like = criteriaBuilder.like(root.get(requestDTO.getColumnName()), "%" + requestDTO.getValue() + "%");
                         predicates.add(like);
@@ -63,37 +59,49 @@ public class FiltersSpecifications<T> {
 
                     case EQUAL, GREATER_THAN, LESS_THAN, GREATER_THAN_EQUAL, LESS_THAN_EQUAL -> {
                         Object value;
-                        if (root.get(requestDTO.getColumnName()).getJavaType() == LocalDate.class) {
+
+                        /* Pegando a classe */
+                        Class<?> classType = root.get(requestDTO.getColumnName()).getJavaType();
+
+                        /* Se for Data, formatando para pesquisa */
+                        if (classType == LocalDate.class) {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                             value = LocalDate.parse(requestDTO.getValue(), formatter);
+                        /* Se for o Enum, cria-se a instância a partir do Enum para pesquisa */
+                        } else if (Enum.class.isAssignableFrom(classType)) {
+                            Enum<?>[] enumConstants = (Enum<?>[]) classType.getEnumConstants();
+                            value = Arrays.stream(enumConstants)
+                                    .filter(e -> e.name().equals(requestDTO.getValue()))
+                                    .findFirst()
+                                    .orElseThrow(() -> new IllegalArgumentException("Valor inválido para o enum: " + requestDTO.getValue()));
+                        /* Se não, até então, cairá em uma classe comum de comparação tipo String ou Long */
                         } else {
-                            // Se não for LocalDate, assumimos que é um tipo de dados compatível com a comparação direta
                             value = requestDTO.getValue();
                         }
 
                         switch (requestDTO.getOperation()) {
                             case EQUAL -> {
-                                Predicate predicate = criteriaBuilder.equal(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                Predicate predicate = criteriaBuilder.equal(root.get(requestDTO.getColumnName()), value);
                                 predicates.add(predicate);
                             }
                             case GREATER_THAN -> {
-                                Predicate predicate = criteriaBuilder.greaterThan(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                Predicate predicate = criteriaBuilder.greaterThan(root.get(requestDTO.getColumnName()), (Comparable) value);
                                 predicates.add(predicate);
                             }
                             case LESS_THAN -> {
-                                Predicate predicate = criteriaBuilder.lessThan(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                Predicate predicate = criteriaBuilder.lessThan(root.get(requestDTO.getColumnName()), (Comparable) value);
                                 predicates.add(predicate);
                             }
                             case GREATER_THAN_EQUAL -> {
-                                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                Predicate predicate = criteriaBuilder.greaterThanOrEqualTo(root.get(requestDTO.getColumnName()), (Comparable) value);
                                 predicates.add(predicate);
                             }
                             case LESS_THAN_EQUAL -> {
-                                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get(requestDTO.getColumnName()), (LocalDate) value);
+                                Predicate predicate = criteriaBuilder.lessThanOrEqualTo(root.get(requestDTO.getColumnName()), (Comparable) value);
                                 predicates.add(predicate);
                             }
                             default -> {
-                                throw new IllegalArgumentException("Operação inválida para tipo de dados LocalDate");
+                                throw new IllegalArgumentException("Operação inválida para o tipo de dados");
                             }
                         }
                     }

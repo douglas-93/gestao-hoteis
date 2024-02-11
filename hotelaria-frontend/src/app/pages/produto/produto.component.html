@@ -1,36 +1,73 @@
-<base-crud [mode]="mode"
-           (saveFunction)="salvar()"
+<base-crud (deleteFunction)="excluirProduto()"
            (filterFunction)="buscaProdutos()"
            (novoCadastroFunction)="novo()"
-           (deleteFunction)="excluirProduto()"
+           (saveFunction)="salvar()"
            [editTitle]="'Cadastro de Produto'"
-           [listTitle]="'Listagem de Produtos'">
+           [listTitle]="'Listagem de Produtos'"
+           [mode]="mode">
     <div list-filter-fields>
+        <dx-form [formData]="produtoFilter"
+                 class="mb mt">
+            <dxi-item [colCount]="3" itemType="group">
+                <dxi-item [label]="{text: 'Código Produto'}" dataField="id" template="idTemplate">
+                </dxi-item>
+                <dxi-item dataField="nome" template="nomeTemplate">
+                </dxi-item>
+                <dxi-item dataField="tipo" template="tipoTemplate">
+                </dxi-item>
+            </dxi-item>
+
+            <!--            TEMPLATE            -->
+            <div *dxTemplate="let data of 'idTemplate'">
+                <dx-number-box [(value)]="produtoFilter.id"
+                               [min]="1"
+                               [showClearButton]="true">
+                </dx-number-box>
+            </div>
+            <div *dxTemplate="let data of 'nomeTemplate'">
+                <dx-text-box [(value)]="produtoFilter.nome"
+                             [showClearButton]="true">
+                </dx-text-box>
+            </div>
+            <div *dxTemplate="let data of 'tipoTemplate'">
+                <dx-select-box [(value)]="produtoFilter.tipo"
+                               [dataSource]="tiposProdutoEnumSelectBox"
+                               [showClearButton]="true"
+                               displayExpr="displayText"
+                               valueExpr="value">
+                </dx-select-box>
+            </div>
+
+        </dx-form>
     </div>
 
     <div list-result>
-        <dx-data-grid [dataSource]="produtos"
-                      [rowAlternationEnabled]="true"
+        <dx-data-grid (onRowDblClick)="editarProduto()"
                       (onSelectionChanged)="selecionaProduto($event)"
-                      (onRowDblClick)="editarProduto()"
+                      [dataSource]="produtos"
+                      [rowAlternationEnabled]="true"
                       [showBorders]="true">
 
             <dxo-selection mode="single"></dxo-selection>
 
-            <dxi-column dataField="nome"
-                        alignment="center">
+            <dxi-column alignment="center"
+                        caption="Código do Produto"
+                        dataField="id">
             </dxi-column>
-            <dxi-column dataField="valor"
-                        alignment="center"
-                        cellTemplate="valorTemplate">
+            <dxi-column alignment="center"
+                        dataField="nome">
             </dxi-column>
-            <dxi-column dataField="estoque"
-                        alignment="center"
-                        cellTemplate="estoqueTemplate">
+            <dxi-column alignment="center"
+                        cellTemplate="valorTemplate"
+                        dataField="valor">
             </dxi-column>
-            <dxi-column dataField="tipo"
-                        alignment="center"
-                        cellTemplate="tipoTemplate">
+            <dxi-column alignment="center"
+                        cellTemplate="estoqueTemplate"
+                        dataField="estoque">
+            </dxi-column>
+            <dxi-column alignment="center"
+                        cellTemplate="tipoTemplate"
+                        dataField="tipo">
             </dxi-column>
 
             <div *dxTemplate="let data of 'valorTemplate'">
@@ -51,9 +88,9 @@
         <dx-form>
             <dxi-item [colCount]="3"
                       itemType="group">
-                <dxi-item template="nomeTemplate" [label]="{text: 'Nome'}"></dxi-item>
-                <dxi-item template="valorTemplate" [label]="{text: 'Valor R$'}"></dxi-item>
-                <dxi-item template="tiposTemplate" [label]="{text: 'Tipo do Produto'}"></dxi-item>
+                <dxi-item [label]="{text: 'Nome'}" template="nomeTemplate"></dxi-item>
+                <dxi-item [label]="{text: 'Valor R$'}" template="valorTemplate"></dxi-item>
+                <dxi-item [label]="{text: 'Tipo do Produto'}" template="tiposTemplate"></dxi-item>
             </dxi-item>
 
             <div *dxTemplate="let data of 'nomeTemplate'">
@@ -72,8 +109,8 @@
                 <dx-select-box #tipos
                                (onValueChanged)="defineTipo($event)"
                                [dataSource]="tiposProdutoEnumSelectBox"
-                               valueExpr="value"
-                               displayExpr="displayText">
+                               displayExpr="displayText"
+                               valueExpr="value">
                 </dx-select-box>
             </div>
         </dx-form>

@@ -8,6 +8,8 @@ import notify from "devextreme/ui/notify";
 import {ProdutoService} from "../../shared/services/produto.service";
 import {Router} from "@angular/router";
 import {Utils} from "../../shared/Utils";
+import {RequestDTO} from "../../shared/dto/requestDTO";
+import {Operation} from "../../shared/dto/searchRequestDTO";
 
 @Component({
     selector: 'app-produto',
@@ -24,9 +26,11 @@ export class ProdutoComponent implements OnInit {
     tiposProdutoEnumSelectBox;
     mode: ModeEnum;
     produtos: ProdutoModel[] = [];
+    produtoFilter: ProdutoModel;
     protected readonly ModeEnum = ModeEnum;
     protected readonly Utils = Utils;
     protected readonly event = event;
+    protected readonly TiposProdutoEnum = TiposProdutoEnum;
 
     constructor(private produtoService: ProdutoService,
                 private router: Router) {
@@ -42,6 +46,8 @@ export class ProdutoComponent implements OnInit {
         let edit: boolean = this.router.url.includes('edit');
         this.mode = (this.router.url.includes('cad') ||
             this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
+
+        this.produtoFilter = new ProdutoModel();
 
         if (edit) {
             this.findProduto(this.router.url.split('/').pop()!)
@@ -93,6 +99,27 @@ export class ProdutoComponent implements OnInit {
     }
 
     buscaProdutos() {
+        console.log(Object.keys(this.produtoFilter))
+        if (Object.keys(this.produtoFilter).length > 0) {
+            const requestDTO: RequestDTO = this.produtoService.createSearchRequest(this.produtoFilter);
+
+            requestDTO.searchRequestDTOS.forEach(r => {
+                if (r.columnName.includes('tipo')){
+                    r.operation = Operation.EQUAL;
+                }
+            })
+
+            this.produtoService.specification(requestDTO).subscribe({
+                next: resp => {
+                    if (resp.ok) {
+                        this.produtos = resp.body!;
+                    }
+                }
+            })
+            return;
+        }
+
+
         this.produtoService.findAll().subscribe({
             next: resp => {
                 if (resp.ok) {
@@ -141,7 +168,7 @@ export class ProdutoComponent implements OnInit {
 
     excluirProduto() {
         this.produtoService.delete(this.produto.id).subscribe({
-            next: resp =>{
+            next: resp => {
                 if (resp.ok) {
                     notify('Produto excluído com sucesso', 'success', 3600);
                     window.history.back();
@@ -149,6 +176,4 @@ export class ProdutoComponent implements OnInit {
             }
         });
     }
-
-    protected readonly TiposProdutoEnum = TiposProdutoEnum;
 }
