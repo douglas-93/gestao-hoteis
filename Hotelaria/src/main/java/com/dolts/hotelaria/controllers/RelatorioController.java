@@ -1,5 +1,6 @@
 package com.dolts.hotelaria.controllers;
 
+import com.dolts.hotelaria.dto.RequestDTO;
 import com.dolts.hotelaria.services.RelatorioService;
 import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,9 @@ public class RelatorioController {
     @Autowired
     private RelatorioService relatorioService;
 
-    @GetMapping
-    public ResponseEntity<InputStreamResource> generateReport(@RequestParam String relatorio) throws JRException, FileNotFoundException {
+    @PostMapping
+    public ResponseEntity<InputStreamResource> generateReport(@RequestParam String relatorio,
+                                                              @RequestBody(required = false) RequestDTO requestDTO) throws JRException, FileNotFoundException {
 
         // Cria um InputStreamResource a partir do array de bytes do PDF
         InputStreamResource resource = relatorioService.gerarRelatorio(relatorio);

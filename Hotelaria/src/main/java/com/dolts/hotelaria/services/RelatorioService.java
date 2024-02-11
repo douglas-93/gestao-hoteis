@@ -1,19 +1,21 @@
 package com.dolts.hotelaria.services;
 
+import com.dolts.hotelaria.dto.RequestDTO;
 import com.dolts.hotelaria.models.ArquivoDigitalModel;
 import com.dolts.hotelaria.models.EnderecoModel;
 import com.dolts.hotelaria.models.HotelModel;
+import com.dolts.hotelaria.models.ReservaModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.Map;
 @Service
 public class RelatorioService {
 
+    @Autowired
+    private FiltersSpecifications<?> filtersSpecifications;
     @Autowired
     private HotelService hotelService;
     @Autowired
@@ -32,6 +36,8 @@ public class RelatorioService {
     private ProdutoService produtoService;
     @Autowired
     private QuartoService quartoService;
+    @Autowired
+    private ReservaService reservaService;
 
 
     public InputStreamResource gerarRelatorio(String nomeRelatorio) throws JRException, FileNotFoundException {
@@ -46,7 +52,28 @@ public class RelatorioService {
 
         Map<String, Object> param = getParam();
 
-        var dataSource = this.getData(nomeRelatorio);
+        var dataSource = this.getSimpleData(nomeRelatorio);
+
+        // Gera o relatório
+        JasperPrint print = JasperFillManager.fillReport(report, param, new JRBeanCollectionDataSource(dataSource));
+
+        // Cria um InputStreamResource a partir do array de bytes do PDF
+        return new org.springframework.core.io.InputStreamResource(new ByteArrayInputStream(JasperExportManager.exportReportToPdf(print)));
+    }
+
+    public InputStreamResource gerarRelatorio(String nomeRelatorio, RequestDTO requestDTO) throws JRException, FileNotFoundException {
+
+        String filePath = "classpath:relatorios/".concat(nomeRelatorio).concat(".jrxml");
+
+        // Pega o relatorio
+        File file = ResourceUtils.getFile(filePath);
+
+        // Cria o relatório Jasper
+        JasperReport report = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+        Map<String, Object> param = getParam();
+
+        var dataSource = this.getFilteredData(nomeRelatorio, requestDTO);
 
         // Gera o relatório
         JasperPrint print = JasperFillManager.fillReport(report, param, new JRBeanCollectionDataSource(dataSource));
@@ -81,7 +108,7 @@ public class RelatorioService {
         return hotelService.getById(hotelService.findLastId());
     }
 
-    public List<?> getData(String relatorio) {
+    private List<?> getSimpleData(String relatorio) {
         switch (relatorio) {
             case "hospedes":
                 return this.hospedeService.findAll();
@@ -89,6 +116,16 @@ public class RelatorioService {
                 return this.produtoService.findAll();
             case "quartos":
                 return this.quartoService.findAll();
+            default:
+                return Collections.emptyList();
+        }
+    }
+
+    private List<?> getFilteredData(String nomeRelatorio, RequestDTO requestDTO) {
+        switch (nomeRelatorio) {
+            case "reservasPeriodo":
+                Specification<ReservaModel> specification = (Specification<ReservaModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+                return reservaService.getRepository().findAll(specification);
             default:
                 return Collections.emptyList();
         }
