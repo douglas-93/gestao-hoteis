@@ -31,7 +31,7 @@
                 </dx-number-box>
             </div>
             <div *dxTemplate="let data of 'quartoTemplate'">
-                <dx-autocomplete [(value)]="nomeQuartoFilter"
+                <dx-autocomplete (onValueChanged)="defineQuartoFiltro($event)"
                                  [dataSource]="quartos"
                                  [showClearButton]="true"
                                  displayValue="nome"
@@ -39,7 +39,7 @@
                 </dx-autocomplete>
             </div>
             <div *dxTemplate="let data of 'hospedeTemplate'">
-                <dx-autocomplete [(value)]="nomeHospedeFilter"
+                <dx-autocomplete (onValueChanged)="defineHospedeFiltro($event)"
                                  [dataSource]="hospedes"
                                  [showClearButton]="true"
                                  displayValue="nome"

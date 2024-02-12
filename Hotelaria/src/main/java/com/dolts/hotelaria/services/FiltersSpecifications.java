@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +45,10 @@ public class FiltersSpecifications<T> {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     value = LocalDate.parse(requestDTO.getValue(), formatter);
                     /* Se for o Enum, cria-se a instância a partir do Enum para pesquisa */
-                } else if (Enum.class.isAssignableFrom(classType)) {
+                } else if (classType == LocalDateTime.class) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    value = LocalDateTime.parse(requestDTO.getValue(), formatter);
+            } else if (Enum.class.isAssignableFrom(classType)) {
                     Enum<?>[] enumConstants = (Enum<?>[]) classType.getEnumConstants();
                     value = Arrays.stream(enumConstants)
                             .filter(e -> e.name().equals(requestDTO.getValue()))

@@ -40,7 +40,7 @@ public class ReservaModel implements Serializable {
     private Boolean isEmpresa = false;
     private Long idReservaOriginal;
 
-    @OneToOne
+    @ManyToOne
     private QuartoModel quarto;
 
     @ManyToOne

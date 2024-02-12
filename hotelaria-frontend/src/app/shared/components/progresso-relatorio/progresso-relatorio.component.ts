@@ -3,6 +3,7 @@ import _ from "lodash";
 import notify from "devextreme/ui/notify";
 import {RelatorioService} from "../../services/relatorio.service";
 import {DxTextAreaComponent} from "devextreme-angular";
+import {RequestDTO} from "../../dto/requestDTO";
 
 @Component({
     selector: 'app-progresso-relatorio',
@@ -20,6 +21,8 @@ export class ProgressoRelatorioComponent {
     @Input()
     nomeRelatorio: string;
     @Input()
+    requestDTO: RequestDTO;
+    @Input()
     renderVisible: boolean;
     @Input()
     fileBlob: Blob;
@@ -33,24 +36,52 @@ export class ProgressoRelatorioComponent {
     }
 
     ngOnInit() {
-        this.relatorioService.gerarRelatorio(this.nomeRelatorio).subscribe({
-            next: resp => {
-                if (resp) {
-                    this.fileBlob = resp;
-                    this.pronto = true;
-                }
-            },
-            complete: () => {
-                this.progress = 100;
-            },
-            error: err => {
-                console.log(err)
-                this.erro = true;
-                this.erroMessage = err.message;
-                this.erroMessage += `\n\n${err.trace}`;
-                notify('Falha ao gerar o relatório', 'error', 3600);
-            }
-        });
+
+        switch (this.nomeRelatorio) {
+            case 'hospedes':
+            case 'produtos':
+            case 'quartos':
+                this.relatorioService.gerarRelatorio(this.nomeRelatorio).subscribe({
+                    next: resp => {
+                        if (resp) {
+                            this.fileBlob = resp;
+                            this.pronto = true;
+                        }
+                    },
+                    complete: () => {
+                        this.progress = 100;
+                    },
+                    error: err => {
+                        console.log(err)
+                        this.erro = true;
+                        this.erroMessage = err.message;
+                        this.erroMessage += `\n\n${err.trace}`;
+                        notify('Falha ao gerar o relatório', 'error', 3600);
+                    }
+                });
+                break;
+            case 'reservasPeriodo':
+            case 'consumoReserva':
+            case 'movimentacao':
+                this.relatorioService.gerarRelatorioComFiltro(this.nomeRelatorio, this.requestDTO).subscribe({
+                    next: resp => {
+                        if (resp) {
+                            this.fileBlob = resp;
+                            this.pronto = true;
+                        }
+                    },
+                    complete: () => {
+                        this.progress = 100;
+                    },
+                    error: err => {
+                        console.log(err)
+                        this.erro = true;
+                        this.erroMessage = err.message;
+                        this.erroMessage += `\n\n${err.trace}`;
+                        notify('Falha ao gerar o relatório', 'error', 3600);
+                    }
+                });
+        }
     }
 
     downloadRelatorio() {

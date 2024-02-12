@@ -21,6 +21,8 @@ import {EmpresaModel} from "../../shared/models/empresa.model";
 import {EmpresaService} from "../../shared/services/empresa.service";
 import {RequestDTO} from "../../shared/dto/requestDTO";
 import {Operation, SearchRequestDTO} from "../../shared/dto/searchRequestDTO";
+import DevExpress from "devextreme";
+import ValueChangedEvent = DevExpress.ui.dxAutocomplete.ValueChangedEvent;
 
 @Component({
     selector: 'app-reserva',
@@ -47,8 +49,8 @@ export class ReservaComponent implements OnInit {
     reservas: ReservaModel[] = [];
     reservasJaRealizadas: ReservaModel[] = [];
     reservaFilter: ReservaModel;
-    nomeHospedeFilter: string = '';
-    nomeQuartoFilter: string = '';
+    hospedeFilter: number;
+    quartoFilter: number;
     protected readonly Utils = Utils;
 
     constructor(private router: Router,
@@ -105,8 +107,8 @@ export class ReservaComponent implements OnInit {
 
         let keys = Object.keys(this.reservaFilter).filter(r => !excludeColumns.includes(r));
         if (keys.length > 0
-            || (this.nomeHospedeFilter != '' && !_.isNil(this.nomeHospedeFilter))
-            || (this.nomeQuartoFilter != '' && !_.isNil(this.nomeQuartoFilter))) {
+            || (!_.isNil(this.hospedeFilter))
+            || (!_.isNil(this.quartoFilter))) {
 
             const requestDTO: RequestDTO = this.reservaService.createSearchRequest(this.reservaFilter);
 
@@ -120,20 +122,20 @@ export class ReservaComponent implements OnInit {
                 }
             })
 
-            if ((this.nomeQuartoFilter != '' && !_.isNil(this.nomeQuartoFilter))) {
+            if (!_.isNil(this.quartoFilter)) {
                 const nomeQuartoSearchRequest: SearchRequestDTO = new SearchRequestDTO();
-                nomeQuartoSearchRequest.columnName = 'nome';
-                nomeQuartoSearchRequest.value = this.nomeQuartoFilter;
+                nomeQuartoSearchRequest.columnName = 'id';
+                nomeQuartoSearchRequest.value = this.quartoFilter.toString();
                 nomeQuartoSearchRequest.operation = Operation.JOIN;
                 nomeQuartoSearchRequest.joinTable = 'quarto'
                 requestDTO.searchRequestDTOS.push(nomeQuartoSearchRequest);
             }
 
 
-            if ((this.nomeHospedeFilter != '' && !_.isNil(this.nomeHospedeFilter))) {
+            if (!_.isNil(this.hospedeFilter)) {
                 const nomeHospedeSearchRequest: SearchRequestDTO = new SearchRequestDTO();
-                nomeHospedeSearchRequest.columnName = 'nome';
-                nomeHospedeSearchRequest.value = this.nomeHospedeFilter;
+                nomeHospedeSearchRequest.columnName = 'id';
+                nomeHospedeSearchRequest.value = this.hospedeFilter.toString();
                 nomeHospedeSearchRequest.operation = Operation.JOIN;
                 nomeHospedeSearchRequest.joinTable = 'hospedes';
                 requestDTO.searchRequestDTOS.push(nomeHospedeSearchRequest);
@@ -362,5 +364,13 @@ export class ReservaComponent implements OnInit {
         if (!this.reserva.isEmpresa) {
             this.reserva.empresa = undefined;
         }
+    }
+
+    defineHospedeFiltro(e: any) {
+        this.hospedeFilter = this.hospedes.find(h => h.nome === e.value)?.id!;
+    }
+
+    defineQuartoFiltro(e: any) {
+        this.quartoFilter = this.quartos.find(q => q.nome === e.value)?.id!;
     }
 }

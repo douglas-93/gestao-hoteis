@@ -1,10 +1,7 @@
 package com.dolts.hotelaria.services;
 
 import com.dolts.hotelaria.dto.RequestDTO;
-import com.dolts.hotelaria.models.ArquivoDigitalModel;
-import com.dolts.hotelaria.models.EnderecoModel;
-import com.dolts.hotelaria.models.HotelModel;
-import com.dolts.hotelaria.models.ReservaModel;
+import com.dolts.hotelaria.models.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,8 @@ public class RelatorioService {
     private QuartoService quartoService;
     @Autowired
     private ReservaService reservaService;
+    @Autowired
+    private TransacaoService transacaoService;
 
 
     public InputStreamResource gerarRelatorio(String nomeRelatorio) throws JRException, FileNotFoundException {
@@ -109,25 +108,25 @@ public class RelatorioService {
     }
 
     private List<?> getSimpleData(String relatorio) {
-        switch (relatorio) {
-            case "hospedes":
-                return this.hospedeService.findAll();
-            case "produtos":
-                return this.produtoService.findAll();
-            case "quartos":
-                return this.quartoService.findAll();
-            default:
-                return Collections.emptyList();
-        }
+        return switch (relatorio) {
+            case "hospedes" -> this.hospedeService.findAll();
+            case "produtos" -> this.produtoService.findAll();
+            case "quartos" -> this.quartoService.findAll();
+            default -> Collections.emptyList();
+        };
     }
 
     private List<?> getFilteredData(String nomeRelatorio, RequestDTO requestDTO) {
-        switch (nomeRelatorio) {
-            case "reservasPeriodo":
-                Specification<ReservaModel> specification = (Specification<ReservaModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
-                return reservaService.getRepository().findAll(specification);
-            default:
-                return Collections.emptyList();
+        if (nomeRelatorio.equals("reservasPeriodo")) {
+            Specification<ReservaModel> specification = (Specification<ReservaModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+            return reservaService.getRepository().findAll(specification);
+        } else if (nomeRelatorio.equals("consumoReserva")) {
+            Specification<TransacaoModel> specification = (Specification<TransacaoModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+            return transacaoService.getRepository().findAll(specification);
+        } else if (nomeRelatorio.equals("movimentacao")) {
+            Specification<TransacaoModel> specification = (Specification<TransacaoModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+            return transacaoService.getRepository().findAll(specification);
         }
+        return Collections.emptyList();
     }
 }

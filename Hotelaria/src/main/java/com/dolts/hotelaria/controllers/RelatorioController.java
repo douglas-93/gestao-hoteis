@@ -19,12 +19,36 @@ public class RelatorioController {
     @Autowired
     private RelatorioService relatorioService;
 
+    @GetMapping
+    public ResponseEntity<InputStreamResource> generateReport(@RequestParam String relatorio) throws JRException, FileNotFoundException {
+
+        // Cria um InputStreamResource a partir do array de bytes do PDF
+        InputStreamResource resource;
+        resource = relatorioService.gerarRelatorio(relatorio);
+
+
+        // Configura os cabeçalhos da resposta para download
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=" + relatorio + ".pdf");
+        headers.add("Content-Type", "application/pdf");
+
+        // Retorna a resposta com o arquivo PDF
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
+    }
+
     @PostMapping
     public ResponseEntity<InputStreamResource> generateReport(@RequestParam String relatorio,
                                                               @RequestBody(required = false) RequestDTO requestDTO) throws JRException, FileNotFoundException {
 
         // Cria um InputStreamResource a partir do array de bytes do PDF
-        InputStreamResource resource = relatorioService.gerarRelatorio(relatorio);
+        InputStreamResource resource;
+        if (requestDTO != null) {
+            resource = relatorioService.gerarRelatorio(relatorio, requestDTO);
+        } else {
+            resource = relatorioService.gerarRelatorio(relatorio);
+        }
 
         // Configura os cabeçalhos da resposta para download
         HttpHeaders headers = new HttpHeaders();
