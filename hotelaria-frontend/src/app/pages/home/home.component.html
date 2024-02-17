@@ -6,93 +6,75 @@
             <h1 style="font-weight: bolder; font-size: 4rem">{{ hotel.nome }}</h1>
             <img [src]="hotel.logoAsDataSource" class="imagem img-border">
         </div>
-        <div class="row mt mb" style="justify-content: center">
-            <span style="font-size: 26px; font-weight: bolder">Atalhos</span>
-        </div>
-        <div class="row mt mb" style="justify-content: space-evenly">
-            <dx-button (onClick)="navegarPara('quartos')"
-                       text="Quartos"
-                       icon="fa-solid fa-door-open"
-                       type="default">
-            </dx-button>
-            <dx-button (onClick)="navegarPara('hospedes')"
-                       text="Hospedes"
-                       icon="fa-solid fa-user"
-                       type="default">
-            </dx-button>
-            <dx-button (onClick)="navegarPara('empresas')"
-                       text="Empresas"
-                       icon="fa-solid fa-city"
-                       type="default">
-            </dx-button>
-            <dx-button (onClick)="navegarPara('reservas')"
-                       text="Reservas"
-                       icon="fa-solid fa-calendar-days"
-                       type="default">
-            </dx-button>
-            <dx-button (onClick)="navegarPara('produto')"
-                       text="Produtos"
-                       icon="fa-solid fa-barcode"
-                       type="default">
-            </dx-button>
-            <dx-button (onClick)="navegarPara('monitor-reservas')"
-                       text="Monitor"
-                       icon="fa-solid fa-table"
-                       type="default">
-            </dx-button>
-            <dx-button (onClick)="isCalculadoraVisible = true"
-                       text="Calculadora"
-                       icon="fa-solid fa-calculator"
-                       type="default">
-            </dx-button>
-        </div>
-        <div class="row mb mt" style="justify-content: center">
-            <span style="font-size: 26px; font-weight: bolder">Estatísticas</span>
-        </div>
-        <div class="row mt mb">
-            <div class="stats-container">
-                <div class="stat-block">
-                    <span class="stat-title">Reservas Na Semana: </span><br>
-                    <span class="stat-value">{{ reservasNaSemana }}</span><br>
-                </div>
-                <div class="stat-block">
-                    <span class="stat-title">Reservas Com CheckIn: </span><br>
-                    <span class="stat-value">{{ reservasComCheckIn }}</span><br>
-                </div>
-                <div class="stat-block">
-                    <span class="stat-title">Reservas Com CheckOut: </span><br>
-                    <span class="stat-value">{{ reservasComCheckOut }}</span><br>
-                </div>
-                <div class="stat-block">
-                    <span class="stat-title">Reservas Previstas Para Sair na Semana: </span><br>
-                    <span class="stat-value">{{ reservasPrevistasParaSair }}</span><br>
-                </div>
-                <div class="stat-block">
-                    <span class="stat-title">CheckOut Para Hoje: </span><br>
-                    <span class="stat-value">{{ checkOutParaHoje }}</span><br>
-                </div>
-                <div class="stat-block">
-                    <span class="stat-title">Quarto Mais Vago na Semana: </span><br>
-                    <span class="stat-value">{{ quartoMaisVagoDaSemana }}</span><br>
-                </div>
-            </div>
-            <div class="stats-container">
+
+        <div class="dx-card responsive-paddings" style="display: flex; justify-content: space-evenly">
+
+            <table class="centered-table" style="width: 25%">
+                <thead>
+                <th colspan="2"> Reservas</th>
+                </thead>
+                <tr>
+                    <td>Na Semana</td>
+                    <td>{{ reservasNaSemana }}</td>
+                </tr>
+                <tr>
+                    <td>Hospedados</td>
+                    <td>{{ reservasComCheckIn }}</td>
+                </tr>
+                <tr>
+                    <td>CheckOut Hoje</td>
+                    <td>{{ checkOutParaHoje }}</td>
+                </tr>
+            </table>
+
+            <table class="centered-table" style="width: 25%">
+                <thead>
+                <th> Quarto</th>
+                <th> Reservas na Semana</th>
+                </thead>
                 <ng-container *ngFor="let data of quartosOcupados">
-                    <div class="stat-block">
-                        <span class="stat-title">Quarto {{ data.quarto }}: </span><br>
-                        <span class="stat-value">{{ data.ocupacao }}</span><br>
-                    </div>
+                    <tr>
+                        <td>{{ data.quarto }}</td>
+                        <td>{{ data.ocupacao }}</td>
+                    </tr>
                 </ng-container>
-            </div>
+            </table>
+
+            <table style="width: 25%" id="atalho">
+                <thead>
+                <th colspan="2">Atalhos</th>
+                </thead>
+                <tr *ngFor="let b of buttons; let i = index">
+                    <ng-container *ngIf="i % 2 === 0">
+                        <td>
+                            <dx-button (onClick)="navegarPara(b.path)" [icon]="b.icon" [text]="b.text"
+                                       type="default"></dx-button>
+                        </td>
+                        <td *ngIf="buttons[i + 1]">
+                            <dx-button (onClick)="navegarPara(buttons[i + 1].path)" [icon]="buttons[i + 1].icon"
+                                       [text]="buttons[i + 1].text" type="default"></dx-button>
+                        </td>
+                    </ng-container>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <dx-button (onClick)="isCalculadoraVisible = true"
+                                   icon="fa-solid fa-calculator"
+                                   text="Calculadora"
+                                   type="default">
+                        </dx-button>
+                    </td>
+                </tr>
+            </table>
         </div>
         <dx-popup [(visible)]="isCalculadoraVisible"
                   [dragEnabled]="true"
                   [resizeEnabled]="false"
-                  [showTitle]="true"
                   [showCloseButton]="true"
+                  [showTitle]="true"
+                  height="450px"
                   title="Calculadora"
-                  width="450px"
-                  height="450px">
+                  width="450px">
             <app-calculadora></app-calculadora>
         </dx-popup>
     </div>

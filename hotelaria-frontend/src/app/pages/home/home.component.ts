@@ -33,6 +33,38 @@ export class HomeComponent {
     quartos: QuartoModel[] | undefined;
     quartosOcupados;
     cacheKey: string = 'HOTEL_LOGO';
+    buttons = [
+        {
+            path: 'quartos',
+            text: 'Quartos',
+            icon: 'fa-solid fa-door-open'
+        },
+        {
+            path: 'hospedes',
+            text: 'Hospedes',
+            icon: 'fa-solid fa-user'
+        },
+        {
+            path: 'empresas',
+            text: 'Empresas',
+            icon: 'fa-solid fa-city'
+        },
+        {
+            path: 'reservas',
+            text: 'Reservas',
+            icon: 'fa-solid fa-calendar-days'
+        },
+        {
+            path: 'produto',
+            text: 'Produto',
+            icon: 'fa-solid fa-barcode'
+        },
+        {
+            path: 'monitor-reservas',
+            text: 'Monitor',
+            icon: 'fa-solid fa-table'
+        }
+    ]
 
     constructor(private hotelService: HotelService,
                 private arquivoDigitalService: ArquivoDigitalService,

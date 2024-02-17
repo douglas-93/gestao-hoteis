@@ -19,8 +19,8 @@
     border: 1px solid #000000;
     border-radius: 5px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-    margin-top: 20px;
-    padding: 10px;
+    /*margin-top: 20px;*/
+    /*padding: 5px;*/
 }
 
 dx-button:hover {
@@ -28,38 +28,40 @@ dx-button:hover {
     transition: transform 0.3s;
 }
 
-.stats-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    background-color: #f5f5f5;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-}
-
-.stat-block {
-    padding: 15px;
-    margin: 10px;
-    text-align: center;
-    border-radius: 5px;
-    transition: transform 0.3s;
-    cursor: pointer;
-}
-
-.stat-block:hover {
+.scale:hover {
     transform: scale(1.05);
 }
 
-.stat-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 5px;
+.centered-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Garante que as colunas tenham o mesmo tamanho */
 }
 
-.stat-value {
-    font-size: 1.5rem;
-    color: #E64B16;
+.centered-table th,
+.centered-table td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
 }
 
+.centered-table th {
+    background-color: #f2f2f2;
+}
+
+#atalho {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Garante que as colunas tenham o mesmo tamanho */
+    border: 1px solid #f2f2f2;
+}
+
+#atalho th,
+#atalho td {
+    text-align: center;
+    padding: 8px;
+}
+
+#atalho th {
+    background-color: #f2f2f2;
+}
