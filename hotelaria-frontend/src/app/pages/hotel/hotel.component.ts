@@ -36,14 +36,16 @@ export class HotelComponent implements OnInit {
     }
 
     ngOnInit() {
-        let edit: boolean = this.router.url.includes('edit');
-        this.mode = (this.router.url.includes('cad') || this.router.url.includes('edit')) ? ModeEnum.EDIT : ModeEnum.LIST;
-
+        this.mode = ModeEnum.EDIT;
         this.hotel = new HotelModel();
 
-        if (edit) {
-            this.findHotel(this.router.url.split('/').pop()!)
-        }
+        this.hotelService.findLastId().subscribe({
+            next: (resp) => {
+                if (resp.ok && resp.body! != 0) {
+                    this.findHotel(resp.body!);
+                }
+            }
+        })
     }
 
     buscar() {
@@ -102,7 +104,7 @@ export class HotelComponent implements OnInit {
         })
     }
 
-    findHotel(id: string) {
+    findHotel(id: number) {
         let idAsNumber: number = Number(id);
         this.hotelService.findById(idAsNumber).subscribe(
             (resp) => {
@@ -172,9 +174,5 @@ export class HotelComponent implements OnInit {
                 this.hotelSelecionado = hotel;
             }
         });
-    }
-
-    editar() {
-        this.router.navigate(['hotel', 'edit', this.hotelSelecionado.id])
     }
 }

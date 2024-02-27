@@ -11,38 +11,7 @@
     </div>
 
     <div list-result>
-        <dx-data-grid (onRowDblClick)="editar()"
-                      (onSelectionChanged)="selecionaHotel($event)"
-                      [dataSource]="gridResult"
-                      [rowAlternationEnabled]="true"
-                      [showBorders]="true">
 
-            <dxo-selection mode="single"></dxo-selection>
-
-            <dxi-column caption="Nome do Hotel"
-                        dataField="nome">
-            </dxi-column>
-            <dxi-column caption="CNPJ"
-                        cellTemplate="cnpjTemplate"
-                        dataField="cnpj">
-            </dxi-column>
-            <dxi-column caption="Responsável"
-                        dataField="responsavel">
-            </dxi-column>
-            <dxi-column caption="CPF"
-                        cellTemplate="cpfTemplate"
-                        dataField="cpfResponsavel">
-            </dxi-column>
-
-            <div *dxTemplate="let data of 'cnpjTemplate'">
-                {{ Utils.formatarCNPJ(data.data.cnpj) }}
-            </div>
-
-            <div *dxTemplate="let data of 'cpfTemplate'">
-                {{ Utils.formatarCPF(data.data.cpfResponsavel) }}
-            </div>
-
-        </dx-data-grid>
     </div>
 
     <div edit-template>

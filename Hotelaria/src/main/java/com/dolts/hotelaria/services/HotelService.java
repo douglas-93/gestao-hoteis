@@ -7,6 +7,8 @@ import com.dolts.hotelaria.utils.service.BaseCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class HotelService extends BaseCRUDService<HotelModel, Long> {
 
@@ -17,7 +19,8 @@ public class HotelService extends BaseCRUDService<HotelModel, Long> {
     private EnderecoService enderecoService;
 
     public Long findLastId(){
-        return hotelRepository.findLastId();
+        Optional<Long> id = hotelRepository.findLastId().describeConstable();
+        return id.orElse(0L);
     }
 
     @Override
