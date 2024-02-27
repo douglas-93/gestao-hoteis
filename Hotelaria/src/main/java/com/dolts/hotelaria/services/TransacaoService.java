@@ -1,6 +1,7 @@
 package com.dolts.hotelaria.services;
 
 import com.dolts.hotelaria.enums.TipoTransacaoEnum;
+import com.dolts.hotelaria.enums.TiposProdutoEnum;
 import com.dolts.hotelaria.models.HospedeModel;
 import com.dolts.hotelaria.models.ProdutoModel;
 import com.dolts.hotelaria.models.ReservaModel;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
@@ -78,7 +78,9 @@ public class TransacaoService extends BaseCRUDService<TransacaoModel, Long> {
         super.afterSave(entity);
         ProdutoModel prod = produtoService.getById(entity.getProdutoModel().getId());
         if (prod.getEstoque() != null) {
-            prod.setEstoque(prod.getEstoque().add(entity.getQuantidade()));
+            if (prod.getTipo() != TiposProdutoEnum.SERVICO_ADICIONAL) {
+                prod.setEstoque(prod.getEstoque().add(entity.getQuantidade()));
+            }
         } else {
             prod.setEstoque(entity.getQuantidade());
         }
