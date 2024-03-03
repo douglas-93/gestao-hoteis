@@ -156,4 +156,8 @@ export class RelatoriosComponent {
         this.tipoMovimento = undefined;
         this.reserva = '';
     }
+
+    limpar() {
+        this.relatoriosSendoGerados.clear();
+    }
 }

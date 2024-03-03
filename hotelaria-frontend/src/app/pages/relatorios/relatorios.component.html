@@ -14,6 +14,11 @@
                        icon="fa-regular fa-file-pdf"
                        text="Gerar">
             </dx-button>
+            <dx-button (onClick)="limpar()"
+                       class="ml"
+                       icon="fa-solid fa-broom"
+                       text="Limpar">
+            </dx-button>
         </div>
 
 
@@ -21,7 +26,6 @@
             <div class="row mt mb" style="width: 40%; justify-content: space-between">
                 <span>Data Inicial: </span>
                 <dx-date-box [(value)]="dataInicial!"
-                             [max]="hoje"
                              [useMaskBehavior]="true"
                              displayFormat="dd/MM/yyyy"
                              width="300px">
@@ -30,7 +34,6 @@
             <div class="row mt mb" style="width: 40%; justify-content: space-between">
                 <span>Data Final: </span>
                 <dx-date-box [(value)]="dataFinal!"
-                             [max]="hoje"
                              [useMaskBehavior]="true"
                              displayFormat="dd/MM/yyyy"
                              width="300px">
@@ -43,7 +46,6 @@
             <div class="row mt mb" style="width: 40%; justify-content: space-between">
                 <span>Data Inicial: </span>
                 <dx-date-box [(value)]="dataInicial!"
-                             [max]="hoje"
                              [useMaskBehavior]="true"
                              displayFormat="dd/MM/yyyy"
                              width="300px">
@@ -52,7 +54,6 @@
             <div class="row mt mb" style="width: 40%; justify-content: space-between">
                 <span>Data Final: </span>
                 <dx-date-box [(value)]="dataFinal!"
-                             [max]="hoje"
                              [useMaskBehavior]="true"
                              displayFormat="dd/MM/yyyy"
                              width="300px">
@@ -70,7 +71,6 @@
             <div class="row mt mb" style="width: 40%; justify-content: space-between">
                 <span>Data Inicial: </span>
                 <dx-date-box [(value)]="dataInicial!"
-                             [max]="hoje"
                              [useMaskBehavior]="true"
                              displayFormat="dd/MM/yyyy"
                              width="300px">
@@ -79,7 +79,6 @@
             <div class="row mt mb" style="width: 40%; justify-content: space-between">
                 <span>Data Final: </span>
                 <dx-date-box [(value)]="dataFinal!"
-                             [max]="hoje"
                              [useMaskBehavior]="true"
                              displayFormat="dd/MM/yyyy"
                              width="300px">

@@ -12,6 +12,10 @@ public class ConfiguracaoService extends BaseCRUDService<ConfiguracaoModel, Long
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
 
+    public ConfiguracaoModel getCancelarAutomatico() {
+        return configuracaoRepository.findAll().stream().findFirst().orElse(null);
+    }
+
     @Override
     public AbstractCRUDRepository<ConfiguracaoModel, Long> getRepository() {
         super.getRepository();

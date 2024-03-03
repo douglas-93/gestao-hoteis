@@ -1,15 +1,18 @@
-<h2 class="content-block">Configurações</h2>
-<div class="content-block">
-    <div class="dx-card responsive-paddings">
+<base-crud [mode]="ModeEnum.EDIT"
+           [editTitle]="'Configurações'">
+    <div list-filter-fields></div>
+    <div list-result></div>
+    <div edit-template>
+
         <div class="row">
             <dx-check-box class="mr"
-                          text="Usar cancelamento automático de reservas">
+                          text="Usar cancelamento automático de reservas"
+                          [(value)]="cancelamentoAutomaticoAtivo">
             </dx-check-box>
-            <dx-date-box (onValueChanged)="logar($event)"
-                         [(value)]="hora"
+            <dx-date-box [(value)]="hora"
                          text="Hora"
                          type="time">
             </dx-date-box>
         </div>
     </div>
-</div>
+</base-crud>

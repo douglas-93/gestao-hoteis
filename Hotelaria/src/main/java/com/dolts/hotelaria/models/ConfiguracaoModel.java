@@ -18,7 +18,7 @@ public class ConfiguracaoModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    boolean usarCancelamentoReserva;
-    LocalDateTime horaCancelamentoReserva;
+    boolean cancelamentoAutomaticoAtivo;
+    String horaCancelamentoAutomatico;
 
 }
