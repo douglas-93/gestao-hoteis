@@ -102,7 +102,7 @@ export class RelatoriosComponent {
             const searchRequestDTO: SearchRequestDTO = new SearchRequestDTO();
             if (this.nomeRelatorio === 'reservasPeriodo') {
                 searchRequestDTO.columnName = 'dataEntrada';
-                searchRequestDTO.value = Utils.formatarDataParaStringSemDiaSemana(new Date(dataInicial));
+                searchRequestDTO.value = Utils.formatarDataParaStringSemDiaSemana(new Date(dataFinal));
             } else {
                 searchRequestDTO.columnName = 'dataHora';
                 let data = new Date(dataFinal);

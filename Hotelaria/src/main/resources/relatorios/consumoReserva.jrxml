@@ -271,7 +271,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["R$ " + $F{valorTotal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{valorTotal} != null ? "R$ " + $F{valorTotal} : ""]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="60" y="0" width="60" height="16" uuid="bbde1c19-2768-4e3e-b47e-fe87ba2b8f8f"/>
@@ -284,7 +284,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["R$ " + $F{valorProduto}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{valorProduto} != null ? "R$ " + $F{valorProduto} : ""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="120" y="0" width="60" height="16" uuid="3a5715c9-0569-4245-846a-de4c7dfe2c05"/>
