@@ -21,7 +21,6 @@ export class RelatoriosComponent {
     relatorios: { relatorio: string, opcao: string }[];
     nomeRelatorio: string = '';
     requestDTO: RequestDTO;
-    hoje: Date = new Date();
     dataInicial: Date | number | string | undefined;
     dataFinal: Date | number | string | undefined;
     tiposMovimento

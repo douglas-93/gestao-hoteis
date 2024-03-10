@@ -117,15 +117,17 @@ public class RelatorioService {
     }
 
     private List<?> getFilteredData(String nomeRelatorio, RequestDTO requestDTO) {
-        if (nomeRelatorio.equals("reservasPeriodo")) {
-            Specification<ReservaModel> specification = (Specification<ReservaModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
-            return reservaService.getRepository().findAll(specification);
-        } else if (nomeRelatorio.equals("consumoReserva")) {
-            Specification<TransacaoModel> specification = (Specification<TransacaoModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
-            return transacaoService.getRepository().findAll(specification);
-        } else if (nomeRelatorio.equals("movimentacao")) {
-            Specification<TransacaoModel> specification = (Specification<TransacaoModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
-            return transacaoService.getRepository().findAll(specification);
+        switch (nomeRelatorio) {
+            case "reservasPeriodo" -> {
+                Specification<ReservaModel> specification = (Specification<ReservaModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+                var reservas = reservaService.getRepository().findAll(specification);
+                reservas.forEach(ReservaModel::getHospedesAsString);
+                return reservas;
+            }
+            case "consumoReserva", "movimentacao" -> {
+                Specification<TransacaoModel> specification = (Specification<TransacaoModel>) this.filtersSpecifications.getSearchSpecification(requestDTO.getSearchRequestDTOS(), requestDTO.getGlobalOperator());
+                return transacaoService.getRepository().findAll(specification);
+            }
         }
         return Collections.emptyList();
     }

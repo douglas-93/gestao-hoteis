@@ -39,6 +39,7 @@ public class ReservaModel implements Serializable {
     private BigDecimal valorTotalEstadia;
     private Boolean isEmpresa = false;
     private Long idReservaOriginal;
+    private String hospedesAsString;
 
     @ManyToOne
     private QuartoModel quarto;
@@ -54,6 +55,15 @@ public class ReservaModel implements Serializable {
 
     @Transient
     private List<QuartoModel> quartos = new ArrayList<>();
+
+    public String getHospedesAsString() {
+        String hospedes = "";
+        for (HospedeModel h : this.getHospedes()) {
+            hospedes += h.getNome() + "#";
+        }
+        this.hospedesAsString = hospedes;
+        return hospedesAsString;
+    }
 
     public void atualizarReserva(ReservaModel reservaAtualizada) {
 
