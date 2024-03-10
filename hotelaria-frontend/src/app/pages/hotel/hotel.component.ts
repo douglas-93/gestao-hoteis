@@ -29,6 +29,7 @@ export class HotelComponent implements OnInit {
     arquivoDigital: ArquivoDIgitalModel;
     hotelSelecionado: HotelModel;
     protected readonly Utils = Utils;
+    cacheKey: string = 'HOTEL_LOGO';
 
     constructor(private router: Router,
                 private hotelService: HotelService,
@@ -145,6 +146,7 @@ export class HotelComponent implements OnInit {
             const reader = new FileReader();
             reader.onload = (e: any) => {
                 this.hotel.logoAsDataSource = e.target.result; // Armazenar a URL da imagem
+                localStorage.removeItem(this.cacheKey);
             };
 
             reader.readAsDataURL(<File>arquivoDigital.dados);
